@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
     <script>
         // Immediate script to ensure content visibility
         document.documentElement.classList.remove('no-js');
@@ -179,7 +178,7 @@
     </div>
 
     <!-- Resume Button -->
-    <a href="Resume.pdf" target="_blank" class="resume-button">Resume</a>
+    <a href="#" class="resume-button">Resume</a>
     
     <!-- Mobile menu button -->
     <button class="menu-button" aria-label="Menu">
@@ -879,137 +878,6 @@
 
     <script src="js/main.js"></script>
     
-    <!-- Mobile menu direct fix -->
-    <script>
-        // Direct fix for mobile menu - bypassing all potential conflicts
-        window.addEventListener('load', function() {
-            console.log("Direct menu fix loaded");
-            
-            // Function to detect if we're on mobile
-            function isMobile() {
-                return window.innerWidth <= 768;
-            }
-            
-            // Function to apply mobile-specific styles
-            function applyMobileStyles() {
-                if (isMobile()) {
-                    // Apply mobile styles
-                    document.querySelector('.main-content').style.width = '100%';
-                    document.querySelector('.main-content').style.marginLeft = '0';
-                    document.querySelector('.main-content').style.paddingLeft = '1rem';
-                    document.querySelector('.main-content').style.paddingRight = '1rem';
-                    
-                    // Apply container styles
-                    const containers = document.querySelectorAll('.container');
-                    containers.forEach(container => {
-                        container.style.width = '100%';
-                        container.style.maxWidth = '100%';
-                        container.style.padding = '0 1rem';
-                        container.style.margin = '0 auto';
-                    });
-                } else {
-                    // Reset to desktop styles
-                    document.querySelector('.main-content').style.width = '';
-                    document.querySelector('.main-content').style.marginLeft = '';
-                    document.querySelector('.main-content').style.paddingLeft = '';
-                    document.querySelector('.main-content').style.paddingRight = '';
-                    
-                    // Reset container styles
-                    const containers = document.querySelectorAll('.container');
-                    containers.forEach(container => {
-                        container.style.width = '';
-                        container.style.maxWidth = '';
-                        container.style.padding = '';
-                        container.style.margin = '';
-                    });
-                }
-            }
-            
-            // Apply styles immediately and on resize
-            applyMobileStyles();
-            window.addEventListener('resize', applyMobileStyles);
-            
-            // Force menu button to be visible and clickable
-            const menuBtn = document.querySelector('.menu-button');
-            const sidebar = document.querySelector('.sidebar');
-            
-            if (menuBtn && sidebar) {
-                // Force button visibility on mobile
-                if (isMobile()) {
-                    menuBtn.style.display = 'flex';
-                    menuBtn.style.zIndex = '9999';
-                    menuBtn.style.opacity = '1';
-                    menuBtn.style.pointerEvents = 'auto';
-                }
-                
-                // Remove any existing click listeners
-                const newMenuBtn = menuBtn.cloneNode(true);
-                menuBtn.parentNode.replaceChild(newMenuBtn, menuBtn);
-                
-                // Add new direct click listener
-                newMenuBtn.addEventListener('click', function(e) {
-                    console.log("Menu button clicked directly");
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    // Toggle sidebar directly
-                    if (sidebar.classList.contains('active')) {
-                        sidebar.classList.remove('active');
-                        newMenuBtn.classList.remove('active');
-                        document.body.classList.remove('menu-open');
-                    } else {
-                        sidebar.classList.add('active');
-                        newMenuBtn.classList.add('active');
-                        document.body.classList.add('menu-open');
-                    }
-                });
-                
-                // Add inline click handler for redundancy
-                newMenuBtn.setAttribute('onclick', `
-                    console.log('Inline handler');
-                    const sb = document.querySelector('.sidebar');
-                    const mb = this;
-                    if (sb.classList.contains('active')) {
-                        sb.classList.remove('active');
-                        mb.classList.remove('active');
-                        document.body.classList.remove('menu-open');
-                    } else {
-                        sb.classList.add('active');
-                        mb.classList.add('active');
-                        document.body.classList.add('menu-open');
-                    }
-                    event.preventDefault();
-                    event.stopPropagation();
-                    return false;
-                `);
-                
-                // Close menu when clicking nav links
-                document.querySelectorAll('.nav a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        if (isMobile()) {
-                            sidebar.classList.remove('active');
-                            newMenuBtn.classList.remove('active');
-                            document.body.classList.remove('menu-open');
-                        }
-                    });
-                });
-            }
-            
-            // Make sure the button appears and has the right styles
-            window.addEventListener('resize', function() {
-                const btn = document.querySelector('.menu-button');
-                if (btn) {
-                    if (isMobile()) {
-                        btn.style.display = 'flex';
-                        btn.style.zIndex = '9999';
-                    } else {
-                        btn.style.display = 'none';
-                    }
-                }
-            });
-        });
-    </script>
-    
     <!-- Additional script to ensure content visibility in both themes -->
     <script>
         // Reset styles for dark theme
@@ -1144,88 +1012,6 @@
                 resetDarkThemeStyles();
             }
         }, 2000);
-    </script>
-
-    <!-- Ultra minimal mobile menu fix -->
-    <script>
-        // Only run this code when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get the menu button and sidebar
-            const menuButton = document.querySelector('.menu-button');
-            const sidebar = document.querySelector('.sidebar');
-            
-            // Create a style element for mobile-only modifications
-            const mobileStyle = document.createElement('style');
-            mobileStyle.innerHTML = `
-                @media (max-width: 768px) {
-                    /* Hide these elements only on mobile */
-                    .sidebar .profile-photo, 
-                    .sidebar-content .profile-photo {
-                        display: none !important;
-                    }
-                    
-                    .sidebar .subtitle,
-                    .sidebar-header .subtitle {
-                        display: none !important;
-                    }
-                    
-                    .sidebar .sidebar-description,
-                    #typingText,
-                    .sidebar-content .sidebar-description {
-                        display: none !important;
-                    }
-                    
-                    /* Ensure name is visible and well-styled on mobile */
-                    .sidebar-content .logo,
-                    .sidebar-header .logo,
-                    .sidebar .logo,
-                    .sidebar .glitch-name,
-                    .logo.glitch-name,
-                    .sidebar-content .glitch-name,
-                    [data-text="Durjoy Majumdar"],
-                    .sidebar .logo[data-text="Durjoy Majumdar"],
-                    .sidebar-header div[class*="logo"],
-                    .sidebar div[class*="glitch"] {
-                        display: block !important;
-                        visibility: visible !important;
-                        opacity: 1 !important;
-                        position: relative !important;
-                        z-index: 10000 !important;
-                        margin: 2rem auto !important;
-                        text-align: center !important;
-                        font-size: 2.5rem !important;
-                        line-height: 1.2 !important;
-                        color: white !important;
-                        font-weight: 700 !important;
-                        text-shadow: 0 0 5px rgba(0,255,242,0.7) !important;
-                        padding-top: 7rem !important;
-                    }
-                }
-            `;
-            // Append the style to the head
-            document.head.appendChild(mobileStyle);
-            
-            // Only add the click handler - no style changes at all
-            if (menuButton && sidebar) {
-                menuButton.addEventListener('click', function() {
-                    // Toggle the sidebar active class
-                    sidebar.classList.toggle('active');
-                    this.classList.toggle('active');
-                    document.body.classList.toggle('menu-open');
-                });
-                
-                // Close menu when clicking nav links on mobile
-                document.querySelectorAll('.nav a').forEach(link => {
-                    link.addEventListener('click', function() {
-                        if (window.innerWidth <= 768) {
-                            sidebar.classList.remove('active');
-                            menuButton.classList.remove('active');
-                            document.body.classList.remove('menu-open');
-                        }
-                    });
-                });
-            }
-        });
     </script>
 </body>
 </html> 
