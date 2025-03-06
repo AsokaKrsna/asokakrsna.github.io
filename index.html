@@ -179,7 +179,7 @@
     </div>
 
     <!-- Resume Button -->
-    <a href="Resume.pdf" class="resume-button">Resume</a>
+    <a href="Resume.pdf" target="_blank" class="resume-button">Resume</a>
     
     <!-- Mobile menu button -->
     <button class="menu-button" aria-label="Menu">
@@ -1144,6 +1144,88 @@
                 resetDarkThemeStyles();
             }
         }, 2000);
+    </script>
+
+    <!-- Ultra minimal mobile menu fix -->
+    <script>
+        // Only run this code when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the menu button and sidebar
+            const menuButton = document.querySelector('.menu-button');
+            const sidebar = document.querySelector('.sidebar');
+            
+            // Create a style element for mobile-only modifications
+            const mobileStyle = document.createElement('style');
+            mobileStyle.innerHTML = `
+                @media (max-width: 768px) {
+                    /* Hide these elements only on mobile */
+                    .sidebar .profile-photo, 
+                    .sidebar-content .profile-photo {
+                        display: none !important;
+                    }
+                    
+                    .sidebar .subtitle,
+                    .sidebar-header .subtitle {
+                        display: none !important;
+                    }
+                    
+                    .sidebar .sidebar-description,
+                    #typingText,
+                    .sidebar-content .sidebar-description {
+                        display: none !important;
+                    }
+                    
+                    /* Ensure name is visible and well-styled on mobile */
+                    .sidebar-content .logo,
+                    .sidebar-header .logo,
+                    .sidebar .logo,
+                    .sidebar .glitch-name,
+                    .logo.glitch-name,
+                    .sidebar-content .glitch-name,
+                    [data-text="Durjoy Majumdar"],
+                    .sidebar .logo[data-text="Durjoy Majumdar"],
+                    .sidebar-header div[class*="logo"],
+                    .sidebar div[class*="glitch"] {
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        position: relative !important;
+                        z-index: 10000 !important;
+                        margin: 2rem auto !important;
+                        text-align: center !important;
+                        font-size: 2.5rem !important;
+                        line-height: 1.2 !important;
+                        color: white !important;
+                        font-weight: 700 !important;
+                        text-shadow: 0 0 5px rgba(0,255,242,0.7) !important;
+                        padding-top: 7rem !important;
+                    }
+                }
+            `;
+            // Append the style to the head
+            document.head.appendChild(mobileStyle);
+            
+            // Only add the click handler - no style changes at all
+            if (menuButton && sidebar) {
+                menuButton.addEventListener('click', function() {
+                    // Toggle the sidebar active class
+                    sidebar.classList.toggle('active');
+                    this.classList.toggle('active');
+                    document.body.classList.toggle('menu-open');
+                });
+                
+                // Close menu when clicking nav links on mobile
+                document.querySelectorAll('.nav a').forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 768) {
+                            sidebar.classList.remove('active');
+                            menuButton.classList.remove('active');
+                            document.body.classList.remove('menu-open');
+                        }
+                    });
+                });
+            }
+        });
     </script>
 </body>
 </html> 
