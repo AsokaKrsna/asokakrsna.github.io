@@ -178,7 +178,7 @@
     </div>
 
     <!-- Resume Button -->
-    <a href="Resume.pdf" class="resume-button">Resume</a>
+    <a href="Resume.pdf" target="_blank" class="resume-button">Resume</a>
     
     <!-- Mobile menu button -->
     <button class="menu-button" aria-label="Menu">
@@ -1012,6 +1012,37 @@
                 resetDarkThemeStyles();
             }
         }, 2000);
+    </script>
+
+    <!-- Ultra minimal mobile menu fix -->
+    <script>
+        // Only run this code when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the menu button and sidebar
+            const menuButton = document.querySelector('.menu-button');
+            const sidebar = document.querySelector('.sidebar');
+            
+            // Only add the click handler - no style changes at all
+            if (menuButton && sidebar) {
+                menuButton.addEventListener('click', function() {
+                    // Toggle the sidebar active class
+                    sidebar.classList.toggle('active');
+                    this.classList.toggle('active');
+                    document.body.classList.toggle('menu-open');
+                });
+                
+                // Close menu when clicking nav links on mobile
+                document.querySelectorAll('.nav a').forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 768) {
+                            sidebar.classList.remove('active');
+                            menuButton.classList.remove('active');
+                            document.body.classList.remove('menu-open');
+                        }
+                    });
+                });
+            }
+        });
     </script>
 </body>
 </html> 
