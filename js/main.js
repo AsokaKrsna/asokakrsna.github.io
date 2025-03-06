@@ -1493,3 +1493,9 @@ document.querySelectorAll('.arena-card').forEach(card => {
         this.removeAttribute('data-hover');
     });
 });
+
+// Add this line to ensure the mobile menu is initialized when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize mobile menu functionality
+    initMobileMenu();
+});

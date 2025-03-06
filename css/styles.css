@@ -1506,7 +1506,7 @@ footer {
     position: fixed;
     top: 1.5rem;
     right: 1.5rem;
-    z-index: 100;
+    z-index: 10000; /* Increase z-index to be above everything */
     background: transparent;
     border: none;
     width: 30px;
@@ -1515,6 +1515,11 @@ footer {
     flex-direction: column;
     justify-content: space-between;
     cursor: pointer;
+    pointer-events: auto !important; /* Ensure clicks are registered */
+    touch-action: manipulation; /* Improve touch behavior */
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove tap highlight on mobile */
+    padding: 10px; /* Add padding to increase touch target */
+    box-sizing: content-box; /* Ensure padding adds to element size */
 }
 
 .menu-button span {
@@ -1522,6 +1527,7 @@ footer {
     height: 2px;
     background-color: var(--lightest-slate);
     transition: var(--transition);
+    pointer-events: none; /* Make spans non-interactive */
 }
 
 .menu-button.active span:nth-child(1) {
@@ -1582,252 +1588,45 @@ footer {
         padding-right: 2rem;
         justify-content: flex-start;
         padding-top: 5rem;
-        background-color: rgba(10, 25, 47, 0.9);
+        background-color: rgba(10, 25, 47, 0.95);
         backdrop-filter: blur(10px);
         position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        overflow-y: auto;
     }
     
-    .sidebar-content {
-        max-width: 100%;
-        padding: 1rem 0;
-        margin-top: 1rem;
-        gap: 1rem;
+    /* Hide profile photo, subtitle and typewriter text on mobile sidebar */
+    .sidebar .profile-photo,
+    .sidebar-content .profile-photo {
+        display: none !important;
     }
     
-    .sidebar-header {
-        margin-bottom: 0.5rem;
-        align-items: flex-start;
-        text-align: left;
+    .sidebar .subtitle,
+    .sidebar-header .subtitle {
+        display: none !important;
     }
     
-    .profile-photo {
-        width: 120px;
-        margin-bottom: 1rem;
+    .sidebar .sidebar-description,
+    #typingText,
+    .sidebar-content .sidebar-description {
+        display: none !important;
     }
     
-    .profile-photo .image-wrapper {
-        width: 100%;
+    /* Center the logo/name on mobile */
+    .sidebar .logo,
+    .sidebar-content .logo.glitch-name {
+        margin: 0 auto 1rem !important;
+        text-align: center !important;
+        font-size: 2rem !important;
     }
     
-    .sidebar-description {
-        min-height: 50px;
-        max-height: 70px;
-        margin-bottom: 0.5rem;
-    }
-    
-    .nav {
-        margin: 0.5rem 0;
-    }
-    
-    .nav ul {
-        align-items: flex-start;
-        gap: 0.75rem;
-    }
-    
-    .sidebar-social ul {
-        justify-content: flex-start;
-    }
-    
-    .container {
-        padding: 0 1.5rem;
-        max-width: 100%;
-    }
-    
-    .main-content {
-        width: 100%;
-        margin-left: 0;
-        padding: var(--padding) 1.5rem;
-    }
-    
-    .menu-button {
-        display: flex;
-    }
-    
-    .logo {
-        font-size: 2rem;
-    }
-    
-    .subtitle {
-        font-size: 1.25rem;
-    }
-    
-    .about-content {
-        flex-direction: column;
-    }
-    
-    .image-wrapper {
-        margin: 3rem auto 0;
-    }
-    
-    .experience-item {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-    }
-    
-    .experience-year {
-        padding: 0;
-        text-align: left;
-        font-size: 0.9rem;
-    }
-    
-    .experience-year::after {
-        display: none;
-    }
-    
-    .experience-year::before {
-        display: none;
-    }
-    
-    .theme-toggle {
-        bottom: 1.5rem;
-        left: 2rem;
-    }
-    
-    /* Certifications timeline mobile styling */
-    .certifications-timeline {
-        padding-left: 25px;
-    }
-    
-    .certification-dot {
-        left: -25px;
-        width: 14px;
-        height: 14px;
-    }
-    
-    .certification-content {
-        padding: 12px 15px;
-    }
-    
-    .certification-title {
-        font-size: 0.95rem;
-    }
-    
-    .certification-date {
-        font-size: 0.85rem;
-    }
-    
-    .contact-info {
-        width: 100%;
-        padding: 0 20px;
-    }
-    
-    .contact-item {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .contact .social-links {
-        flex-wrap: wrap;
-    }
-    
-    .contact .social-links a {
-        font-size: 18px;
-        padding: 8px;
-    }
-}
-
-@media (max-width: 480px) {
-    .section-title::after,
-    .contact .section-title::after,
-    .contact .section-title::before {
-        width: 60px;
-    }
-    
-    .hero-content {
-        gap: 1.5rem;
-    }
-    
-    .intro-text, .bio-text, .current-text {
-        font-size: 1rem;
-    }
-    
-    .section-title {
-        font-size: 1.5rem;
-    }
-    
-    .cta-buttons {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .skills-list {
-        grid-template-columns: 1fr;
-    }
-    
-    .project-card {
-        padding: 20px;
-    }
-}
-
-/* Fade-in animation */
-.section-title, .about-content, .skills-content, 
-.experience-item, .project-card, .contact p, 
-.contact .btn {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    will-change: opacity, transform;
-}
-
-/* Only hide elements when JS has loaded and added this class */
-.js-loaded .animate-on-scroll {
-    opacity: 0;
-    transform: translateY(20px);
-}
-
-/* Animation visible state */
-.animate-on-scroll.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* No-js fallback already ensures visibility */
-.no-js .section-title, .no-js .about-content, .no-js .skills-content, 
-.no-js .experience-item, .no-js .project-card, .no-js .contact p, 
-.no-js .contact .btn {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Ensure body doesn't scroll when mobile menu is open */
-body.menu-open {
-    overflow: visible; /* Changed to fix content overflow */
-}
-
-/* Glitch Effect for Name */
-.glitch-name {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--lightest-slate);
-    position: relative;
-    display: inline-block;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.glitch-name::before,
-.glitch-name::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 50%; /* Reduced height for a more focused scan effect */
-    z-index: -1;
-}
-
-.glitch-name::before {
-    color: rgba(255, 0, 64, 0.7);
-    transform: translateX(-2px);
-}
-
-.glitch-name::after {
-    color: rgba(0, 255, 242, 0.7);
-    transform: translateX(2px);
-}
-
-.sidebar.active {
-    transform: translateX(0);
+    .sidebar.active {
+        transform: translateX(0);
+        display: flex !important;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
 }
 
 /* Remove all cursor-related CSS classes */
@@ -3839,6 +3638,62 @@ body:not(.loading-active) .menu-button {
 
 .arena-intro {
     color: var(--light-slate);
+}
+
+
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+    // ... existing code ...
+    
+    /* Hide elements from mobile sidebar to save space */
+    .sidebar .profile-photo,
+    .sidebar .subtitle,
+    .sidebar .sidebar-description,
+    #typingText {
+        display: none !important;
+    }
+    
+    /* Adjust logo/name for better mobile display */
+    .sidebar .logo.glitch-name {
+        margin: 1rem auto;
+        text-align: center;
+        font-size: 2rem;
+    }
+    
+    // ... existing code ...
+}
+
+
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+    // ... existing code ...
+    
+    .container {
+        padding: 0 1.5rem;
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .main-content {
+        width: 100%;
+        margin-left: 0;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+    
+    // ... existing code ...
 }
 
 
