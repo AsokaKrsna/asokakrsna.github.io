@@ -1,0 +1,462 @@
+/* Mobile Sidebar Fixes */
+
+/* Ensure sidebar header is displayed in mobile menu */
+body.is-mobile .sidebar.active .sidebar-header {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0;
+    padding-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Make sure profile photo shows */
+body.is-mobile .sidebar.active .profile-photo {
+    display: block !important;
+    margin-bottom: 0.5rem;
+}
+
+/* Ensure name is visible */
+body.is-mobile .sidebar.active .logo.glitch-name {
+    display: block !important;
+    font-size: 1.5rem !important;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+/* Show subtitle */
+body.is-mobile .sidebar.active .subtitle {
+    display: block !important;
+    text-align: center;
+    font-size: 0.8rem !important;
+}
+
+/* Navigation styling */
+body.is-mobile .sidebar.active .nav {
+    margin-top: 0.5rem;
+    overflow-y: visible;
+    max-height: none;
+}
+
+body.is-mobile .sidebar.active .nav ul {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0.4rem !important;
+    padding-left: 0;
+    padding-top: 0.5rem;
+    margin-top: 0;
+    height: auto;
+    overflow: visible;
+}
+
+body.is-mobile .sidebar.active .nav li {
+    margin-bottom: 0.5rem;
+}
+
+body.is-mobile .sidebar.active .nav a {
+    color: var(--lightest-slate);
+    font-size: 0.95rem !important;
+    letter-spacing: 1px;
+}
+
+/* Theme toggle positioning */
+body.is-mobile .sidebar.active .theme-toggle {
+    margin-top: auto;
+    padding-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+/* Scrollbar styling */
+body.is-mobile .sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+body.is-mobile .sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 255, 242, 0.5);
+    border-radius: 4px;
+}
+
+body.is-mobile .sidebar::-webkit-scrollbar-track {
+    background: rgba(10, 25, 47, 0.2);
+}
+
+/* Content layout */
+body.is-mobile .sidebar.active .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: 1rem;
+    overflow-y: auto;
+}
+
+/* Ensure proper sidebar sizing */
+body.is-mobile .sidebar.active {
+    z-index: 1000;
+    width: 100%;
+    height: 100vh;
+    padding-top: 1rem;
+    overflow-y: auto;
+}
+
+/* Ensure all nav items are visible in mobile */
+body.is-mobile .sidebar.active .nav ul li {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin-bottom: 0.4rem !important;
+}
+
+/* Reset any transforms or visibility that might be hiding the items */
+body.is-mobile .sidebar.active .nav ul li a {
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    color: var(--lightest-slate) !important;
+    text-shadow: 0 0 5px rgba(0, 255, 242, 0.3);
+}
+
+/* Add extra spacing to ensure the menu is fully scrollable */
+body.is-mobile .sidebar.active {
+    padding-bottom: 3rem !important;
+}
+
+/* Fix mobile sidebar structure */
+body.is-mobile .sidebar.active {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0 !important;
+    padding-bottom: 3rem !important;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 100%;
+    height: 100vh;
+}
+
+/* Make sidebar content properly structured */
+body.is-mobile .sidebar.active .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+    overflow-y: visible;
+    height: auto;
+    order: 1;
+}
+
+/* Position header at the top, after navigation */
+body.is-mobile .sidebar.active .sidebar-header {
+    order: 2;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+/* Make sure navigation is at the top */
+body.is-mobile .sidebar.active .nav {
+    order: 1;
+    margin-top: 3.5rem !important; /* Space for menu button */
+    overflow-y: visible;
+    max-height: none;
+}
+
+/* Set proper navigation list styles */
+body.is-mobile .sidebar.active .nav ul {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0.4rem !important;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    margin-top: 0;
+    height: auto;
+    overflow: visible;
+}
+
+/* Ensure all nav items are visible */
+body.is-mobile .sidebar.active .nav ul li {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Style nav links */
+body.is-mobile .sidebar.active .nav ul li a {
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    color: var(--lightest-slate) !important;
+    text-shadow: 0 0 5px rgba(0, 255, 242, 0.3);
+    font-size: 1rem !important;
+    display: block;
+    padding: 0.5rem 0 !important;
+}
+
+/* Position social links and theme toggle */
+body.is-mobile .sidebar.active .sidebar-social {
+    order: 3;
+    margin-top: 1rem;
+}
+
+body.is-mobile .sidebar.active .theme-toggle {
+    order: 4;
+    margin-top: 1rem;
+    padding-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+/* Mobile fixes for sidebar */
+.sidebar.active {
+    padding-top: 0 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 80% !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Menu button - always at top right */
+.menu-button {
+    position: fixed !important;
+    z-index: 10000 !important;
+}
+
+/* SIMPLIFIED: Clean structure with name at top and nav below */
+.sidebar.active .sidebar-content {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    width: 100% !important;
+    padding: 0 !important;
+}
+
+/* Put name at the top */
+.sidebar.active .logo {
+    display: block !important;
+    position: fixed !important;
+    top: 20px !important;
+    left: 20px !important;
+    font-size: 1.2rem !important;
+    line-height: 1.2 !important;
+    color: var(--text-color) !important;
+    text-shadow: 0 0 3px rgba(0, 255, 255, 0.3) !important;
+    z-index: 10001 !important;
+    padding: 5px 10px !important;
+    border-radius: 4px !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Dark theme styling - deep navy */
+body.dark-theme .sidebar.active .logo {
+    background-color: rgba(8, 15, 30, 0.85) !important; /* Darker background to match theme */
+    text-shadow: 0 0 3px rgba(0, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+}
+
+/* Light theme styling */
+body:not(.dark-theme) .sidebar.active .logo {
+    background-color: rgba(240, 240, 240, 0.9) !important;
+    text-shadow: 0 0 3px rgba(0, 100, 255, 0.3) !important;
+    color: #333333 !important;
+}
+
+/* Special styling for light theme */
+body:not(.dark-theme) .sidebar.active .logo {
+    background-color: rgba(240, 240, 240, 0.8) !important; /* Light background for light theme */
+    text-shadow: 0 0 3px rgba(0, 100, 255, 0.3) !important; /* Adjusted glow for light theme */
+}
+
+/* CRITICAL: Hide ALL profile elements ONLY IN MOBILE */
+.sidebar.active .profile-photo,
+.sidebar.active .subtitle,
+.sidebar.active .sidebar-description,
+.sidebar-footer,
+body.is-mobile .sidebar.active .sidebar-footer,
+body.is-mobile .profile-photo,
+.sidebar.active .sidebar-header .profile-photo,
+.sidebar-header .profile-photo {
+    /* Remove these rules that were affecting desktop mode too */
+    display: initial;
+    opacity: initial;
+    visibility: initial;
+    height: initial;
+    width: initial;
+    margin: initial;
+    padding: initial;
+    overflow: initial;
+    position: initial;
+    pointer-events: initial;
+}
+
+/* Completely hide the sidebar header except for the name */
+.sidebar.active .sidebar-header {
+    background: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Force sidebar-header elements to be hidden */
+.sidebar.active .sidebar-header > *:not(.logo) {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* Navigation visibility - with proper padding */
+.sidebar.active .nav {
+    display: block !important;
+    width: 100% !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: relative !important;
+    z-index: 1000 !important;
+    padding-top: 80px !important; /* Space for name at top */
+    padding-bottom: 60px !important; /* Space for theme toggle at bottom */
+    margin: 0 !important;
+}
+
+.sidebar.active .nav ul {
+    display: block !important;
+    width: 100% !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 1.5rem !important;
+    margin: 0 !important;
+}
+
+/* ALL nav items must be visible */
+.sidebar.active .nav li {
+    display: block !important;
+    width: 100% !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    margin-bottom: 15px !important;
+    transform: none !important;
+    position: static !important;
+    pointer-events: auto !important; /* Ensure clicks work */
+    cursor: pointer !important;
+}
+
+.sidebar.active .nav li:first-child,
+.sidebar.active .nav li:nth-child(2),
+.sidebar.active .nav li:nth-child(3) {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: static !important;
+    pointer-events: auto !important; /* Ensure clicks work */
+}
+
+.sidebar.active .nav a {
+    display: block !important;
+    width: 100% !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    padding: 5px 0 !important;
+    pointer-events: auto !important; /* Ensure clicks work */
+    cursor: pointer !important;
+    position: relative !important;
+    z-index: 1005 !important; /* Ensure links are above other elements */
+}
+
+/* Hide social links in mobile */
+.sidebar.active .sidebar-social {
+    display: none !important;
+}
+
+/* Theme toggle at bottom of screen - revert to original styling */
+.sidebar.active .theme-toggle {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 20px !important;
+    z-index: 10010 !important;
+    width: 40px !important;
+    height: 40px !important;
+    background-color: transparent !important; /* Remove background color */
+    padding: 10px !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3) !important; /* Original shadow */
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* CRITICAL: Ensure first navigation items are visible and highlighted */
+.sidebar.active .nav ul li:first-child a,
+.sidebar.active .nav ul li:nth-child(2) a,
+.sidebar.active .nav ul li:nth-child(3) a {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: var(--neon-blue) !important;
+    font-weight: bold !important;
+}
+
+/* Force scroll to top of sidebar on open */
+.sidebar.active {
+    scroll-behavior: auto !important;
+    scroll-padding-top: 0 !important;
+}
+
+/* Make first few links highlighted for better visibility */
+body.is-mobile .sidebar.active .nav ul li:first-child,
+body.is-mobile .sidebar.active .nav ul li:nth-child(2),
+body.is-mobile .sidebar.active .nav ul li:nth-child(3) {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: static !important;
+    transform: none !important;
+}
+
+/* Reduce glitch effect on mobile */
+.sidebar.active .logo.glitch-name::before,
+.sidebar.active .logo.glitch-name::after {
+    display: none !important;
+}
+
+/* Ensure nothing has scroll overflow issues */
+* {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Make sure main content doesn't block clicks when menu is open */
+body.menu-open .main-content {
+    pointer-events: none !important;
+}
+
+/* MOBILE-ONLY: Apply hiding ONLY for mobile devices */
+@media (max-width: 768px) {
+    .sidebar.active .profile-photo,
+    .sidebar.active .subtitle,
+    .sidebar.active .sidebar-description,
+    body.is-mobile .sidebar.active .sidebar-footer,
+    body.is-mobile .sidebar.active .profile-photo {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        position: absolute !important;
+        pointer-events: none !important;
+    }
+} 

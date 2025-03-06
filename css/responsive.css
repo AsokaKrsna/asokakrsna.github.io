@@ -1,0 +1,245 @@
+/* Responsive CSS for mobile devices */
+
+@media (max-width: 768px) {
+    /* Adjust main content when menu is open */
+    body.menu-open .main-content {
+        opacity: 0.3;
+        pointer-events: none !important;
+    }
+    
+    /* Fix sidebar content structure */
+    .sidebar.active {
+        display: flex !important;
+        flex-direction: column !important;
+        overflow-y: auto !important;
+        max-height: 100vh;
+        padding-bottom: 2rem;
+        padding-top: 0 !important;
+    }
+    
+    /* SIMPLIFIED: Clean sidebar content structure */
+    .sidebar.active .sidebar-content {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        width: 100% !important;
+        padding: 0 !important;
+    }
+    
+    /* Name at the top with reduced glitch effect */
+    .sidebar.active .logo.glitch-name {
+        display: block !important;
+        position: fixed !important;
+        top: 20px !important;
+        left: 20px !important;
+        font-size: 1.2rem !important;
+        line-height: 1.2 !important;
+        color: var(--text-color) !important;
+        text-shadow: 0 0 3px rgba(0, 255, 255, 0.3);
+        z-index: 10001 !important;
+        padding: 5px 10px !important;
+        border-radius: 4px !important;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Dark theme styling - deeper navy to match theme */
+    body.dark-theme .sidebar.active .logo.glitch-name {
+        background-color: rgba(8, 15, 30, 0.85) !important;
+        text-shadow: 0 0 3px rgba(0, 255, 255, 0.3) !important;
+        color: #ffffff !important;
+    }
+    
+    /* Light theme styling */
+    body:not(.dark-theme) .sidebar.active .logo.glitch-name {
+        background-color: rgba(240, 240, 240, 0.9) !important;
+        text-shadow: 0 0 3px rgba(0, 100, 255, 0.3) !important;
+        color: #333333 !important;
+    }
+    
+    /* Reduce glitch effect in mobile */
+    .sidebar.active .logo.glitch-name::before,
+    .sidebar.active .logo.glitch-name::after {
+        display: none !important;
+    }
+    
+    /* COMPLETELY HIDE profile components - MOBILE ONLY */
+    .sidebar.active .profile-photo,
+    .sidebar.active .subtitle,
+    .sidebar.active .sidebar-description,
+    .sidebar-footer,
+    .sidebar.active .sidebar-footer,
+    body.is-mobile .sidebar-footer,
+    body.is-mobile .profile-photo {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        position: absolute !important;
+        pointer-events: none !important;
+    }
+    
+    /* Navigation below name */
+    .sidebar.active .nav {
+        display: block !important;
+        width: 100% !important;
+        padding-top: 80px !important; /* Space for name at top */
+        padding-bottom: 60px !important; /* Space for theme toggle at bottom */
+        margin: 0 !important;
+    }
+    
+    /* Hide sidebar header and social links */
+    .sidebar.active .sidebar-header {
+        background: none !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Force hide all sidebar-header children except logo */
+    .sidebar.active .sidebar-header > *:not(.logo) {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        position: absolute !important;
+        pointer-events: none !important;
+    }
+    
+    .sidebar.active .sidebar-social {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+    
+    /* Theme toggle at bottom left - revert to original */
+    .sidebar.active .theme-toggle {
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        z-index: 10010 !important;
+        width: 40px !important;
+        height: 40px !important;
+        background-color: transparent !important;
+        padding: 10px !important;
+        border-radius: 50% !important;
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.3) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* Force all navigation items to be visible */
+    .nav {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    .nav ul {
+        padding: 0 1.5rem !important;
+        margin: 0 !important;
+        display: block !important;
+        overflow: visible !important;
+        height: auto !important;
+    }
+    
+    /* Force display of all navigation items, clear spacing */
+    .nav li {
+        margin-bottom: 15px !important;
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        position: static !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+    }
+    
+    /* Special emphasis for first items */
+    .nav li:first-child,
+    .nav li:nth-child(2),
+    .nav li:nth-child(3) {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        position: static !important;
+        pointer-events: auto !important;
+    }
+    
+    /* Ensure all links are visible and clickable */
+    .nav a {
+        padding: 0.5rem 0 !important;
+        font-size: 1rem !important;
+        display: block !important;
+        letter-spacing: 0.5px;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        position: relative !important;
+        z-index: 1005 !important;
+    }
+    
+    /* Animation on touch */
+    .nav a:active {
+        transform: translateX(5px);
+    }
+    
+    /* Ensure sidebar transitions smoothly */
+    .sidebar {
+        transition: transform 0.3s ease, visibility 0.3s ease;
+    }
+    
+    /* Menu button animation improvements */
+    .menu-button {
+        z-index: 10000;
+    }
+    
+    .menu-button.active {
+        position: fixed;
+    }
+    
+    .menu-button span {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    
+    .menu-button.active span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+    
+    .menu-button.active span:nth-child(3) {
+        transform: translateY(-14px) rotate(-45deg);
+    }
+    
+    /* Special highlight for first items */
+    .nav li:first-child a,
+    .nav li:nth-child(2) a,
+    .nav li:nth-child(3) a {
+        color: var(--neon-blue) !important;
+        font-weight: bold !important;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 350px) {
+    /* Extra small device optimizations */
+    .nav a {
+        font-size: 0.9rem !important;
+        padding: 8px 0 !important;
+    }
+    
+    .menu-button {
+        width: 40px;
+        height: 40px;
+        padding: 8px;
+    }
+    
+    .resume-button {
+        padding: 8px 15px;
+        font-size: 0.8rem;
+    }
+} 

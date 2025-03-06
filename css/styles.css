@@ -208,8 +208,8 @@ ul {
 
 /* Profile Photo - Refined square style */
 .profile-photo {
-    width: 100px;
-    height: 100px;
+    width: 5rem !important; /* Added !important to override any other styles */
+    height: 5rem !important; /* Added !important to override any other styles */
     margin-bottom: 0.75rem; /* Reduce margin */
     position: relative;
 }
@@ -3839,6 +3839,267 @@ body:not(.loading-active) .menu-button {
 
 .arena-intro {
     color: var(--light-slate);
+}
+
+
+
+
+
+
+
+
+
+/* Add this at the end of the file to handle menu-open body state */
+body.menu-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+/* This will ensure content doesn't shift when scrollbar disappears */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--green) var(--navy);
+}
+
+/* Ensure proper z-index for mobile menu components */
+@media (max-width: 768px) {
+    .menu-button {
+        z-index: 1100 !important; /* Higher than sidebar */
+    }
+    .sidebar {
+        z-index: 1000 !important;
+    }
+}
+
+/* Enhance mobile sidebar appearance */
+@media (max-width: 768px) {
+    .sidebar-header {
+        padding-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .profile-photo {
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .profile-photo .image-wrapper {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .logo.glitch-name {
+        font-size: 1.5rem !important;
+        margin-bottom: 0.25rem !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .subtitle {
+        font-size: 0.8rem !important;
+        line-height: 1.2 !important;
+        margin-bottom: 0.25rem !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    /* Hide typing text on mobile */
+    .sidebar-description {
+        display: none !important;
+    }
+    
+    /* Compact nav for mobile */
+    .nav {
+        margin-top: 0.5rem !important;
+    }
+    
+    .nav ul {
+        gap: 0.4rem !important;
+    }
+    
+    .nav a {
+        padding: 0.4rem 0 !important;
+        font-size: 0.9rem !important;
+    }
+    
+    /* Adjust sidebar social links */
+    .sidebar-social {
+        margin-top: 1rem !important;
+    }
+    
+    .sidebar-social ul {
+        gap: 0.5rem !important;
+    }
+}
+
+/* Extra adjustments for very small screens */
+@media (max-width: 350px) {
+    .subtitle {
+        display: none !important;
+    }
+    
+    .profile-photo .image-wrapper {
+        width: 50px !important;
+        height: 50px !important;
+    }
+}
+
+/* Enhance mobile sidebar when active */
+@media (max-width: 768px) {
+    .sidebar.active {
+        transform: translateX(0);
+        overflow-y: auto;
+        padding-top: 4rem;
+        height: 100vh;
+    }
+    
+    /* Improve transition animation */
+    .sidebar {
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    /* Ensure menu button stays on top */
+    .menu-button {
+        z-index: 1100 !important;
+        top: 1rem;
+        right: 1rem;
+    }
+    
+    /* Handle vertical scrolling only when needed */
+    .sidebar-content {
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+        padding-bottom: 4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Ensure proper z-index for mobile menu components */
+    .menu-button {
+        z-index: 1100 !important; 
+    }
+    
+    .sidebar {
+        z-index: 1000 !important;
+    }
+    
+    /* Fixed positioning for resume button on mobile */
+    .resume-button {
+        z-index: 900 !important;
+        position: fixed !important;
+        right: 5.5rem !important; /* Position next to menu button */
+        top: 1rem !important;
+    }
+}
+
+/* Mobile-specific customizations */
+body.is-mobile .sidebar-header {
+    padding-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+body.is-mobile .profile-photo {
+    margin-bottom: 0.5rem !important;
+}
+
+body.is-mobile .profile-photo .image-wrapper {
+    width: 60px !important;
+    height: 60px !important;
+}
+
+body.is-mobile .logo.glitch-name {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.25rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body.is-mobile .subtitle {
+    font-size: 0.8rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.25rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Hide typing text on mobile */
+body.is-mobile .sidebar-description {
+    display: none !important;
+}
+
+/* Compact nav for mobile */
+body.is-mobile .nav {
+    margin-top: 0.5rem !important;
+}
+
+body.is-mobile .nav ul {
+    gap: 0.4rem !important;
+}
+
+body.is-mobile .nav a {
+    padding: 0.4rem 0 !important;
+    font-size: 0.9rem !important;
+}
+
+/* Adjust sidebar social links */
+body.is-mobile .sidebar-social {
+    margin-top: 1rem !important;
+}
+
+body.is-mobile .sidebar-social ul {
+    gap: 0.5rem !important;
+}
+
+/* Mobile sidebar when active */
+body.is-mobile .sidebar.active {
+    transform: translateX(0);
+    overflow-y: auto;
+    padding-top: 4rem;
+    height: 100vh;
+}
+
+/* Improve transition animation */
+body.is-mobile .sidebar {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Ensure menu button stays on top */
+body.is-mobile .menu-button {
+    z-index: 1100 !important;
+    top: 1rem;
+    right: 1rem;
+}
+
+/* Handle vertical scrolling only when needed */
+body.is-mobile .sidebar-content {
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    padding-bottom: 4rem;
+}
+
+/* Fixed positioning for resume button on mobile */
+body.is-mobile .resume-button {
+    z-index: 900 !important;
+    position: fixed !important;
+    right: 5.5rem !important; /* Position next to menu button */
+    top: 1rem !important;
+}
+
+/* Extra adjustments for very small screens */
+@media (max-width: 350px) {
+    body.is-mobile .subtitle {
+        display: none !important;
+    }
+    
+    body.is-mobile .profile-photo .image-wrapper {
+        width: 50px !important;
+        height: 50px !important;
+    }
 }
 
 

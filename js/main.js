@@ -13,6 +13,266 @@ setTimeout(() => {
     });
 }, 1000);
 
+// Add immediate mobile menu initializer to ensure it works regardless of other code
+(function initializeMobileMenu() {
+    const menuButton = document.querySelector('.menu-button');
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    const sidebarHeader = document.querySelector('.sidebar-header');
+    const logo = document.querySelector('.logo');
+    const subtitle = document.querySelector('.subtitle');
+    const nav = document.querySelector('.nav');
+    const navUl = document.querySelector('.nav ul');
+    const navItems = document.querySelectorAll('.nav li');
+    const sidebarSocial = document.querySelector('.sidebar-social');
+    const themeToggle = document.querySelector('.theme-toggle');
+    
+    // Add mobile detection to body
+    function handleMobileDetection() {
+        if (window.innerWidth <= 768) {
+            document.body.classList.add('is-mobile');
+            
+            // Make sure sidebar elements are ready for mobile
+            if (sidebarHeader) sidebarHeader.style.display = 'flex';
+            if (logo) logo.style.display = 'block';
+            if (subtitle) subtitle.style.display = 'block';
+        } else {
+            document.body.classList.remove('is-mobile');
+            // Make sure to clean up mobile state if resized to desktop
+            sidebar.classList.remove('active');
+            menuButton.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            
+            // Reset any style changes
+            if (sidebarHeader) sidebarHeader.style.display = '';
+            if (logo) logo.style.display = '';
+            if (subtitle) subtitle.style.display = '';
+            if (sidebarSocial) sidebarSocial.style.display = '';
+            if (themeToggle) themeToggle.style.display = '';
+        }
+    }
+    
+    // Run on load
+    handleMobileDetection();
+    
+    // Run on resize
+    window.addEventListener('resize', handleMobileDetection);
+    
+    if (menuButton && sidebar) {
+        menuButton.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            menuButton.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+            
+            // Handle mobile view
+            if (window.innerWidth <= 768) {
+                if (sidebar.classList.contains('active')) {
+                    // Force scroll to top on open
+                    sidebar.scrollTop = 0;
+                    
+                    // Ensure sidebar is properly displayed
+                    sidebar.style.display = 'flex';
+                    sidebar.style.flexDirection = 'column';
+                    sidebar.style.overflowY = 'auto';
+                    
+                    // Get sidebar content container
+                    const sidebarContent = sidebar.querySelector('.sidebar-content');
+                    if (sidebarContent) {
+                        sidebarContent.style.display = 'flex';
+                        sidebarContent.style.flexDirection = 'column';
+                        sidebarContent.style.width = '100%';
+                        sidebarContent.style.height = 'auto';
+                        sidebarContent.style.padding = '0';
+                    }
+                    
+                    // Position name at the top with reduced glitch effect
+                    if (logo) {
+                        logo.style.display = 'block';
+                        logo.style.position = 'fixed';
+                        logo.style.top = '20px';
+                        logo.style.left = '20px';
+                        logo.style.fontSize = '1.2rem';
+                        logo.style.lineHeight = '1.2';
+                        logo.style.zIndex = '10001';
+                        logo.style.padding = '5px 10px';
+                        logo.style.borderRadius = '4px';
+                        logo.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+                        
+                        // Apply theme-appropriate styling with specific colors
+                        const isDarkTheme = document.body.classList.contains('dark-theme');
+                        if (isDarkTheme) {
+                            logo.style.backgroundColor = 'rgba(8, 15, 30, 0.85)'; // Darker navy to match theme
+                            logo.style.textShadow = '0 0 3px rgba(0, 255, 255, 0.3)';
+                            logo.style.color = '#ffffff';
+                        } else {
+                            logo.style.backgroundColor = 'rgba(240, 240, 240, 0.9)';
+                            logo.style.textShadow = '0 0 3px rgba(0, 100, 255, 0.3)';
+                            logo.style.color = '#333333';
+                        }
+                        
+                        // Disable glitch effect for mobile
+                        const beforePseudo = document.createElement('style');
+                        beforePseudo.innerHTML = `.sidebar.active .logo.glitch-name::before, .sidebar.active .logo.glitch-name::after { display: none !important; }`;
+                        document.head.appendChild(beforePseudo);
+                    }
+                    
+                    // MOBILE ONLY: Hide profile elements only in mobile view
+                    const profilePhoto = sidebar.querySelector('.profile-photo');
+                    if (profilePhoto && window.innerWidth <= 768) {
+                        profilePhoto.style.display = 'none';
+                        profilePhoto.style.opacity = '0';
+                        profilePhoto.style.visibility = 'hidden';
+                    }
+                    
+                    if (subtitle && window.innerWidth <= 768) {
+                        subtitle.style.display = 'none';
+                        subtitle.style.opacity = '0';
+                        subtitle.style.visibility = 'hidden';
+                    }
+                    
+                    const sidebarDescription = sidebar.querySelector('.sidebar-description');
+                    if (sidebarDescription && window.innerWidth <= 768) {
+                        sidebarDescription.style.display = 'none';
+                        sidebarDescription.style.opacity = '0';
+                        sidebarDescription.style.visibility = 'hidden';
+                    }
+                    
+                    // Hide sidebar header except logo in mobile only
+                    if (sidebarHeader && window.innerWidth <= 768) {
+                        sidebarHeader.style.background = 'none';
+                        sidebarHeader.style.boxShadow = 'none';
+                        sidebarHeader.style.border = 'none';
+                        sidebarHeader.style.padding = '0';
+                        sidebarHeader.style.margin = '0';
+                        
+                        // Hide all children except logo
+                        Array.from(sidebarHeader.children).forEach(child => {
+                            if (!child.classList.contains('logo') && window.innerWidth <= 768) {
+                                child.style.display = 'none';
+                                child.style.opacity = '0';
+                                child.style.visibility = 'hidden';
+                            }
+                        });
+                    }
+                    
+                    // Set proper navigation padding
+                    nav.style.display = 'block';
+                    nav.style.width = '100%';
+                    nav.style.paddingTop = '80px';
+                    nav.style.paddingBottom = '60px';
+                    nav.style.margin = '0';
+                    
+                    // Ensure all navigation items are visible
+                    navUl.style.display = 'block';
+                    navUl.style.height = 'auto';
+                    navUl.style.overflow = 'visible';
+                    navUl.style.margin = '0';
+                    navUl.style.padding = '0 1.5rem';
+                    
+                    // Make all nav items visible, with special attention to first items
+                    navItems.forEach((item, index) => {
+                        // Force display of all items
+                        item.style.display = 'block';
+                        item.style.opacity = '1';
+                        item.style.visibility = 'visible';
+                        item.style.transform = 'none';
+                        item.style.position = 'static';
+                        item.style.marginBottom = '15px';
+                        item.style.pointerEvents = 'auto';
+                        item.style.cursor = 'pointer';
+                        
+                        // Special emphasis on first few items
+                        if (index === 0 || index === 1 || index === 2) {
+                            const link = item.querySelector('a');
+                            if (link) {
+                                link.style.display = 'block';
+                                link.style.visibility = 'visible';
+                                link.style.opacity = '1';
+                                link.style.color = 'var(--neon-blue)';
+                                link.style.fontWeight = 'bold';
+                                link.style.pointerEvents = 'auto';
+                                link.style.cursor = 'pointer';
+                                link.style.position = 'relative';
+                                link.style.zIndex = '1005';
+                            }
+                        }
+                    });
+                    
+                    // Ensure navigation links are clickable
+                    fixMobileNavigation();
+                    
+                    // Hide social links in mobile view only
+                    if (sidebarSocial && window.innerWidth <= 768) {
+                        sidebarSocial.style.display = 'none';
+                        sidebarSocial.style.opacity = '0';
+                        sidebarSocial.style.visibility = 'hidden';
+                    }
+                    
+                    // Position theme toggle button at bottom left - revert to original
+                    if (themeToggle) {
+                        themeToggle.style.position = 'fixed';
+                        themeToggle.style.bottom = '20px';
+                        themeToggle.style.left = '20px';
+                        themeToggle.style.zIndex = '10010';
+                        themeToggle.style.width = '40px';
+                        themeToggle.style.height = '40px';
+                        themeToggle.style.backgroundColor = 'transparent';
+                        themeToggle.style.padding = '10px';
+                        themeToggle.style.borderRadius = '50%';
+                        themeToggle.style.boxShadow = '0 0 10px rgba(0, 255, 255, 0.3)';
+                        themeToggle.style.display = 'flex';
+                        themeToggle.style.alignItems = 'center';
+                        themeToggle.style.justifyContent = 'center';
+                    }
+                    
+                    // Hide any possible footer elements in mobile only
+                    const sidebarFooter = sidebar.querySelector('.sidebar-footer');
+                    if (sidebarFooter && window.innerWidth <= 768) {
+                        sidebarFooter.style.display = 'none';
+                        sidebarFooter.style.opacity = '0';
+                        sidebarFooter.style.visibility = 'hidden';
+                    }
+                    
+                    // Log for debugging
+                    console.log('Mobile menu toggled on - simplified layout');
+                } else {
+                    // Reset styles when closed
+                    console.log('Mobile menu toggled off');
+                }
+            } else {
+                // If in desktop view, make sure styles are reset
+                resetDesktopStyles();
+            }
+        });
+        
+        // Reset styles on window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                // Reset styles for desktop view to ensure desktop view is not affected
+                nav.style = '';
+                logo.style = '';
+                subtitle.style = '';
+                navUl.style = '';
+                
+                const profilePhoto = document.querySelector('.profile-photo');
+                if (profilePhoto) profilePhoto.style = '';
+                
+                const sidebarDescription = document.querySelector('.sidebar-description');
+                if (sidebarDescription) sidebarDescription.style = '';
+                
+                navItems.forEach(item => {
+                    item.style = '';
+                    const link = item.querySelector('a');
+                    if (link) link.style = '';
+                });
+                
+                if (sidebarSocial) sidebarSocial.style = '';
+                if (themeToggle) themeToggle.style = '';
+            }
+        });
+    }
+})();
+
 // Custom cursor follower
 const cursorFollower = document.querySelector('.cursor-follower');
 
@@ -26,51 +286,8 @@ document.addEventListener('mouseout', () => {
 
 // Mobile menu functionality
 function initMobileMenu() {
-    const menuButton = document.querySelector('.menu-button');
-    const sidebar = document.querySelector('.sidebar');
-
-    if (menuButton) {
-        menuButton.addEventListener('click', function() {
-            this.classList.toggle('active');
-            sidebar.classList.toggle('active');
-            document.body.classList.toggle('menu-open');
-        });
-    }
-
-    // Close mobile menu when clicking on a nav link
-    const navLinks = document.querySelectorAll('.nav a');
-
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.remove('active');
-                if (menuButton) menuButton.classList.remove('active');
-                document.body.classList.remove('menu-open');
-            }
-        });
-    });
-    
-    // Add smooth scrolling to all links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            
-            if (sidebar.classList.contains('active')) {
-                sidebar.classList.remove('active');
-                menuButton.classList.remove('active');
-                document.body.classList.remove('menu-open');
-            }
-            
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
+    // Keep this for backward compatibility, but our immediate initializer above will handle the functionality
+    console.log('Legacy mobile menu initialization - already handled');
 }
 
 // Apply hover effect on all interactive elements
@@ -1375,17 +1592,8 @@ function init() {
         });
     });
     
-    // Handle mobile menu toggle
-    const menuButton = document.querySelector('.menu-button');
-    const sidebar = document.querySelector('.sidebar');
-    
-    if (menuButton && sidebar) {
-        menuButton.addEventListener('click', function() {
-            this.classList.toggle('active');
-            sidebar.classList.toggle('active');
-            document.body.classList.toggle('menu-open');
-        });
-    }
+    // Mobile menu is now handled by the immediate initializer at the top of the file
+    // No need to duplicate the functionality here
     
     // Initialize typing effect
     initTypingEffect();
@@ -1492,4 +1700,112 @@ document.querySelectorAll('.arena-card').forEach(card => {
     card.addEventListener('mouseleave', function() {
         this.removeAttribute('data-hover');
     });
+});
+
+// Fix mobile navigation click handling
+function fixMobileNavigation() {
+    const navLinks = document.querySelectorAll('.nav a');
+    const sidebar = document.querySelector('.sidebar');
+    const menuButton = document.querySelector('.menu-button');
+    
+    // Add click handling to each nav link
+    navLinks.forEach(link => {
+        // Remove any existing event listeners first to prevent duplicates
+        const newLink = link.cloneNode(true);
+        link.parentNode.replaceChild(newLink, link);
+        
+        newLink.addEventListener('click', (e) => {
+            // Get the href attribute
+            const href = newLink.getAttribute('href');
+            
+            // If this is a section link (starts with #)
+            if (href && href.startsWith('#')) {
+                // Close the menu when link is clicked
+                sidebar.classList.remove('active');
+                menuButton.classList.remove('active');
+                document.body.classList.remove('menu-open');
+                
+                // Small delay to ensure smooth scrolling
+                setTimeout(() => {
+                    // Try to find the target element
+                    const targetElement = document.querySelector(href);
+                    if (targetElement) {
+                        // Scroll to the element
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }, 300);
+            }
+        });
+    });
+}
+
+// Call the fix navigation function on page load
+document.addEventListener('DOMContentLoaded', () => {
+    fixMobileNavigation();
+});
+
+// Call it again on window resize to ensure it works after resizing
+window.addEventListener('resize', () => {
+    if (window.innerWidth <= 768) {
+        fixMobileNavigation();
+    }
+});
+
+// Add a function to reset all desktop styles
+function resetDesktopStyles() {
+    // Get all elements
+    const profilePhoto = document.querySelector('.profile-photo');
+    const subtitle = document.querySelector('.subtitle');
+    const sidebarDescription = document.querySelector('.sidebar-description');
+    const sidebarHeader = document.querySelector('.sidebar-header');
+    const sidebarSocial = document.querySelector('.sidebar-social');
+    
+    // Reset all styles for desktop view
+    if (profilePhoto) {
+        profilePhoto.style = ''; // Clear all inline styles
+        profilePhoto.removeAttribute('style');
+    }
+    
+    if (subtitle) {
+        subtitle.style = '';
+        subtitle.removeAttribute('style');
+    }
+    
+    if (sidebarDescription) {
+        sidebarDescription.style = '';
+        sidebarDescription.removeAttribute('style');
+    }
+    
+    if (sidebarHeader) {
+        sidebarHeader.style = '';
+        sidebarHeader.removeAttribute('style');
+        
+        // Reset children elements too
+        Array.from(sidebarHeader.children).forEach(child => {
+            child.style = '';
+            child.removeAttribute('style');
+        });
+    }
+    
+    if (sidebarSocial) {
+        sidebarSocial.style = '';
+        sidebarSocial.removeAttribute('style');
+    }
+}
+
+// Call this on page load to ensure desktop view is clean
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.innerWidth > 768) {
+        resetDesktopStyles();
+    }
+});
+
+// Reset styles on page load and whenever window resizes to desktop size
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        resetDesktopStyles();
+    }
 });
