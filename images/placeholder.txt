@@ -1,0 +1,5 @@
+Please replace this with your profile photo.
+Recommended size: 300px x 300px
+Recommended format: JPG or PNG
+
+Rename your image to "profile.jpg" or update the image path in index.html. 
