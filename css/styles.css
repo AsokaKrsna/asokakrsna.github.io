@@ -2745,6 +2745,7 @@ body:not(.loading-active) .menu-button {
 .achievement-item {
     position: relative;
     padding-left: 1.8rem;
+    margin-bottom: 1.5rem;
     transition: all 0.3s ease;
     transform-origin: left;
 }
@@ -2753,6 +2754,7 @@ body:not(.loading-active) .menu-button {
     content: '>';
     position: absolute;
     left: 0;
+    top: 0;
     color: var(--accent);
     font-family: var(--font-mono);
     font-weight: bold;
@@ -2771,8 +2773,9 @@ body:not(.loading-active) .menu-button {
 
 .achievement-title {
     font-size: 1rem;
+    line-height: 1.6;
     transition: all 0.3s ease;
-    margin: 0;
+    margin: 0 0 0.5rem 0;
 }
 
 .achievement-item:hover .achievement-title {
@@ -4100,6 +4103,172 @@ body.is-mobile .resume-button {
         width: 50px !important;
         height: 50px !important;
     }
+}
+
+/* ===================================
+   RESEARCH INTERESTS SECTION
+   =================================== */
+
+.research-interests {
+    padding: 3rem 0;
+}
+
+.research-interests-content {
+    max-width: 900px;
+}
+
+.research-statement {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--light-slate);
+    margin-bottom: 0;
+}
+
+/* ===================================
+   RESEARCH PUBLICATIONS ENHANCEMENTS
+   =================================== */
+
+.research-item {
+    position: relative;
+}
+
+.research-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.research-status,
+.research-role,
+.research-impact {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.research-status.published {
+    background: rgba(100, 255, 218, 0.1);
+    color: var(--neon-blue);
+    border: 1px solid var(--neon-blue);
+}
+
+.research-status.in-progress {
+    background: rgba(167, 139, 250, 0.1);
+    color: var(--neon-purple);
+    border: 1px solid var(--neon-purple);
+}
+
+.research-role {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.research-impact {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+/* ===================================
+   ACHIEVEMENTS CATEGORIES
+   =================================== */
+
+.achievements-category {
+    margin-bottom: 4rem;
+}
+
+.category-title {
+    color: var(--neon-blue);
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(100, 255, 218, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.category-title i {
+    color: var(--neon-purple);
+}
+
+.achievement-item h4 {
+    color: var(--lightest-slate);
+    line-height: 1.6;
+    margin-bottom: 0.3rem;
+}
+
+/* ===================================
+   VOLUNTEERING SECTION
+   =================================== */
+
+.volunteering-item {
+    background: var(--light-navy);
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    border-left: 4px solid var(--neon-purple);
+    transition: all 0.3s ease;
+}
+
+.volunteering-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-left-color: var(--neon-blue);
+}
+
+.volunteering-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.volunteering-org {
+    color: var(--lightest-slate);
+    font-size: 1.3rem;
+    margin: 0;
+}
+
+.volunteering-period {
+    color: var(--neon-blue);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+}
+
+.volunteering-role {
+    color: var(--neon-purple);
+    font-size: 1.1rem;
+    margin: 0.5rem 0 1rem 0;
+    font-weight: 500;
+}
+
+.volunteering-description {
+    color: var(--light-slate);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.volunteering-impact {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--neon-blue);
+    font-size: 0.95rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(100, 255, 218, 0.2);
+}
+
+.volunteering-impact i {
+    color: var(--neon-purple);
 }
 
 

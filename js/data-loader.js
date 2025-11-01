@@ -16,6 +16,18 @@ class PortfolioLoader {
         try {
             await this.loadData();
             this.renderAll();
+            
+            // Initialize "See More" and "Load More" functionality after rendering
+            if (typeof initResearchLoadMore === 'function') {
+                initResearchLoadMore();
+            }
+            if (typeof initProjectsLoadMore === 'function') {
+                initProjectsLoadMore();
+            }
+            if (typeof initBlogViewMore === 'function') {
+                initBlogViewMore();
+            }
+            
             console.log('%c[Portfolio] %cData loaded successfully!', 'color: #4dfcff; font-weight: bold;', 'color: white;');
         } catch (error) {
             console.error('[Portfolio] Error loading data:', error);
@@ -44,15 +56,17 @@ class PortfolioLoader {
     renderAll() {
         this.renderPersonalInfo();
         this.renderAbout();
+        this.renderResearchInterests();
+        this.renderResearch();
         this.renderEducation();
         this.renderExperience();
         this.renderSkills();
         this.renderProjects();
-        this.renderResearch();
         this.renderBlogs();
         this.renderCyberArena();
         this.renderCertifications();
         this.renderAchievements();
+        this.renderVolunteering();
         this.renderContact();
         this.renderSocialLinks();
         this.renderFooter();
@@ -106,6 +120,28 @@ class PortfolioLoader {
         aboutContent.innerHTML = this.data.about.paragraphs
             .map(p => `<p>${p}</p>`)
             .join('');
+    }
+
+    /**
+     * Render Research Interests section
+     */
+    renderResearchInterests() {
+        const researchInterestsSection = document.querySelector('#research-interests');
+        if (!researchInterestsSection) return;
+        
+        const { researchInterests } = this.data;
+        const container = researchInterestsSection.querySelector('.container');
+        
+        if (container) {
+            container.innerHTML = `
+                <h2 class="section-title">Research Interests</h2>
+                <div class="research-interests-content">
+                    <div class="research-statement">
+                        <p>${researchInterests.statement}</p>
+                    </div>
+                </div>
+            `;
+        }
     }
 
     /**
@@ -205,20 +241,39 @@ class PortfolioLoader {
         const researchContent = document.querySelector('#research .research-content');
         if (!researchContent) return;
         
-        researchContent.innerHTML = this.data.research.map(paper => `
-            <div class="research-item${paper.hidden ? ' hidden' : ''}">
-                <div class="research-meta">
-                    <span class="research-year">${paper.date}</span> | <span class="research-publication">${paper.publication}</span>
+        researchContent.innerHTML = this.data.research.map(paper => {
+            const statusBadge = paper.type === 'in-progress' 
+                ? `<span class="research-status in-progress"><i class="fas fa-flask"></i> ${paper.status || 'In Progress'}</span>`
+                : `<span class="research-status published"><i class="fas fa-check-circle"></i> Published</span>`;
+            
+            const roleInfo = paper.yourRole 
+                ? `<span class="research-role"><i class="fas fa-user-circle"></i> ${paper.yourRole}</span>`
+                : '';
+            
+            const impactInfo = paper.impactArea
+                ? `<span class="research-impact"><i class="fas fa-bullseye"></i> ${paper.impactArea}</span>`
+                : '';
+            
+            return `
+                <div class="research-item${paper.hidden ? ' hidden' : ''}">
+                    <div class="research-meta">
+                        <span class="research-year">${paper.date}</span> | <span class="research-publication">${paper.publication}</span>
+                    </div>
+                    <h3 class="research-title">${paper.title}</h3>
+                    <div class="research-badges">
+                        ${statusBadge}
+                        ${roleInfo}
+                        ${impactInfo}
+                    </div>
+                    <p class="research-description">
+                        ${paper.description}
+                    </p>
+                    <i class="external-icon fas fa-external-link-alt"></i>
+                    <div class="border-line"></div>
+                    <a href="${paper.url}" ${paper.url !== '#' ? 'target="_blank" rel="noopener noreferrer"' : ''} class="card-link" aria-label="View paper"></a>
                 </div>
-                <h3 class="research-title">${paper.title}</h3>
-                <p class="research-description">
-                    ${paper.description}
-                </p>
-                <i class="external-icon fas fa-external-link-alt"></i>
-                <div class="border-line"></div>
-                <a href="${paper.url}" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="View paper"></a>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
     /**
@@ -290,9 +345,56 @@ class PortfolioLoader {
         const achievementsTimeline = document.querySelector('#achievements .achievements-timeline');
         if (!achievementsTimeline) return;
         
-        achievementsTimeline.innerHTML = this.data.achievements.map(achievement => `
-            <div class="achievement-item">
-                <h3 class="achievement-title">${achievement}</h3>
+        const { achievements } = this.data;
+        
+        achievementsTimeline.innerHTML = `
+            <div class="achievements-category">
+                <h3 class="category-title"><i class="fas fa-graduation-cap"></i> Academic Honors</h3>
+                ${achievements.academic.map(achievement => `
+                    <div class="achievement-item">
+                        <h4 class="achievement-title">${achievement}</h4>
+                    </div>
+                `).join('')}
+            </div>
+            
+            <div class="achievements-category">
+                <h3 class="category-title"><i class="fas fa-trophy"></i> Competitions & Recognitions</h3>
+                ${achievements.competitions.map(achievement => `
+                    <div class="achievement-item">
+                        <h4 class="achievement-title">${achievement}</h4>
+                    </div>
+                `).join('')}
+            </div>
+            
+            <div class="achievements-category">
+                <h3 class="category-title"><i class="fas fa-users"></i> Leadership & Service</h3>
+                ${achievements.leadership.map(achievement => `
+                    <div class="achievement-item">
+                        <h4 class="achievement-title">${achievement}</h4>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    /**
+     * Render Volunteering section
+     */
+    renderVolunteering() {
+        const volunteeringContent = document.querySelector('#volunteering .volunteering-content');
+        if (!volunteeringContent) return;
+        
+        volunteeringContent.innerHTML = this.data.volunteering.map(vol => `
+            <div class="volunteering-item">
+                <div class="volunteering-header">
+                    <h3 class="volunteering-org">${vol.organization}</h3>
+                    <span class="volunteering-period">${vol.period}</span>
+                </div>
+                <h4 class="volunteering-role">${vol.role}</h4>
+                <p class="volunteering-description">${vol.description}</p>
+                <div class="volunteering-impact">
+                    <i class="fas fa-heart"></i> <strong>Impact:</strong> ${vol.impact}
+                </div>
             </div>
         `).join('');
     }
@@ -369,6 +471,6 @@ class PortfolioLoader {
 
 // Initialize portfolio loader when DOM is ready
 document.addEventListener('DOMContentLoaded', async () => {
-    const loader = new PortfolioLoader();
-    await loader.init();
+    window.portfolioLoader = new PortfolioLoader();
+    await window.portfolioLoader.init();
 });

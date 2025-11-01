@@ -64,73 +64,56 @@
                 // Hide the main content until loading completes
                 document.body.classList.add('loading-active');
                 
-                // Linux-style boot sequence (shorter for 3-second timing)
+                // Shorter Linux-style boot sequence (1.5 seconds total)
                 let bootSequence = `
-<span class="boot-msg">[    0.000000] Linux version 5.15.0-security (durjoy@securehost) (gcc version 11.2.0) </span>
-<span class="boot-msg">[    0.001337] Command line: BOOT_IMAGE=/vmlinuz-5.15.0-security root=/dev/portfolio/durjoy ro</span>
-<span class="boot-msg">[    0.235713] Memory: 16384MB available (8192KB kernel code, 2048KB rwdata, 4096KB rodata)</span>
-<span class="boot-msg">[    0.317540] CPU0: AMD Ryzen 7 PRO @ 3.80GHz</span>
-<span class="boot-msg">[    0.457892] Initializing cryptographic modules</span>
-<span class="boot-msg">[    0.598213] Loading firmware modules: signature verified</span>
-<span class="boot-msg">[    0.742369] Starting system services...</span>
-<span class="boot-msg">[    0.883642] Mounting secure filesystem...</span>
-<span class="boot-msg firewall">[    1.024715] Starting firewall: iptables ruleset applied</span>
-<span class="boot-msg">[    1.185230] Network interfaces: eth0, wlan0, tun0</span>
-<span class="boot-msg">[    1.347911] Checking system integrity...</span>
-<span class="boot-msg security">[    1.462837] Running LUKS security verification...</span>
-<span class="boot-msg intrusion">[    1.589023] Starting intrusion detection system</span>
-<span class="boot-msg">[    1.764521] Loading SELinux policies: enforcing mode</span>
-<span class="boot-msg security">[    1.913268] Setting up secure environment variables</span>
-<span class="boot-msg verified">[    2.058743] Portfolio assets: verified</span>
-<span class="boot-msg complete">[    2.228631] Secure boot complete: all checks passed</span>
-<span class="boot-msg">[    2.459014] Starting portfolio service...</span>
-<span class="boot-msg">[    2.732050] Welcome to Durjoy Majumdar's secure environment</span>
-<span class="boot-success">[    2.987331] System ready.</span>`;
+<span class="boot-msg">[    0.000000] Linux version 5.15.0-security (durjoy@securehost)</span>
+<span class="boot-msg">[    0.142857] Memory: 16384MB available</span>
+<span class="boot-msg">[    0.285714] CPU0: AMD Ryzen 7 PRO @ 3.80GHz</span>
+<span class="boot-msg firewall">[    0.428571] Starting firewall: iptables applied</span>
+<span class="boot-msg security">[    0.571428] Running security verification...</span>
+<span class="boot-msg intrusion">[    0.714285] Starting intrusion detection system</span>
+<span class="boot-msg verified">[    0.857142] Portfolio assets: verified</span>
+<span class="boot-msg complete">[    1.000000] Secure boot complete</span>
+<span class="boot-msg">[    1.142857] Starting portfolio service...</span>
+<span class="boot-success">[    1.500000] System ready.</span>`;
 
-                const totalTime = 3000; // Exactly 3 seconds total
+                const totalTime = 1500; // 1.5 seconds total
                 const lines = bootSequence.split('\n').filter(line => line.trim() !== '');
                 const timePerLine = totalTime / lines.length;
                 let currentLine = 0;
                 
-                // First show all content immediately but keep it hidden
                 bootText.innerHTML = '';
                 
-                // Display each line with precise timing for exactly 3 second total
+                // Display each line with precise timing
                 function displayNextLine() {
                     if (currentLine < lines.length) {
                         bootText.innerHTML += lines[currentLine] + '\n';
-                        bootText.scrollTop = bootText.scrollHeight; // Auto-scroll
+                        bootText.scrollTop = bootText.scrollHeight;
                         currentLine++;
                         
                         if (currentLine < lines.length) {
                             setTimeout(displayNextLine, timePerLine);
                         } else {
-                            // Last line displayed, complete in exactly 3 seconds
-                            const remainingTime = totalTime - (timePerLine * (lines.length - 1));
-                            setTimeout(completeLoading, remainingTime);
+                            setTimeout(completeLoading, timePerLine);
                         }
                     }
                 }
                 
                 function completeLoading() {
-                    // Make content ready to appear
                     document.body.classList.remove('loading-active');
                     
-                    // Force all content to be visible
                     document.querySelectorAll('.main-content, .sidebar, .menu-button').forEach(el => {
                         el.classList.add('force-visible');
                     });
                     
-                    // Fade out loading screen
                     loadingScreen.classList.add('fade-out');
                     
-                    // Remove from DOM after transition
                     setTimeout(() => {
                         loadingScreen.style.display = 'none';
                     }, 300);
                 }
                 
-                // Start the boot sequence immediately
+                // Start immediately
                 setTimeout(displayNextLine, 50);
             }
             
@@ -145,8 +128,8 @@
                 }
             }
             
-            // Shorter failsafe for 3-second loading
-            setTimeout(ensureContentVisible, 4000); // 4 second failsafe (just in case)
+            // Failsafe for 2 seconds (just in case)
+            setTimeout(ensureContentVisible, 2000);
             
             // Handle loading screen animation
             handleLoadingScreen();
@@ -160,7 +143,7 @@
                     console.log('Failsafe triggered: forcing loading screen removal');
                     ensureContentVisible();
                 }
-            }, 3500); // 3.5 second failsafe after load
+            }, 2000); // 2 second failsafe after load
         });
     </script>
 </head>
@@ -215,13 +198,15 @@
                         <li><a href="#about">ABOUT</a></li>
                         <li><a href="#education">EDUCATION</a></li>
                         <li><a href="#experience">EXPERIENCE</a></li>
+                        <li><a href="#research-interests">RESEARCH INTERESTS</a></li>
+                        <li><a href="#research">RESEARCH</a></li>
                         <li><a href="#skills">SKILLS</a></li>
                         <li><a href="#projects">PROJECTS</a></li>
-                        <li><a href="#research">RESEARCH</a></li>
                         <li><a href="#blogs">BLOGS</a></li>
                         <li><a href="#cyber-arena">CYBER ARENA</a></li>
                         <li><a href="#certifications">GLOBAL CERTIFICATIONS</a></li>
                         <li><a href="#achievements">ACHIEVEMENTS</a></li>
+                        <li><a href="#volunteering">VOLUNTEERING</a></li>
                         <li><a href="#contact">CONTACT</a></li>
                     </ul>
                 </nav>
@@ -278,6 +263,24 @@
                 </div>
             </section>
 
+            <section id="research-interests" class="research-interests">
+                <div class="container">
+                    <!-- Content loaded dynamically from data/portfolio-data.json -->
+                </div>
+            </section>
+
+            <section id="research" class="research">
+                <div class="container">
+                    <h2 class="section-title">Research Publications</h2>
+                    <div class="research-content">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                    <div class="section-cta research-cta">
+                        <button id="load-more-research" class="btn small secondary">See More</button>
+                    </div>
+                </div>
+            </section>
+
             <section id="skills" class="skills">
                 <div class="container">
                     <h2 class="section-title">Skills</h2>
@@ -296,18 +299,6 @@
                 </div>
                 <div class="project-cta">
                     <button id="load-more-projects" class="btn load-more">Load More</button>
-                </div>
-            </section>
-
-            <section id="research" class="research">
-                <div class="container">
-                    <h2 class="section-title">Research</h2>
-                    <div class="research-content">
-                        <!-- Content loaded dynamically from data/portfolio-data.json -->
-                    </div>
-                    <div class="section-cta research-cta">
-                        <button id="load-more-research" class="btn small secondary">See More</button>
-                    </div>
                 </div>
             </section>
 
@@ -351,6 +342,15 @@
                 <div class="container">
                     <h2 class="section-title">Achievements & Honors</h2>
                     <div class="achievements-timeline">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="volunteering" class="volunteering">
+                <div class="container">
+                    <h2 class="section-title">Volunteering & Community Service</h2>
+                    <div class="volunteering-content">
                         <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
                 </div>
