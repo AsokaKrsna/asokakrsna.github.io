@@ -50,14 +50,13 @@
                 }
             }
             
-            // Hex Stream Data Visualization Loading
+            // Hex Stream Progress Bar Loading
             function handleLoadingScreen() {
                 const loadingScreen = document.querySelector('.loading-screen');
-                const hexContainer = document.getElementById('hexContainer');
-                const progressBar = document.getElementById('progressBar');
-                const progressText = document.getElementById('progressText');
+                const hexProgressLine = document.getElementById('hexProgressLine');
+                const progressPercentage = document.getElementById('progressPercentage');
                 
-                if (!loadingScreen || !hexContainer || !progressBar || !progressText) {
+                if (!loadingScreen || !hexProgressLine || !progressPercentage) {
                     console.error('Loading screen elements not found');
                     if (loadingScreen) loadingScreen.style.display = 'none';
                     return;
@@ -65,28 +64,71 @@
                 
                 document.body.classList.add('loading-active');
                 
-                // Generate random hex streams
-                function generateHexLine() {
-                    let line = '';
-                    for (let i = 0; i < 32; i++) {
-                        line += Math.floor(Math.random() * 16).toString(16).toUpperCase();
-                        if (i % 2 === 1) line += ' ';
+                // Generate random hex characters
+                function generateHexChars(count) {
+                    const chars = '0123456789ABCDEF';
+                    let result = '';
+                    for (let i = 0; i < count; i++) {
+                        result += chars.charAt(Math.floor(Math.random() * chars.length));
+                        // Add space every 2 characters for readability
+                        if ((i + 1) % 2 === 0 && i < count - 1) {
+                            result += ' ';
+                        }
                     }
-                    return line;
+                    return result;
                 }
                 
-                // Animate hex streams
-                const hexInterval = setInterval(() => {
-                    const hexLine = document.createElement('div');
-                    hexLine.className = 'hex-line';
-                    hexLine.textContent = generateHexLine();
-                    hexContainer.appendChild(hexLine);
+                // Compute dynamic count so hex spans full screen
+                function calcCharCount() {
+                    const fs = parseFloat(getComputedStyle(hexProgressLine).fontSize) || 14;
+                    const approxCharWidth = fs * 0.75 + (fs * 0.15); // font + letter-spacing
+                    return Math.ceil(window.innerWidth / Math.max(approxCharWidth, 8));
+                }
+
+                // Create a background matrix of hex lines that all reveal together
+                const linesContainer = document.createElement('div');
+                linesContainer.className = 'loader-lines';
+                loadingScreen.appendChild(linesContainer);
+                
+                const bgLines = [];
+                (function buildHexLines(){
+                    const fs = parseFloat(getComputedStyle(hexProgressLine).fontSize) || 14;
+                    const lineGap = fs * 1.6; // spacing between rows
+                    const total = Math.max(5, Math.floor(window.innerHeight / lineGap));
+                    const centerIndex = Math.floor(total / 2);
+                    const charCount = calcCharCount();
                     
-                    // Remove old lines to prevent overflow
-                    if (hexContainer.children.length > 15) {
-                        hexContainer.removeChild(hexContainer.firstChild);
+                    for (let i = 0; i < total; i++) {
+                        const line = document.createElement('div');
+                        line.className = 'hex-line';
+                        line.textContent = generateHexChars(charCount);
+                        const top = Math.round((i + 0.5) * (window.innerHeight / total));
+                        line.style.top = top + 'px';
+                        
+                        // fade based on distance from center
+                        const dist = Math.abs(i - centerIndex);
+                        const maxDist = Math.max(centerIndex, 1);
+                        // much more faded background lines
+                        const baseOpacity = 0.18; // max opacity at center for bg lines
+                        const t = dist / maxDist;
+                        // power curve to fade faster as we move away from center
+                        const fade = Math.max(0.02, baseOpacity * (1 - Math.pow(t, 1.35)));
+                        line.style.opacity = fade.toString();
+                        line.style.setProperty('--reveal', '0%');
+                        
+                        linesContainer.appendChild(line);
+                        bgLines.push(line);
                     }
-                }, 150);
+                })();
+
+                // Update hex stream continuously
+                const hexUpdateInterval = setInterval(() => {
+                    const count = calcCharCount();
+                    hexProgressLine.textContent = generateHexChars(count);
+                    bgLines.forEach(line => {
+                        line.textContent = generateHexChars(count);
+                    });
+                }, 100);
                 
                 // Progress animation
                 let progress = 0;
@@ -101,7 +143,7 @@
                     if (progress >= 100) {
                         progress = 100;
                         clearInterval(progressInterval);
-                        clearInterval(hexInterval);
+                        clearInterval(hexUpdateInterval);
                         
                         setTimeout(() => {
                             document.body.classList.remove('loading-active');
@@ -118,8 +160,12 @@
                         }, 400);
                     }
 
-                    progressBar.style.width = progress + '%';
-                    progressText.textContent = Math.floor(progress) + '%';
+                    // Reveal hex from center via CSS var and aria state
+                    const revealValue = progress + '%';
+                    hexProgressLine.style.setProperty('--reveal', revealValue);
+                    bgLines.forEach(line => line.style.setProperty('--reveal', revealValue));
+                    hexProgressLine.setAttribute('aria-valuenow', Math.floor(progress));
+                    progressPercentage.textContent = Math.floor(progress) + '%';
                 }, interval);
             }
             
@@ -155,16 +201,20 @@
 </head>
 <body>
     <!-- Loading Screen -->
-    <div class="loading-screen">
-        <div class="loader-content">
-            <div class="hex-container" id="hexContainer"></div>
+    <div class="loading-screen" role="alert" aria-live="polite" aria-busy="true">
+        <!-- ambient layers -->
+        <div class="loader-vignette" aria-hidden="true"></div>
+        <div class="loader-noise" aria-hidden="true"></div>
+
+        <!-- progress stream -->
+        <div class="hex-progress-line" id="hexProgressLine" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+
+        <!-- glass panel -->
+        <div class="loader-panel">
             <div class="loader-center">
-                <h1 class="loader-title">DURJOY</h1>
-                <div class="loader-subtitle">Decrypting Portfolio...</div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="progressBar"></div>
-                    <span class="progress-text" id="progressText">0%</span>
-                </div>
+                <h1 class="loader-title">DURJOY M.</h1>
+                <div class="loader-subtitle">Fetching portfolio…</div>
+                <div class="progress-percentage" id="progressPercentage">0%</div>
             </div>
         </div>
     </div>

@@ -2196,7 +2196,7 @@ body[data-theme="light"] p {
 
 /* Loading Screen Styles */
 /* ===================================
-   HEX DATA STREAM LOADING SCREEN
+   HEX STREAM PROGRESS LOADING SCREEN
    =================================== */
 
 .loading-screen {
@@ -2216,46 +2216,75 @@ body[data-theme="light"] p {
     overflow: hidden;
 }
 
-.loader-content {
-    position: relative;
+/* Hex Progress Line - Full Width */
+.hex-progress-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
     width: 100%;
-    height: 100%;
+    height: auto;
+    padding: 0.3rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--neon-blue);
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+    overflow: visible;
+    transition: width 0.3s ease;
     display: flex;
-    justify-content: center;
     align-items: center;
+    background: transparent; /* no bar, only text */
+    box-shadow: none;
+    opacity: 0.7;
+    line-height: 1;
 }
 
-/* Hex Stream Background */
-.hex-container {
+/* Background grid of hex lines */
+.loader-lines {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: rgba(100, 255, 218, 0.08);
-    padding: 2rem;
-    overflow: hidden;
+    inset: 0;
+    z-index: 0;
     pointer-events: none;
+    overflow: hidden;
 }
 
 .hex-line {
-    opacity: 0;
-    transform: translateX(-20px);
-    animation: slideIn 0.4s ease-out forwards;
-    line-height: 2;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
     letter-spacing: 0.15em;
+    white-space: nowrap;
+    color: var(--slate);
+    opacity: 0.08; /* default very faded; overridden per-line */
 }
 
-@keyframes slideIn {
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+/* Center-out reveal: two covers shrink from center as --reveal grows */
+.hex-progress-line::before,
+.hex-progress-line::after,
+.hex-line::before,
+.hex-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: calc((100% - var(--reveal, 0%)) / 2);
+    background: var(--navy);
+    z-index: 2; /* cover the text until revealed */
+    pointer-events: none;
+    transition: width 0.3s ease;
+}
+
+.hex-progress-line::before, .hex-line::before { left: 0; }
+.hex-progress-line::after, .hex-line::after { right: 0; }
+
+[data-theme="light"] .hex-progress-line::before,
+[data-theme="light"] .hex-progress-line::after,
+[data-theme="light"] .hex-line::before,
+[data-theme="light"] .hex-line::after {
+    background: #ffffff;
 }
 
 /* Center Content */
@@ -2285,38 +2314,22 @@ body[data-theme="light"] p {
     font-family: var(--font-mono);
     font-size: 0.85rem;
     color: var(--slate);
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     opacity: 0;
     animation: fadeIn 1s ease-out 0.5s forwards;
 }
 
-/* Progress Bar */
-.progress-container {
-    position: relative;
-    width: 400px;
-    margin: 0 auto;
-    opacity: 0;
-    animation: fadeIn 1s ease-out 0.7s forwards;
-}
-
-.progress-bar {
-    height: 1px;
-    background: var(--neon-blue);
-    width: 0%;
-    transition: width 0.3s ease;
-    box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
-}
-
-.progress-text {
-    display: block;
-    margin-top: 1rem;
+/* Progress Percentage */
+.progress-percentage {
     font-family: var(--font-mono);
     font-size: 0.85rem;
     color: var(--slate);
     font-weight: 400;
     letter-spacing: 0.2em;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.7s forwards;
 }
 
 .loading-screen.fade-out {
@@ -2327,7 +2340,7 @@ body[data-theme="light"] p {
 /* Responsive */
 @media (max-width: 768px) {
     .loader-title {
-        font-size: 3rem;
+        font-size: 2.5rem;
         letter-spacing: 0.25em;
     }
     
@@ -2335,38 +2348,35 @@ body[data-theme="light"] p {
         font-size: 0.75rem;
     }
     
-    .progress-container {
-        width: 300px;
+    .progress-percentage {
+        font-size: 0.75rem;
     }
     
-    .hex-container {
-        font-size: 0.65rem;
-        padding: 1rem;
+    .hex-progress-line {
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
     }
 }
 
 @media (max-width: 480px) {
     .loader-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
         letter-spacing: 0.2em;
     }
     
     .loader-subtitle {
         font-size: 0.7rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
     }
     
-    .progress-container {
-        width: 250px;
+    .progress-percentage {
+        font-size: 0.7rem;
     }
     
-    .progress-text {
-        font-size: 0.75rem;
-    }
-    
-    .hex-container {
-        font-size: 0.55rem;
-        padding: 0.5rem;
+    .hex-progress-line {
+        font-size: 0.6rem;
+        letter-spacing: 0.1em;
+        padding: 0.2rem 0;
     }
 }
 
@@ -3361,6 +3371,7 @@ body:not(.loading-active) .menu-button {
     border-radius: 6px;
     padding: 1px;
     background: linear-gradient(135deg, rgba(100, 255, 218, 0) 50%, rgba(100, 255, 218, 0.3) 100%);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
