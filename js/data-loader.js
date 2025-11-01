@@ -1,0 +1,374 @@
+/**
+ * Portfolio Data Loader
+ * Dynamically loads and renders portfolio content from JSON data
+ */
+
+class PortfolioLoader {
+    constructor() {
+        this.data = null;
+        this.dataUrl = 'data/portfolio-data.json';
+    }
+
+    /**
+     * Initialize the portfolio by loading data and rendering all sections
+     */
+    async init() {
+        try {
+            await this.loadData();
+            this.renderAll();
+            console.log('%c[Portfolio] %cData loaded successfully!', 'color: #4dfcff; font-weight: bold;', 'color: white;');
+        } catch (error) {
+            console.error('[Portfolio] Error loading data:', error);
+        }
+    }
+
+    /**
+     * Load portfolio data from JSON file
+     */
+    async loadData() {
+        try {
+            const response = await fetch(this.dataUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            this.data = await response.json();
+        } catch (error) {
+            console.error('Error loading portfolio data:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Render all portfolio sections
+     */
+    renderAll() {
+        this.renderPersonalInfo();
+        this.renderAbout();
+        this.renderEducation();
+        this.renderExperience();
+        this.renderSkills();
+        this.renderProjects();
+        this.renderResearch();
+        this.renderBlogs();
+        this.renderCyberArena();
+        this.renderCertifications();
+        this.renderAchievements();
+        this.renderContact();
+        this.renderSocialLinks();
+        this.renderFooter();
+    }
+
+    /**
+     * Render personal information (header, title, etc.)
+     */
+    renderPersonalInfo() {
+        const { personal } = this.data;
+        
+        // Update page title
+        document.title = `${personal.name} | ${personal.title}`;
+        
+        // Update favicon
+        const favicon = document.querySelector('link[rel="shortcut icon"]');
+        if (favicon) favicon.href = personal.favicon;
+        
+        // Update profile image
+        const profileImg = document.querySelector('.profile-photo img');
+        if (profileImg) {
+            profileImg.src = personal.profileImage;
+            profileImg.alt = personal.name;
+        }
+        
+        // Update name and title in sidebar
+        const nameElement = document.querySelector('.logo.glitch-name');
+        if (nameElement) {
+            nameElement.textContent = personal.name;
+            nameElement.setAttribute('data-text', personal.name);
+        }
+        
+        const subtitleElement = document.querySelector('.subtitle');
+        if (subtitleElement) subtitleElement.textContent = personal.title;
+        
+        const taglineElement = document.getElementById('typingText');
+        if (taglineElement) taglineElement.setAttribute('data-tagline', personal.tagline);
+        
+        // Update resume link
+        const resumeButton = document.querySelector('.resume-button');
+        if (resumeButton) resumeButton.href = personal.resumeLink;
+    }
+
+    /**
+     * Render About section
+     */
+    renderAbout() {
+        const aboutContent = document.querySelector('#about .about-text');
+        if (!aboutContent) return;
+        
+        aboutContent.innerHTML = this.data.about.paragraphs
+            .map(p => `<p>${p}</p>`)
+            .join('');
+    }
+
+    /**
+     * Render Education section
+     */
+    renderEducation() {
+        const educationContent = document.querySelector('#education .education-content');
+        if (!educationContent) return;
+        
+        educationContent.innerHTML = this.data.education.map(edu => `
+            <div class="education-item">
+                <div class="education-header">
+                    <h3>${edu.institution}</h3>
+                    <div class="education-meta">
+                        <span class="education-location">${edu.location}</span>
+                        <span class="education-date">${edu.grade} | ${edu.period}</span>
+                    </div>
+                </div>
+                <p>${edu.degree}</p>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * Render Experience section
+     */
+    renderExperience() {
+        const experienceContent = document.querySelector('#experience .experience-content');
+        if (!experienceContent) return;
+        
+        experienceContent.innerHTML = this.data.experience.map(exp => `
+            <div class="experience-item">
+                <div class="experience-year">${exp.period}</div>
+                <div class="experience-details">
+                    <h3 class="experience-title">${exp.title}</h3>
+                    <div class="experience-company">${exp.company} | ${exp.location}</div>
+                    <ul class="experience-description">
+                        ${exp.responsibilities.map(resp => `<li>${resp}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * Render Skills section
+     */
+    renderSkills() {
+        const skillsContent = document.querySelector('#skills .skills-content');
+        if (!skillsContent) return;
+        
+        skillsContent.innerHTML = this.data.skills.map(skill => `
+            <div class="skills-category">
+                <h3><i class="${skill.icon}"></i>${skill.category}</h3>
+                <div class="skills-list">
+                    ${skill.items}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * Render Projects section
+     */
+    renderProjects() {
+        const projectsGrid = document.querySelector('#projects .projects-grid');
+        if (!projectsGrid) return;
+        
+        projectsGrid.innerHTML = this.data.projects.map(project => `
+            <div class="project-card">
+                <div class="project-top">
+                    <div class="folder-icon">
+                        <i class="far fa-folder-open"></i>
+                    </div>
+                    <div class="project-links">
+                        <a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+                        <a href="${project.liveUrl}" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+                <h3 class="project-title">
+                    <a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer">${project.title}</a>
+                </h3>
+                <div class="project-description">
+                    <p>${project.description}</p>
+                </div>
+                <ul class="project-tech-list">
+                    ${project.technologies.map(tech => `<li>${tech}</li>`).join('')}
+                </ul>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * Render Research section
+     */
+    renderResearch() {
+        const researchContent = document.querySelector('#research .research-content');
+        if (!researchContent) return;
+        
+        researchContent.innerHTML = this.data.research.map(paper => `
+            <div class="research-item${paper.hidden ? ' hidden' : ''}">
+                <div class="research-meta">
+                    <span class="research-year">${paper.date}</span> | <span class="research-publication">${paper.publication}</span>
+                </div>
+                <h3 class="research-title">${paper.title}</h3>
+                <p class="research-description">
+                    ${paper.description}
+                </p>
+                <i class="external-icon fas fa-external-link-alt"></i>
+                <div class="border-line"></div>
+                <a href="${paper.url}" target="_blank" rel="noopener noreferrer" class="card-link" aria-label="View paper"></a>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * Render Blogs section
+     */
+    renderBlogs() {
+        const blogsGrid = document.querySelector('#blogs .blogs-grid');
+        if (!blogsGrid) return;
+        
+        blogsGrid.innerHTML = this.data.blogs.map(blog => `
+            <div class="blog-card">
+                <div class="blog-date">${blog.date}</div>
+                <h3 class="blog-title">
+                    <a href="${blog.url}" target="_blank" rel="noopener noreferrer">${blog.title}<i class="fas fa-external-link-alt"></i></a>
+                </h3>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * Render Cyber Arena section
+     */
+    renderCyberArena() {
+        const arenaIntro = document.querySelector('.arena-intro');
+        const arenaGrid = document.querySelector('.arena-grid');
+        
+        if (arenaIntro) {
+            arenaIntro.textContent = this.data.cyberArena.intro;
+        }
+        
+        if (arenaGrid) {
+            arenaGrid.innerHTML = this.data.cyberArena.platforms.map(platform => `
+                <div class="arena-card">
+                    <div class="arena-icon">
+                        <i class="${platform.icon}"></i>
+                    </div>
+                    <h3 class="arena-title">${platform.name}</h3>
+                    <ul class="arena-list">
+                        ${platform.highlights.map(highlight => `<li>${highlight}</li>`).join('')}
+                    </ul>
+                    <a href="${platform.url}" ${platform.url !== '#' ? 'target="_blank"' : ''} class="arena-link">${platform.linkText} <i class="fas fa-arrow-right"></i></a>
+                </div>
+            `).join('');
+        }
+    }
+
+    /**
+     * Render Certifications section
+     */
+    renderCertifications() {
+        const certificationsTimeline = document.querySelector('#certifications .certifications-timeline');
+        if (!certificationsTimeline) return;
+        
+        certificationsTimeline.innerHTML = this.data.certifications.map(cert => `
+            <div class="certification-item">
+                <div class="certification-dot"></div>
+                <div class="certification-content">
+                    <h3 class="certification-title">${cert.name}</h3>
+                    <div class="certification-date">${cert.date}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * Render Achievements section
+     */
+    renderAchievements() {
+        const achievementsTimeline = document.querySelector('#achievements .achievements-timeline');
+        if (!achievementsTimeline) return;
+        
+        achievementsTimeline.innerHTML = this.data.achievements.map(achievement => `
+            <div class="achievement-item">
+                <h3 class="achievement-title">${achievement}</h3>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * Render Contact section
+     */
+    renderContact() {
+        const contactSection = document.querySelector('#contact .container');
+        if (!contactSection) return;
+        
+        const { contact } = this.data;
+        
+        // Update contact description
+        const contactDesc = contactSection.querySelector('p');
+        if (contactDesc) contactDesc.textContent = contact.description;
+        
+        // Update contact info
+        const contactInfo = contactSection.querySelector('.contact-info');
+        if (contactInfo) {
+            contactInfo.innerHTML = `
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>${contact.phone}</span>
+                </div>
+                ${contact.emails.map(email => `
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span><a href="mailto:${email}">${email}</a></span>
+                    </div>
+                `).join('')}
+            `;
+        }
+        
+        // Update Calendly link
+        const calendlyBtn = contactSection.querySelector('.btn.primary');
+        if (calendlyBtn) calendlyBtn.href = contact.calendlyUrl;
+    }
+
+    /**
+     * Render Social Links
+     */
+    renderSocialLinks() {
+        // Render in sidebar
+        const sidebarSocial = document.querySelector('.sidebar-social ul');
+        if (sidebarSocial) {
+            sidebarSocial.innerHTML = this.data.socialLinks.map(link => `
+                <li><a href="${link.url}" target="_blank" rel="noopener noreferrer"><i class="${link.icon}"></i></a></li>
+            `).join('');
+        }
+        
+        // Render in contact section
+        const contactSocial = document.querySelector('#contact .social-links');
+        if (contactSocial) {
+            contactSocial.innerHTML = this.data.socialLinks.map(link => `
+                <a href="${link.url}" target="_blank" rel="noopener noreferrer"><i class="${link.icon}"></i></a>
+            `).join('');
+        }
+    }
+
+    /**
+     * Render Footer
+     */
+    renderFooter() {
+        const footerContent = document.querySelector('footer .footer-content');
+        if (!footerContent) return;
+        
+        footerContent.innerHTML = `
+            <p>${this.data.footer.text}</p>
+            <p>${this.data.footer.copyright}</p>
+        `;
+    }
+}
+
+// Initialize portfolio loader when DOM is ready
+document.addEventListener('DOMContentLoaded', async () => {
+    const loader = new PortfolioLoader();
+    await loader.init();
+});

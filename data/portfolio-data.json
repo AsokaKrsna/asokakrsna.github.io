@@ -1,0 +1,329 @@
+{
+  "personal": {
+    "name": "Durjoy Majumdar",
+    "alias": "AsokaKrsna",
+    "title": "Cybersec Nerd | Researcher | Student",
+    "tagline": "Cybersecurity is a mindset, not a product.",
+    "profileImage": "images/profile.png",
+    "favicon": "./images/AsokaKrsna.ico",
+    "resumeLink": "Resume.pdf"
+  },
+  "about": {
+    "paragraphs": [
+      "Hello! I'm Durjoy, a passionate cybersecurity enthusiast with expertise in protecting digital infrastructures and identifying security vulnerabilities.",
+      "My interest in cybersecurity began from watching hackers in movies 😏 and the real journey began during my 2-1 semester of BTech. Thanks to the people who are helping me in the journey.",
+      "Driven by an insatiable curiosity and a mission to fortify digital landscapes, I approach cybersecurity as more than a technical discipline - it's a continuous journey of anticipating, understanding, and neutralizing emerging threats. My passion lies not just in mastering tools and techniques, but in cultivating a proactive, adaptive mindset. I believe cybersecurity is not about tools its more about mindset. I want to understand whats happening under the hood. Whether researching quantum-safe cryptography, exploring AI's security implications, or mentoring future cybersecurity professionals, I'm committed to staying ahead of technological risks and transforming potential vulnerabilities into opportunities for innovation and resilience.",
+      "Currently, I'm a Research Associate intern at <a href=\"#\">SRG Lab, KLEF</a>, working on LLMs and keeping their data safe.",
+      "I am actively looking for any opportunity in the field of cybersecurity."
+    ]
+  },
+  "education": [
+    {
+      "institution": "KL University (KLEF)",
+      "location": "Vaddeswaram, Andhra Pradesh, India",
+      "grade": "CGPA - 9.26 out of 10.00",
+      "period": "2021-25",
+      "degree": "B.Tech CSE (Honours); Specialization in cybersecurity and blockchain technology."
+    },
+    {
+      "institution": "Govt. Shamsur Rahman College",
+      "location": "Shariatpur, Dhaka, Bangladesh",
+      "grade": "GPA - 5.00 out of 5.00",
+      "period": "2019-21",
+      "degree": "Higher Secondary School Certificate; Science major."
+    },
+    {
+      "institution": "Idilpur Pilot High School",
+      "location": "Shariatpur, Dhaka, Bangladesh",
+      "grade": "GPA - 5.00 out of 5.00",
+      "period": "2017-19",
+      "degree": "Secondary School Certificate; Science major."
+    }
+  ],
+  "experience": [
+    {
+      "period": "Nov'24 - Present",
+      "title": "Research Associate (Intern)",
+      "company": "SRG Lab, KLEF",
+      "location": "[Andhra Pradesh, IN]",
+      "responsibilities": [
+        "Working on a project to mitigate voice based authentication risks e.g. record and reply attack or deepfake.",
+        "Exploring LLM fine tuning and training practically.",
+        "Keeping their system and data secure. Additionally performing web development tasks on the basis of need."
+      ]
+    },
+    {
+      "period": "May'24 - Present",
+      "title": "Research Advisor",
+      "company": "White Hat Hackers Club, KL University",
+      "location": "[Andhra Pradesh, IN]",
+      "responsibilities": [
+        "Initiated 6 research projects with 15+ team members, led 3 of them resulting in 2 IEEE-published papers.",
+        "Partnered with 5+ external entities to work collaboratively in research.",
+        "Facilitated 24+ biweekly discussions averaging 100+ participants, with 60% attendance retention."
+      ]
+    },
+    {
+      "period": "May'23 - May'24",
+      "title": "Technical Chair",
+      "company": "White Hat Hackers Club, KL University",
+      "location": "[Andhra Pradesh, IN]",
+      "responsibilities": [
+        "Coordinated 15+ events with 1500+ participants, achieving 85% satisfaction rate.",
+        "Crafted 20+ CTF challenges across 3 difficulty levels, completed by 300+ participants.",
+        "Provided guidelines to students to grow in Cybersecurity. Delivered 15+ technical sessions."
+      ]
+    },
+    {
+      "period": "Apr'22 - Jun'24",
+      "title": "Student Peer Mentor & Teaching Assistant",
+      "company": "White Hat Hackers Club, KL University",
+      "location": "[Andhra Pradesh, IN]",
+      "responsibilities": [
+        "Mentored 100+ undergraduates across 7 core security courses, achieving 80% positive feedback.",
+        "Conducted 20+ study sessions, provided coursework guidiance and assisted in lab."
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "category": "Security Operations",
+      "icon": "fas fa-compass",
+      "items": "Incident Response, Threat Hunting, Security Monitoring, Digital Forensics, Log analysis, Malware analysis, SIEM implementation."
+    },
+    {
+      "category": "Tools & Technologies",
+      "icon": "fas fa-tools",
+      "items": "Kali Linux, Metasploit, Wireshark, Burp Suite, Nmap, Splunk, Metasploit, GNS3, Autopsy, Volatility, Snort, Suricata, Sysinternal Toolkit and more."
+    },
+    {
+      "category": "Software Development",
+      "icon": "fas fa-certificate",
+      "items": "HTML, CSS, Js, C, Bash, Powershell, React, NodeJS, Django and propficient in ai tools like Cursor. Have built fully functional web applications, androind and ios application using AI."
+    }
+  ],
+  "projects": [
+    {
+      "title": "Logalyzer: Autonomus Threat Dedense System.",
+      "description": "n house SIEM solution for real-time log analysis, reducing incident response time by 30% through automatic threat remediation. Enables log collection from geographically isolated endpoints.",
+      "technologies": ["Python", "PHP", "Powershell scripting", "Javascript"],
+      "githubUrl": "https://github.com/AsokaKrsna/SIH2023",
+      "liveUrl": "#"
+    },
+    {
+      "title": "WeCrypt",
+      "description": "Researched possible ways recover and decrypt WeChat messages in an forensic environment, developed an tool to discover the database using degredation vulnerability of WeChat achieving 95% success rate across 50+ databases and various scenarios.",
+      "technologies": ["JavaScript", "HTML", "Shell Scripting"],
+      "githubUrl": "https://github.com/AsokaKrsna/KAVACH_2023",
+      "liveUrl": "#"
+    },
+    {
+      "title": "SignatureVault",
+      "description": "Aims to aggregate a wide range of attack patterns across various threat categories, providing a valuable resource for securoty professionals, researchers and enthusiasts. The project is open for collaboration.",
+      "technologies": ["Roff", "C", "C++", "Python", "Yara", "Regex"],
+      "githubUrl": "https://github.com/AsokaKrsna/SignatureVault",
+      "liveUrl": "#"
+    },
+    {
+      "title": "CyberMasteryGuide",
+      "description": "An open source comprehensive guide to master cybersecurity. This is an pathway for the beginners in the field. I found it difficult to start my journey in the endless ocean of cyber and that inspired me to create the curated pathway. The project is publishes under the MIT license on github.",
+      "technologies": ["Markdown"],
+      "githubUrl": "https://github.com/AsokaKrsna/CyberMasteryGuide",
+      "liveUrl": "#"
+    },
+    {
+      "title": "Sri Vinayaka Packers Website",
+      "description": "A paid project I have delivered to a local packers and movers company.",
+      "technologies": ["HTML", "CSS", "JavaScript"],
+      "githubUrl": "https://github.com/AsokaKrsna/sri-vinayaka-packers-website",
+      "liveUrl": "https://srivinayakapackers.in/"
+    },
+    {
+      "title": "WiSSAP2024",
+      "description": "I have build the website of Winter School on Speech and Audio Processing - 2024 hosted by KL University.",
+      "technologies": ["HTML", "CSS", "JavaScript"],
+      "githubUrl": "https://github.com/AsokaKrsna/WiSSAP2024",
+      "liveUrl": "https://wissap24.kluniversity.in/"
+    }
+  ],
+  "research": [
+    {
+      "date": "Dec'24",
+      "publication": "SpringerNature | ISICDS2024",
+      "title": "Beyond Copy–Pasting—Contextualizing LLMs for Secure Code Generation",
+      "description": "This study evaluates security vulnerabilities in code generated by Large Language Models (LLMs) and co-pilots, emphasizing the need for strategic contextualization in Secure Coding Practices (SCPs). Through qualitative analysis, it assesses risks and proposes actionable strategies to help developers fine-tune LLMs for secure code generation. By integrating proactive security measures, this research aligns accelerated development with robust security practices.",
+      "url": "https://link.springer.com/chapter/10.1007/978-981-97-5791-6_15"
+    },
+    {
+      "date": "Jul'24",
+      "publication": "ISCS2024 | IEEE Xplore",
+      "title": "Beyond Text: Nefarious Actors Harnessing LLMs for Strategic Advantage",
+      "description": "This study explores how malicious actors exploit Large Language Models (LLMs) for cyber threats beyond conventional uses. Through literature review, case studies, and real-world analysis, it examines LLM-driven deception, social engineering, and cybercrimes like phishing, password cracking, and malware propagation, highlighting emerging security challenges.",
+      "url": "https://ieeexplore.ieee.org/document/10581181"
+    },
+    {
+      "date": "May'23",
+      "publication": "ICACCS2023 | IEEE Xplore",
+      "title": "Shadow APR-ing for APR Poisoning Detection",
+      "description": "This study addresses ARP spoofing, a longstanding network security threat enabling attacks like MITM and DDoS. It proposes an automated OS-based monitoring technique to detect ARP poisoning in real time, reducing reliance on manual ARP table checks and minimizing detection delays.",
+      "url": "https://ieeexplore.ieee.org/abstract/document/10112712"
+    },
+    {
+      "date": "Ongoing Work",
+      "publication": "Open for collaboration",
+      "title": "An analysis and improvment research on Quantum Safe Cryptography",
+      "description": "Following Google's unveiling of Willow on December 9, 2024, the quantum era is arriving faster than expected, raising concerns about data security. My team and I are working to find solutions to enable quantum-safe encryption on existing infrastructure, ensuring today's data remains secure for the future.",
+      "url": "#",
+      "hidden": true
+    }
+  ],
+  "blogs": [
+    {
+      "date": "Jan 22, 2025",
+      "title": "The Attribution Error Trap: How GenAI Tools Are Reshaping Secure Coding",
+      "url": "https://www.linkedin.com/pulse/attribution-error-trap-how-genai-tools-reshaping-secure-majumdar-hxm6c/?trackingId=bpcBAUbbSdiR5DBkz397Wg%3D%3D"
+    },
+    {
+      "date": "Nov 4, 2024",
+      "title": "Breaking Down the ISC2 2024 Cybersecurity Workforce Study: Key Insights and Career Tips",
+      "url": "https://hacklido.com/blog/942-breaking-down-the-isc2-2024-cybersecurity-workforce-study-key-insights-and-career-tips"
+    },
+    {
+      "date": "Apr 22, 2024",
+      "title": "Run Kali Linux in Windows - Winlux",
+      "url": "https://hacklido.com/blog/798-run-kali-linux-in-windows-winlux-seamless-integration-between-windows-and-kali-linux"
+    },
+    {
+      "date": "Oct 27, 2023",
+      "title": "The Unwanted Love Letter",
+      "url": "https://hacklido.com/blog/637-the-unwanted-love-letter"
+    }
+  ],
+  "cyberArena": {
+    "intro": "My playground for showcasing cybersecurity challenges, CTF writeups, and practical security exercises I've developed or participated in.",
+    "platforms": [
+      {
+        "name": "CTF Competitions",
+        "icon": "fas fa-flag",
+        "highlights": [
+          "Cracking Since 2023 :)"
+        ],
+        "linkText": "View Writeups",
+        "url": "#"
+      },
+      {
+        "name": "TryHackMe",
+        "icon": "fas fa-laptop-code",
+        "highlights": [
+          "Top 1% in global leaderboard",
+          "400+ days streak, 31k+ points, 200+ rooms completed, 26 badges earned.",
+          "4 learning path completed."
+        ],
+        "linkText": "View Profile",
+        "url": "https://tryhackme.com/p/AsokaKrsna"
+      },
+      {
+        "name": "Letsdefend",
+        "icon": "fas fa-laptop-code",
+        "highlights": [
+          "Top 3 in the national leaderboard",
+          "6k+ points, 7k+ sla, 85% success rate on ticket solving.",
+          "5 learning paths completed, 100+ room completed."
+        ],
+        "linkText": "View Profile",
+        "url": "https://app.letsdefend.io/user/AsokaKrsna"
+      }
+    ]
+  },
+  "certifications": [
+    {
+      "name": "TryHackMe Security Analyst Level-1 (SAL1)",
+      "date": "Apr'25"
+    },
+    {
+      "name": "Github Foundations",
+      "date": "Jan'25"
+    },
+    {
+      "name": "OCI GenAI Professional.",
+      "date": "Jul'24"
+    },
+    {
+      "name": "Oracle certified foundations associate.",
+      "date": "Jun'24"
+    },
+    {
+      "name": "Microsoft AI-900 (Azure AI Fundamentals)",
+      "date": "Jun'24"
+    },
+    {
+      "name": "Fortinet Certified Cybersecurity Associate",
+      "date": "May'2024"
+    },
+    {
+      "name": "Juniper Networks Certified Associate, Junos (JNCIA-Junos)",
+      "date": "May' 2023"
+    },
+    {
+      "name": "(ISC)² Certified in Cybersecurity℠ - CC",
+      "date": "Dec' 2023"
+    }
+  ],
+  "achievements": [
+    "Runner Up of Smart India Hackathon 2023 - the worlds biggest open innovation model and the largest hackathon of India.",
+    "Runner up of KAVACH 2023 - the biggest cybersecurity hackathon of India.",
+    "Recieved the conference grant to attend Seasides cybersecurity conference 2025.",
+    "Top 1% in TryHackMe global leaderboard, top 3 in LetsDefend national leaderboard and active CTF player.",
+    "SII (Study In India) Scholar. An scholarship awarded to 250 students worldwide by the Govt. of India mainly based on the PRAGATII exam conducted by the National Testing Agency of India.",
+    "Research Advisor, White Hat Hackers Club, KL University.",
+    "Head of the Quality Assessment council, Student Activity Center (SAC), KL University.",
+    "Recognized as LinkedIn's Cybersecurity Community Top Voice (Golden Badge) for contributing to community collaborative articles.",
+    "Head coordinator, Winter School for Speech and Audio Processing (WiSSAP-2024).",
+    "Co-founder and head of cybersecurity wing - LaShido Tech Society.",
+    "Nationalist of the Extraordinary Talent Hunt competiton 2019 (Science section). Awarded by the education minister of the Govt. of Bangladesh.",
+    "Received \"Best meritorious student of the year of the state in science\" award consecutively 3 times.",
+    "Recieved \"Best boy scout of the state\" award on 2018 and \"Best rover scout of the state\" award on 2020.",
+    "Consecutive three time winner of state level debate championship.",
+    "Co-founder and Vice president, GSRC Science club (an club founded by a group of student to foster the hands on practice and learning of science and technology for colleage students)."
+  ],
+  "contact": {
+    "description": "I'm currently looking for new opportunities in the cybersecurity field. Whether you have a question or just want to say hi, I'll try my best to get back to you!",
+    "phone": "+917810976687",
+    "emails": [
+      "durjoymajumdar02@gmail.com",
+      "2100032570@kluniversity.in"
+    ],
+    "calendlyUrl": "https://calendly.com/durjoymajumdar02/let-s-talk"
+  },
+  "socialLinks": [
+    {
+      "platform": "LinkedIn",
+      "icon": "fab fa-linkedin-in",
+      "url": "https://www.linkedin.com/in/durjoy-majumdar/"
+    },
+    {
+      "platform": "Telegram",
+      "icon": "fab fa-telegram-plane",
+      "url": "https://t.me/as0kakrsna"
+    },
+    {
+      "platform": "Facebook",
+      "icon": "fab fa-facebook-f",
+      "url": "https://www.facebook.com/AsokaKrsna"
+    },
+    {
+      "platform": "Instagram",
+      "icon": "fab fa-instagram",
+      "url": "https://www.instagram.com/asokakrsna/"
+    },
+    {
+      "platform": "Twitter",
+      "icon": "fab fa-twitter",
+      "url": "https://x.com/Durjoy_02"
+    }
+  ],
+  "footer": {
+    "text": "Designed & Built by Durjoy Majumdar with Curson AI using \"Claude 3.7 thinking\" as the LLM model without a single line of coding.",
+    "copyright": "© 2025 All Rights Reserved"
+  }
+}
