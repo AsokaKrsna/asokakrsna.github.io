@@ -50,73 +50,77 @@
                 }
             }
             
-            // Modern loading screen animation
+            // Hex Stream Data Visualization Loading
             function handleLoadingScreen() {
                 const loadingScreen = document.querySelector('.loading-screen');
-                const progressBar = document.querySelector('.loading-progress');
-                const loadingStatus = document.getElementById('loading-status');
-                const loadingPercent = document.getElementById('loading-percent');
+                const hexContainer = document.getElementById('hexContainer');
+                const progressBar = document.getElementById('progressBar');
+                const progressText = document.getElementById('progressText');
                 
-                if (!loadingScreen) {
-                    console.error('Loading screen not found');
+                if (!loadingScreen || !hexContainer || !progressBar || !progressText) {
+                    console.error('Loading screen elements not found');
+                    if (loadingScreen) loadingScreen.style.display = 'none';
                     return;
                 }
                 
                 document.body.classList.add('loading-active');
                 
-                const statuses = [
-                    'Initializing secure connection',
-                    'Verifying credentials',
-                    'Loading encrypted data',
-                    'Authenticating user',
-                    'Establishing secure session',
-                    'Portfolio ready'
-                ];
+                // Generate random hex streams
+                function generateHexLine() {
+                    let line = '';
+                    for (let i = 0; i < 32; i++) {
+                        line += Math.floor(Math.random() * 16).toString(16).toUpperCase();
+                        if (i % 2 === 1) line += ' ';
+                    }
+                    return line;
+                }
                 
+                // Animate hex streams
+                const hexInterval = setInterval(() => {
+                    const hexLine = document.createElement('div');
+                    hexLine.className = 'hex-line';
+                    hexLine.textContent = generateHexLine();
+                    hexContainer.appendChild(hexLine);
+                    
+                    // Remove old lines to prevent overflow
+                    if (hexContainer.children.length > 15) {
+                        hexContainer.removeChild(hexContainer.firstChild);
+                    }
+                }, 150);
+                
+                // Progress animation
                 let progress = 0;
-                const duration = 2000; // 2 seconds total
-                const interval = 30; // Update every 30ms
-                const increment = 100 / (duration / interval);
-                
+                const duration = 2500;
+                const interval = 30;
+                const steps = duration / interval;
+                const increment = 100 / steps;
+
                 const progressInterval = setInterval(() => {
                     progress += increment;
                     
                     if (progress >= 100) {
                         progress = 100;
                         clearInterval(progressInterval);
-                        setTimeout(completeLoading, 300);
+                        clearInterval(hexInterval);
+                        
+                        setTimeout(() => {
+                            document.body.classList.remove('loading-active');
+                            
+                            document.querySelectorAll('.main-content, .sidebar, .menu-button').forEach(el => {
+                                el.classList.add('force-visible');
+                            });
+                            
+                            loadingScreen.classList.add('fade-out');
+                            
+                            setTimeout(() => {
+                                loadingScreen.style.display = 'none';
+                            }, 600);
+                        }, 400);
                     }
-                    
-                    // Update progress bar
-                    if (progressBar) {
-                        progressBar.style.width = progress + '%';
-                    }
-                    
-                    // Update percentage
-                    if (loadingPercent) {
-                        loadingPercent.textContent = Math.floor(progress) + '%';
-                    }
-                    
-                    // Update status text
-                    if (loadingStatus) {
-                        const statusIndex = Math.min(Math.floor(progress / (100 / statuses.length)), statuses.length - 1);
-                        loadingStatus.textContent = statuses[statusIndex];
-                    }
+
+                    progressBar.style.width = progress + '%';
+                    progressText.textContent = Math.floor(progress) + '%';
                 }, interval);
-                
-                function completeLoading() {
-                    document.body.classList.remove('loading-active');
-                    
-                    document.querySelectorAll('.main-content, .sidebar, .menu-button').forEach(el => {
-                        el.classList.add('force-visible');
-                    });
-                    
-                    loadingScreen.classList.add('fade-out');
-                    
-                    setTimeout(() => {
-                        loadingScreen.style.display = 'none';
-                    }, 500);
-                }
             }
             
             function ensureContentVisible() {
@@ -152,40 +156,14 @@
 <body>
     <!-- Loading Screen -->
     <div class="loading-screen">
-        <div class="loader-container">
-            <div class="logo-animation">
-                <div class="shield-icon">
-                    <i class="fas fa-shield-halved"></i>
-                </div>
-                <div class="scan-line"></div>
-            </div>
-            
-            <h2 class="loading-title">
-                <span class="glitch" data-text="Durjoy Majumdar">Durjoy Majumdar</span>
-            </h2>
-            
-            <div class="loading-bar-container">
-                <div class="loading-bar">
-                    <div class="loading-progress"></div>
-                </div>
-                <div class="loading-text">
-                    <span id="loading-status">Initializing secure connection</span>
-                    <span id="loading-percent">0%</span>
-                </div>
-            </div>
-            
-            <div class="loading-details">
-                <div class="detail-line">
-                    <i class="fas fa-lock"></i>
-                    <span>Encryption: AES-256</span>
-                </div>
-                <div class="detail-line">
-                    <i class="fas fa-network-wired"></i>
-                    <span>Protocol: HTTPS/TLS 1.3</span>
-                </div>
-                <div class="detail-line">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Security: Enhanced</span>
+        <div class="loader-content">
+            <div class="hex-container" id="hexContainer"></div>
+            <div class="loader-center">
+                <h1 class="loader-title">DURJOY</h1>
+                <div class="loader-subtitle">Decrypting Portfolio...</div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                    <span class="progress-text" id="progressText">0%</span>
                 </div>
             </div>
         </div>
