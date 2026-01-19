@@ -232,6 +232,15 @@ class PortfolioLoader {
                 </ul>
             </div>
         `).join('');
+        // Ensure Load More button is visible if needed
+        const loadMoreBtn = document.getElementById('load-more-projects');
+        if (loadMoreBtn) {
+            if (this.data.projects.length > 3) {
+                loadMoreBtn.style.display = 'inline-block';
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+        }
     }
 
     /**
