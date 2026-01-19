@@ -11,29 +11,25 @@
   "about": {
     "paragraphs": [
       "Hello! I'm Durjoy, a passionate cybersecurity researcher with expertise in protecting digital infrastructures and identifying security vulnerabilities. My journey spans from practical security operations to academic research in AI security and cryptography.",
-      "My research journey began during my sophomore year, evolving from a fascination with system vulnerabilities into focused investigation of AI-driven security threats and quantum-safe cryptographic systems. Through hands-on experience and rigorous academic exploration, I've developed a deep understanding of both offensive and defensive security paradigms.",
+      "My research journey began during my sophomore year of graduation, evolving from a fascination with system vulnerabilities into focused investigation of AI-driven security threats and quantum-safe cryptographic systems. Through hands-on experience and rigorous academic exploration, I've developed a deep understanding of both offensive and defensive security paradigms.",
       "Driven by an insatiable curiosity and a mission to fortify digital landscapes, I approach cybersecurity as more than a technical discipline—it's a continuous journey of anticipating, understanding, and neutralizing emerging threats. My passion lies not just in mastering tools and techniques, but in cultivating a proactive, adaptive mindset that bridges theoretical research with practical implementation.",
-      "Currently, I'm a Research Associate intern at <a href=\"#\">SRG Lab, KLEF</a>, investigating voice authentication vulnerabilities and exploring LLM fine-tuning for secure AI deployment. My work focuses on developing practical solutions to emerging security challenges while contributing to academic literature.",
-      "I am actively seeking PhD opportunities to advance research in AI security and post-quantum cryptography, with the goal of developing frameworks that ensure safe and reliable deployment of emerging technologies in critical infrastructure."
+      "Currently, I'm a Junior Research Associate at <a href=\"#\">Security Lab @ IIT Patna</a>, working on Blockchain and distributed systems security. My work focuses on developing practical solutions to emerging security challenges while contributing to academic literature.",
+      "I am actively seeking research or internship opportunities to advance my expertise in the field and contribute toward making the world safer bit by bit."
     ]
   },
   "researchInterests": {
     "title": "Research Focus",
-    "statement": "My research focuses on the intersection of artificial intelligence and cybersecurity, with particular emphasis on developing secure AI systems and quantum-resistant cryptographic solutions. I am passionate about addressing emerging threats in the era of large language models and quantum computing, working to ensure that technological advancement does not compromise security.",
+    "statement": "My research interests focus on the security of distributed and blockchain systems. I am interested in understanding how these systems behave under realistic adversarial conditions, and in exploring practical ways to evaluate and improve security, trust, and reliability through experimentation and system-level analysis.",
     "areas": [
-      "Large Language Model Security & Safe AI Development",
-      "Post-Quantum Cryptography & Quantum-Safe Systems",
-      "AI-Driven Threat Detection & Automated Response Systems",
-      "Secure Software Engineering & Vulnerability Analysis",
-      "Voice Biometric Authentication & Deepfake Detection"
+      ""
     ],
-    "futureGoals": "I aim to pursue doctoral research that bridges theoretical cryptographic innovations with practical AI security implementations, ultimately contributing frameworks and methodologies that make emerging technologies deployable in high-stakes environments."
+    "futureGoals": ""
   },
   "education": [
     {
       "institution": "Indian Institute of Technology Patna",
       "location": "Patna, Bihar, India",
-      "grade": "N/A",
+      "grade": "Current CPI: 8.73 out of 10.00",
       "period": "2025-27",
       "degree": "M.Tech CSE (Cybersecurity)"
     },
@@ -61,6 +57,15 @@
   ],
   "experience": [
     {
+      "period": "Nov'25 - Present",
+      "title": "Junior Research Associate",
+      "company": "Security Lab, IIT Patna",
+      "location": "[Patna, IN]",
+      "responsibilities": [
+        "Working on blockchain Security. Currerntly Building a local blockchain testbed to support security testing and attack simulation."
+      ]
+    },
+    {
       "period": "Apr'25 - Present",
       "title": "Security Researcher (Intern)",
       "company": "CRAC Learning",
@@ -71,7 +76,7 @@
       ]
     },
     {
-      "period": "Nov'24 - Aug'25",
+      "period": "Nov'24 - Jul'25",
       "title": "Research Associate (Intern)",
       "company": "SRG Lab, KLEF",
       "location": "[Andhra Pradesh, IN]",
@@ -210,30 +215,6 @@
       "type": "published",
       "yourRole": "Lead Researcher",
       "impactArea": "Network Security, Intrusion Detection"
-    },
-    {
-      "date": "In Progress",
-      "publication": "Target: IEEE Conference 2025",
-      "title": "Mitigating Voice Authentication Vulnerabilities: Defense Against Replay and Deepfake Attacks",
-      "description": "Currently developing a novel approach to detect and prevent voice-based authentication attacks, including record-replay attacks and deepfake-generated voices. The research combines signal analysis, machine learning models, and behavioral biometrics to create a robust multi-factor voice authentication system. Preliminary results show 95%+ detection accuracy across various attack vectors.",
-      "url": "#",
-      "type": "in-progress",
-      "yourRole": "Principal Investigator",
-      "impactArea": "Biometric Security, AI Security",
-      "status": "Manuscript in preparation",
-      "hidden": true
-    },
-    {
-      "date": "Ongoing",
-      "publication": "Collaborative Research Initiative",
-      "title": "Analysis and Enhancement of Post-Quantum Cryptographic Systems",
-      "description": "Following the advancement of quantum computing capabilities, this research investigates the practical implementation challenges of post-quantum cryptography in existing infrastructure. The study focuses on lattice-based and code-based cryptographic schemes, analyzing their performance overhead, integration complexities, and security guarantees. Working towards developing hybrid solutions that enable quantum-safe encryption without requiring complete infrastructure overhaul.",
-      "url": "#",
-      "type": "in-progress",
-      "yourRole": "Lead Researcher",
-      "impactArea": "Cryptography, Quantum Security",
-      "status": "Data collection phase",
-      "hidden": true
     }
   ],
   "blogs": [
@@ -360,17 +341,25 @@
     {
       "organization": "Local Community Education Initiative",
       "role": "Cybersecurity Awareness Volunteer",
-      "period": "2023 - Present",
-      "description": "Conducting free cybersecurity awareness workshops for underprivileged students and small businesses, covering basic digital hygiene, phishing awareness, and password security.",
-      "impact": "Trained 200+ individuals in basic cybersecurity practices"
+      "period": "2024 – Present",
+      "description": "Delivering free cybersecurity awareness sessions for underprivileged students, including instruction in Bengali. Developing basic learning materials in the local language to improve accessibility.",
+      "impact": "Reached hundreds of students and continuing the initiative to improve digital safety awareness."
     },
     {
-      "organization": "Open Source Security Community",
-      "role": "Contributing Researcher",
-      "period": "2022 - Present",
-      "description": "Contributing to open-source security tools and vulnerability databases, participating in responsible disclosure programs, and mentoring new contributors in the security research community.",
-      "impact": "Contributed to 5+ open source security projects"
+      "organization": "Skillmate",
+      "role": "Cybersecurity Mentor (Volunteer)",
+      "period": "2025 – Present",
+      "description": "Providing free one-on-one mentorship and introductory sessions in cybersecurity, focused on guiding students through learning paths, fundamentals and practical problem-solving. Sessions are offered voluntarily despite having a paid model to follow",
+      "impact": "Making mentorship in cybersecurity accessible to learners."
+    },
+    {
+      "organization": "Gold Heart Foundation",
+      "role": "Cybersecurity Mentor (Volunteer)",
+      "period": "2025 – Present",
+      "description": "Providing free cybersecurity mentorship and guidance to underprivileged students.",
+      "impact": "Supporting access to cybersecurity education for underserved learners."
     }
+
   ],
   "contact": {
     "description": "I'm actively seeking for PhD and relevant opportunities to contribute into building a safer cyberspace for all. Whether you'd like to discuss potential research directions, collaboration opportunities or just want to connect, I'd love to hear from you!",

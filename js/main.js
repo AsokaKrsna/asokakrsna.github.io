@@ -1509,9 +1509,10 @@ function initProjectsLoadMore() {
         // Calculate how many to show initially
         currentlyVisible = Math.min(projectsPerPage, projectCards.length);
         showProjects();
-        
-        // Hide the button if not enough projects
-        if (projectCards.length <= projectsPerPage) {
+        // Show the button only if there are more than projectsPerPage
+        if (projectCards.length > projectsPerPage) {
+            loadMoreBtn.style.display = 'inline-block';
+        } else {
             loadMoreBtn.style.display = 'none';
         }
     } else {
