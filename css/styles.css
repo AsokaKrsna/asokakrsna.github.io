@@ -174,7 +174,7 @@ ul {
     padding-right: 0%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     background-color: transparent;
     overflow-y: auto;
     /* Hide scrollbar but keep functionality */
