@@ -3511,7 +3511,7 @@ body.is-mobile .resume-button {
 
 .terminal-bar-body {
     padding: 0.8rem 1rem;
-    max-height: 250px;
+    max-height: 350px;
     overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;

@@ -1695,7 +1695,7 @@ window.addEventListener('resize', () => {
         ];
 
         const commands = {
-            help: () => '<span class="cmd-info">Available commands:</span>\n  help        — you\'re reading it\n  about       — who is this guy?\n  whoami      — identity crisis\n  skills      — peek at the arsenal\n  goto [sec]  — teleport to section\n  ls          — list the map\n  cat flag    — capture the flag 🚩\n  ping        — ping durjoy\n  uptime      — how long has this been running?\n  sudo        — nice try\n  rm          — don\'t even think about it\n  hack        — initiate hack sequence\n  fortune     — random wisdom\n  coffee      — essential fuel\n  matrix      — take the pill\n  8ball       — ask the oracle\n  leet [text] — 1337 translator\n  flip        — flip a coin\n  rickroll    — you know the rules\n  exit        — you can\'t escape\n  neofetch    — system info\n  clear       — wipe the slate',
+            help: () => '<span class="cmd-info">Available commands:</span>\n  help        — you\'re reading it\n  about       — who is this guy?\n  whoami      — identity crisis\n  skills      — peek at the arsenal\n  goto [sec]  — teleport to section\n  ls          — list the map\n  cat flag    — capture the flag 🚩\n  ping        — ping durjoy\n  uptime      — how long has this been running?\n  sudo        — nice try\n  rm          — don\'t even think about it\n  hack        — initiate hack sequence\n  fortune     — random wisdom\n  coffee      — essential fuel\n  matrix      — take the pill\n  8ball       — ask the oracle\n  leet [text] — 1337 translator\n  flip        — flip a coin\n  rickroll    — you know the rules\n  exit        — you can\'t escape\n  neofetch    — system info\n  <span class="cmd-success">snake</span>       — <span class="cmd-success">🐍 play packet snatcher!</span>\n  clear       — wipe the slate',
             about: () => pick(aboutVariants),
             whoami: () => pick(whoamiVariants),
             skills: () => '<span class="cmd-info">cat /etc/arsenal.conf</span>\n\n  <span class="cmd-success">[Security Ops]</span>  Incident Response · Threat Hunting · Digital Forensics · Malware Analysis · SIEM\n  <span class="cmd-success">[Tools]</span>         Kali · Metasploit · Wireshark · Burp Suite · Nmap · Splunk · Snort · Volatility\n  <span class="cmd-success">[Dev]</span>           Python · JS · C · Bash · PowerShell · React · Django · Node\n  <span class="cmd-success">[Research]</span>      Literature Review · Experimental Design · Quantitative Analysis · Academic Writing',
@@ -1763,9 +1763,170 @@ window.addEventListener('resize', () => {
             rickroll: () => pick(rickrollVariants),
             exit: () => pick(exitVariants),
             neofetch: () => pick(neofetchVariants),
+            snake: () => {
+                startSnakeGame(output, cmdInput);
+                return null;
+            },
         };
 
+        // ── Snake Game Engine ──
+        let snakeGame = null;
+
+        function startSnakeGame(outputEl, inputEl) {
+            const W = 22, H = 12;
+            let snake = [{x:11,y:6},{x:10,y:6},{x:9,y:6}];
+            let dir = {x:1,y:0};
+            let nextDir = {x:1,y:0};
+            let score = 0;
+            let speed = 180;
+            let paused = false;
+            let highScore = parseInt(localStorage.getItem('snakeHigh') || '0');
+
+            function spawnFood() {
+                let pos;
+                do {
+                    pos = {x: Math.floor(Math.random()*W), y: Math.floor(Math.random()*H)};
+                } while (snake.some(s => s.x === pos.x && s.y === pos.y));
+                return pos;
+            }
+
+            let food = spawnFood();
+            const foodIcons = ['◆','●','■','▲','★'];
+            let foodIcon = pick(foodIcons);
+
+            function render() {
+                let board = '<span class="cmd-success">╔' + '═'.repeat(W) + '╗</span>\n';
+                for (let y = 0; y < H; y++) {
+                    let row = '<span class="cmd-success">║</span>';
+                    for (let x = 0; x < W; x++) {
+                        if (snake[0].x === x && snake[0].y === y) {
+                            row += '<span class="cmd-success">@</span>';
+                        } else if (snake.some(s => s.x === x && s.y === y)) {
+                            row += '<span class="cmd-info">○</span>';
+                        } else if (food.x === x && food.y === y) {
+                            row += '<span class="cmd-error">' + foodIcon + '</span>';
+                        } else {
+                            row += ' ';
+                        }
+                    }
+                    row += '<span class="cmd-success">║</span>';
+                    board += row + '\n';
+                }
+                board += '<span class="cmd-success">╚' + '═'.repeat(W) + '╝</span>';
+
+                const status = paused
+                    ? '<span class="cmd-error">⏸ PAUSED</span> | P to resume | Q to quit'
+                    : '<span class="cmd-info">WASD/Arrows</span> to move | P pause | Q quit';
+
+                outputEl.innerHTML = '<span class="cmd-success">🐍 PACKET SNATCHER v1.0</span>  Score: <span class="cmd-info">' + score + '</span>  Hi: <span class="cmd-success">' + highScore + '</span>\n' + board + '\n' + status;
+                const body = outputEl.closest('.terminal-bar-body');
+                if (body) body.scrollTop = 0;
+            }
+
+            function tick() {
+                if (paused) return;
+                dir = {...nextDir};
+                const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+
+                // Wall wrap-around
+                if (head.x < 0) head.x = W - 1;
+                if (head.x >= W) head.x = 0;
+                if (head.y < 0) head.y = H - 1;
+                if (head.y >= H) head.y = 0;
+
+                // Self collision
+                if (snake.some(s => s.x === head.x && s.y === head.y)) {
+                    endGame();
+                    return;
+                }
+
+                snake.unshift(head);
+
+                if (head.x === food.x && head.y === food.y) {
+                    score += 10;
+                    food = spawnFood();
+                    foodIcon = pick(foodIcons);
+                    // Speed up slightly every 50 points
+                    if (score % 50 === 0 && speed > 80) {
+                        speed -= 15;
+                        clearInterval(gameInterval);
+                        gameInterval = setInterval(tick, speed);
+                    }
+                } else {
+                    snake.pop();
+                }
+
+                render();
+            }
+
+            function endGame() {
+                clearInterval(gameInterval);
+                snakeGame = null;
+                document.removeEventListener('keydown', handleGameKey);
+
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('snakeHigh', String(score));
+                }
+
+                const msgs = [
+                    `GAME OVER! You snatched ${score/10} packets.`,
+                    `CRASH! Final payload: ${score} bytes.`,
+                    `SEGFAULT! But you scored ${score} before dying.`,
+                    `CONNECTION LOST. Score: ${score}`,
+                ];
+                outputEl.innerHTML += '\n\n<span class="cmd-error">' + pick(msgs) + '</span>';
+                if (score > 0 && score >= highScore) {
+                    outputEl.innerHTML += '\n<span class="cmd-success">🏆 NEW HIGH SCORE!</span>';
+                }
+                outputEl.innerHTML += '\n<span class="cmd-info">Type "snake" to play again.</span>\n';
+                inputEl.focus();
+            }
+
+            function handleGameKey(e) {
+                if (!snakeGame) return;
+                const key = e.key;
+
+                if (key === 'q' || key === 'Q') {
+                    e.preventDefault();
+                    clearInterval(gameInterval);
+                    snakeGame = null;
+                    document.removeEventListener('keydown', handleGameKey);
+                    outputEl.innerHTML += '\n\n<span class="cmd-info">Game exited. Score: ' + score + '</span>\n';
+                    inputEl.focus();
+                    return;
+                }
+
+                if (key === 'p' || key === 'P') {
+                    e.preventDefault();
+                    paused = !paused;
+                    render();
+                    return;
+                }
+
+                const up = key === 'w' || key === 'W' || key === 'ArrowUp';
+                const down = key === 's' || key === 'S' || key === 'ArrowDown';
+                const left = key === 'a' || key === 'A' || key === 'ArrowLeft';
+                const right = key === 'd' || key === 'D' || key === 'ArrowRight';
+
+                if (up || down || left || right) e.preventDefault();
+
+                if (up && dir.y !== 1) nextDir = {x:0, y:-1};
+                if (down && dir.y !== -1) nextDir = {x:0, y:1};
+                if (left && dir.x !== 1) nextDir = {x:-1, y:0};
+                if (right && dir.x !== -1) nextDir = {x:1, y:0};
+            }
+
+            // Activate game
+            inputEl.blur();
+            snakeGame = true;
+            document.addEventListener('keydown', handleGameKey);
+            render();
+            let gameInterval = setInterval(tick, speed);
+        }
+
         cmdInput.addEventListener('keydown', (e) => {
+            if (snakeGame) { e.preventDefault(); return; }
             if (e.key !== 'Enter') return;
             const raw = cmdInput.value.trim();
             if (!raw) return;
