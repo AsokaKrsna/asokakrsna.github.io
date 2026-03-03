@@ -2355,19 +2355,15 @@ body:not(.loading-active) .menu-button {
 /* Reduce the size of cyber arena cards */
 .arena-card {
     position: relative;
-    background: rgba(2, 12, 27, 0.7);
-    padding: 1.4rem;  /* Reduced from 2rem */
+    background: rgba(10, 25, 47, 0.5);
+    padding: 1.4rem;
     border-radius: 8px;
     border: 1px solid rgba(100, 255, 218, 0.1);
     transition: all 0.3s ease;
-    overflow: visible; /* Changed to fix content overflow */
-    z-index: 1; cursor: pointer; /* Added pointer cursor for better UX */
-    /* Digital circuit pattern background */
-    background-image: 
-        linear-gradient(rgba(2, 12, 27, 0.9) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(2, 12, 27, 0.9) 1px, transparent 1px);
-    background-size: 15px 15px; /* Reduced from 20px */
-    background-position: -1px -1px;
+    overflow: visible;
+    z-index: 1;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
 }
 
 /* Digital circuit nodes */
@@ -3517,6 +3513,12 @@ body.is-mobile .resume-button {
     padding: 0.8rem 1rem;
     max-height: 250px;
     overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.terminal-bar-body::-webkit-scrollbar {
+    display: none;
 }
 
 .terminal-bar-output {
