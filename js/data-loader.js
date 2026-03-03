@@ -56,7 +56,6 @@ class PortfolioLoader {
     renderAll() {
         this.renderPersonalInfo();
         this.renderAbout();
-        this.renderResearchInterests();
         this.renderResearch();
         this.renderEducation();
         this.renderExperience();
@@ -124,25 +123,40 @@ class PortfolioLoader {
     }
 
     /**
-     * Render Research Interests section
+     * Render Research section (combined: statement + compact paper cards)
      */
-    renderResearchInterests() {
-        const researchInterestsSection = document.querySelector('#research-interests');
-        if (!researchInterestsSection) return;
-        
-        const { researchInterests } = this.data;
-        const container = researchInterestsSection.querySelector('.container');
-        
-        if (container) {
-            container.innerHTML = `
-                <h2 class="section-title">Research Interests</h2>
-                <div class="research-interests-content">
-                    <div class="research-statement">
-                        <p>${researchInterests.statement}</p>
-                    </div>
+    renderResearch() {
+        // Render research interests statement into the combined section
+        const statementWrapper = document.querySelector('#research .research-statement-wrapper');
+        if (statementWrapper && this.data.researchInterests) {
+            statementWrapper.innerHTML = `
+                <div class="research-statement">
+                    <p>${this.data.researchInterests.statement}</p>
                 </div>
             `;
         }
+
+        const researchContent = document.querySelector('#research .research-content');
+        if (!researchContent) return;
+        
+        researchContent.innerHTML = this.data.research.map(paper => {
+            const tldr = paper.tldr || paper.description;
+            const roleTag = paper.yourRole 
+                ? `<span class="research-role-tag">${paper.yourRole}</span>`
+                : '';
+            
+            return `
+                <div class="research-item${paper.hidden ? ' hidden' : ''}">
+                    <div class="research-meta">
+                        <span class="research-year">${paper.date}</span> | <span class="research-publication">${paper.publication}</span>
+                        ${roleTag}
+                    </div>
+                    <h3 class="research-title">${paper.title}</h3>
+                    <p class="research-tldr">${tldr}</p>
+                    <a href="${paper.url}" ${paper.url !== '#' ? 'target="_blank" rel="noopener noreferrer"' : ''} class="research-link"><i class="fas fa-external-link-alt"></i> View Paper</a>
+                </div>
+            `;
+        }).join('');
     }
 
     /**
@@ -242,48 +256,6 @@ class PortfolioLoader {
                 loadMoreBtn.style.display = 'none';
             }
         }
-    }
-
-    /**
-     * Render Research section
-     */
-    renderResearch() {
-        const researchContent = document.querySelector('#research .research-content');
-        if (!researchContent) return;
-        
-        researchContent.innerHTML = this.data.research.map(paper => {
-            const statusBadge = paper.type === 'in-progress' 
-                ? `<span class="research-status in-progress"><i class="fas fa-flask"></i> ${paper.status || 'In Progress'}</span>`
-                : `<span class="research-status published"><i class="fas fa-check-circle"></i> Published</span>`;
-            
-            const roleInfo = paper.yourRole 
-                ? `<span class="research-role"><i class="fas fa-user-circle"></i> ${paper.yourRole}</span>`
-                : '';
-            
-            const impactInfo = paper.impactArea
-                ? `<span class="research-impact"><i class="fas fa-bullseye"></i> ${paper.impactArea}</span>`
-                : '';
-            
-            return `
-                <div class="research-item${paper.hidden ? ' hidden' : ''}">
-                    <div class="research-meta">
-                        <span class="research-year">${paper.date}</span> | <span class="research-publication">${paper.publication}</span>
-                    </div>
-                    <h3 class="research-title">${paper.title}</h3>
-                    <div class="research-badges">
-                        ${statusBadge}
-                        ${roleInfo}
-                        ${impactInfo}
-                    </div>
-                    <p class="research-description">
-                        ${paper.description}
-                    </p>
-                    <i class="external-icon fas fa-external-link-alt"></i>
-                    <div class="border-line"></div>
-                    <a href="${paper.url}" ${paper.url !== '#' ? 'target="_blank" rel="noopener noreferrer"' : ''} class="card-link" aria-label="View paper"></a>
-                </div>
-            `;
-        }).join('');
     }
 
     /**

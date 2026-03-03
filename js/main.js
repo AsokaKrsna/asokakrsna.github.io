@@ -666,7 +666,7 @@ style.textContent = `
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: -2;
+        z-index: -1;
         opacity: 0.15;
         pointer-events: none;
     }
