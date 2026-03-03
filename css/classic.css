@@ -492,6 +492,15 @@ section {
     display: inline-block;
 }
 
+.pub-tldr {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.35rem;
+    padding-left: 0.6rem;
+    border-left: 2px solid var(--accent);
+    line-height: 1.5;
+}
+
 .pub-links {
     display: flex;
     gap: 0.5rem;

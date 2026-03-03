@@ -10,11 +10,8 @@
   },
   "about": {
     "paragraphs": [
-      "Hello! I'm Durjoy, a passionate cybersecurity researcher with expertise in protecting digital infrastructures and identifying security vulnerabilities. My journey spans from practical security operations to academic research in AI security and cryptography.",
-      "My research journey began during my sophomore year of graduation, evolving from a fascination with system vulnerabilities into focused investigation of AI-driven security threats and quantum-safe cryptographic systems. Through hands-on experience and rigorous academic exploration, I've developed a deep understanding of both offensive and defensive security paradigms.",
-      "Driven by an insatiable curiosity and a mission to fortify digital landscapes, I approach cybersecurity as more than a technical discipline—it's a continuous journey of anticipating, understanding, and neutralizing emerging threats. My passion lies not just in mastering tools and techniques, but in cultivating a proactive, adaptive mindset that bridges theoretical research with practical implementation.",
-      "Currently, I'm a Junior Research Associate at <a href=\"#\">Security Lab @ IIT Patna</a>, working on Blockchain and distributed systems security. My work focuses on developing practical solutions to emerging security challenges while contributing to academic literature.",
-      "I am actively seeking research or internship opportunities to advance my expertise in the field and contribute toward making the world safer bit by bit."
+      "Cybersecurity researcher. I break things to understand how to defend them — from AI-driven threats and blockchain security to network intrusion detection. Currently an M.Tech student at <a href='#'>IIT Patna</a> and Junior Research Associate at the Security Lab, building blockchain testbeds and poking at distributed systems.",
+      "3 published papers (IEEE, Springer), multiple CTF wins, and a habit of going down rabbit holes that sometimes turn into research. I'm looking for opportunities to do meaningful security research — the kind that makes systems actually harder to break."
     ]
   },
   "researchInterests": {
