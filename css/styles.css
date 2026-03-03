@@ -120,7 +120,7 @@ h2 {
 
 .section-title::after {
     content: '';
-    display: block; word-wrap: break-word; /* Added word wrapping for full width content */
+    display: block;
     position: relative;
     width: 300px;
     height: 1px;
@@ -493,11 +493,29 @@ ul {
 }
 
 .section-title {
-    color: var(--lightest-slate);
-    font-size: 1.75rem;
-    font-weight: 600;
-    margin-bottom: 2.5rem;
+    color: var(--neon-blue);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+    padding: 0.4rem 0;
     position: relative;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.section-title::before {
+    content: '┌─[ ';
+    color: var(--slate);
+}
+
+.section-title::after {
+    content: ' ]── ── ── ── ── ── ── ── ──';
+    color: var(--slate);
+    opacity: 0.3;
 }
 
 .cta-buttons {
@@ -3391,3 +3409,318 @@ body.is-mobile .resume-button {
     color: var(--neon-purple);
 }
 
+/* ===================================
+   NERDIFICATION - ASCII Dividers
+   =================================== */
+
+.ascii-divider {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--slate);
+    opacity: 0.15;
+    text-align: center;
+    padding: 0.5rem 0;
+    user-select: none;
+    pointer-events: none;
+    letter-spacing: 0.1em;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* ===================================
+   NERDIFICATION - CRT Scanlines
+   =================================== */
+
+.crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9990;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.03) 0px,
+        rgba(0, 0, 0, 0.03) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    mix-blend-mode: multiply;
+}
+
+/* ===================================
+   NERDIFICATION - Terminal Command Bar
+   =================================== */
+
+.terminal-bar {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 9000;
+    font-family: var(--font-mono);
+}
+
+.terminal-bar-toggle {
+    width: 40px;
+    height: 40px;
+    background: var(--light-navy);
+    border: 1px solid rgba(100, 255, 218, 0.2);
+    border-radius: 6px;
+    color: var(--neon-blue);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.terminal-bar-toggle:hover {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 15px rgba(100, 255, 218, 0.15);
+}
+
+.terminal-bar-input {
+    position: absolute;
+    bottom: 50px;
+    right: 0;
+    width: 320px;
+    background: rgba(10, 25, 47, 0.98);
+    border: 1px solid rgba(100, 255, 218, 0.2);
+    border-radius: 6px;
+    padding: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px) scale(0.95);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.terminal-bar-input.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.terminal-bar-header {
+    font-size: 0.65rem;
+    color: var(--slate);
+    padding: 0.4rem 0.8rem;
+    background: rgba(17, 34, 64, 0.8);
+    border-bottom: 1px solid rgba(100, 255, 218, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.terminal-bar-header .terminal-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.terminal-bar-header .terminal-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    opacity: 0.5;
+}
+
+.terminal-bar-header .terminal-dots span:nth-child(1) { background: #ff5f56; }
+.terminal-bar-header .terminal-dots span:nth-child(2) { background: #ffbd2e; }
+.terminal-bar-header .terminal-dots span:nth-child(3) { background: #27c93f; }
+
+.terminal-bar-body {
+    padding: 0.6rem 0.8rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.terminal-bar-output {
+    font-size: 0.7rem;
+    color: var(--light-slate);
+    line-height: 1.6;
+    margin-bottom: 0.4rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.terminal-bar-output .cmd-success { color: var(--neon-blue); }
+.terminal-bar-output .cmd-error { color: #ff5252; }
+.terminal-bar-output .cmd-info { color: var(--neon-purple); }
+
+.terminal-bar-prompt {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem 0.6rem;
+    border-top: 1px solid rgba(100, 255, 218, 0.05);
+}
+
+.terminal-bar-prompt span {
+    color: var(--neon-blue);
+    font-size: 0.72rem;
+    flex-shrink: 0;
+}
+
+.terminal-bar-prompt input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--lightest-slate);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    width: 100%;
+    caret-color: var(--neon-blue);
+}
+
+.terminal-bar-prompt input::placeholder {
+    color: var(--slate);
+    opacity: 0.4;
+}
+
+/* ===================================
+   NERDIFICATION - Konami Popup
+   =================================== */
+
+.konami-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: rgba(10, 25, 47, 0.98);
+    border: 1px solid var(--neon-blue);
+    border-radius: 8px;
+    padding: 2rem 2.5rem;
+    z-index: 10000;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 0 40px rgba(100, 255, 218, 0.2), inset 0 0 40px rgba(100, 255, 218, 0.02);
+}
+
+.konami-popup.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.konami-popup .konami-ascii {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--neon-blue);
+    white-space: pre;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.konami-popup .konami-msg {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--lightest-slate);
+    margin-bottom: 0.5rem;
+}
+
+.konami-popup .konami-sub {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--slate);
+}
+
+.konami-popup .konami-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.8rem;
+    background: none;
+    border: none;
+    color: var(--slate);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.konami-popup .konami-close:hover {
+    color: var(--neon-blue);
+}
+
+/* ===================================
+   NERDIFICATION - Status Bar Footer
+   =================================== */
+
+.status-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 22px;
+    background: rgba(17, 34, 64, 0.95);
+    border-top: 1px solid rgba(100, 255, 218, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--slate);
+    z-index: 9500;
+    backdrop-filter: blur(10px);
+}
+
+.status-bar-left,
+.status-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.status-bar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    white-space: nowrap;
+}
+
+.status-bar-item .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--neon-blue);
+    animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.status-bar-item .dot.amber { background: #ffc107; }
+.status-bar-item .dot.green { background: #27c93f; }
+
+@media (max-width: 768px) {
+    .terminal-bar {
+        bottom: 1.5rem;
+        right: 1rem;
+    }
+    
+    .terminal-bar-input {
+        width: 280px;
+        right: -0.5rem;
+    }
+
+    .status-bar {
+        display: none;
+    }
+
+    .crt-overlay {
+        display: none;
+    }
+}
+
+/* Ensure content doesn't hide behind status bar */
+footer {
+    margin-bottom: 22px;
+}

@@ -198,6 +198,58 @@
         </div>
     </div>
 
+    <!-- CRT Scanline Overlay -->
+    <div class="crt-overlay" aria-hidden="true"></div>
+
+    <!-- Konami Code Popup -->
+    <div class="konami-popup" id="konamiPopup">
+        <button class="konami-close" id="konamiClose">&times;</button>
+        <div class="konami-ascii">
+ ██╗  ██╗ █████╗  ██████╗██╗  ██╗███████╗██████╗ 
+ ██║  ██║██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗
+ ███████║███████║██║     █████╔╝ █████╗  ██████╔╝
+ ██╔══██║██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗
+ ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║
+ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+        </div>
+        <div class="konami-msg">You found the secret. Root access granted.</div>
+        <div class="konami-sub">↑↑↓↓←→←→BA</div>
+    </div>
+
+    <!-- Terminal Command Bar -->
+    <div class="terminal-bar" id="terminalBar">
+        <div class="terminal-bar-input" id="terminalInput">
+            <div class="terminal-bar-header">
+                <span>guest@durjoy.dev ~ </span>
+                <div class="terminal-dots"><span></span><span></span><span></span></div>
+            </div>
+            <div class="terminal-bar-body">
+                <div class="terminal-bar-output" id="terminalOutput">
+                    <span class="cmd-info">Welcome. Type 'help' for available commands.</span>
+                </div>
+            </div>
+            <div class="terminal-bar-prompt">
+                <span>$</span>
+                <input type="text" id="terminalCmdInput" placeholder="type a command..." autocomplete="off" spellcheck="false">
+            </div>
+        </div>
+        <button class="terminal-bar-toggle" id="terminalToggle" aria-label="Toggle terminal">>_</button>
+    </div>
+
+    <!-- Status Bar Footer -->
+    <div class="status-bar" aria-hidden="true">
+        <div class="status-bar-left">
+            <div class="status-bar-item"><span class="dot green"></span> online</div>
+            <div class="status-bar-item" id="statusBarBranch">main</div>
+            <div class="status-bar-item" id="statusBarSection">~/about</div>
+        </div>
+        <div class="status-bar-right">
+            <div class="status-bar-item" id="statusBarScroll">0%</div>
+            <div class="status-bar-item" id="statusBarTime"></div>
+            <div class="status-bar-item">UTF-8</div>
+        </div>
+    </div>
+
     <!-- Resume Button -->
     <a href="Resume.pdf" class="resume-button" target="_blank" rel="noopener noreferrer">Resume</a>
     

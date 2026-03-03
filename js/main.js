@@ -1545,3 +1545,184 @@ window.addEventListener('resize', () => {
         resetDesktopStyles();
     }
 });
+
+// ═══════════════════════════════════════
+//  NERDIFICATION MODULE
+// ═══════════════════════════════════════
+
+(function initNerdMode() {
+
+    // ── ASCII Art Dividers ──
+    function injectAsciiDividers() {
+        const patterns = [
+            '─── ◆ ─── ◆ ─── ◆ ─── ◆ ─── ◆ ─── ◆ ─── ◆ ─── ◆ ─── ◆ ───',
+            '╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌',
+            '· · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·',
+            '═══════════════════════════════════════════════════════════════',
+            '┈┈┈┈┈┈┈ ⟡ ┈┈┈┈┈┈┈ ⟡ ┈┈┈┈┈┈┈ ⟡ ┈┈┈┈┈┈┈ ⟡ ┈┈┈┈┈┈┈ ⟡ ┈┈┈┈┈┈┈'
+        ];
+        const sections = document.querySelectorAll('main > section');
+        sections.forEach((section, i) => {
+            if (i === 0) return; // No divider before the first section
+            const divider = document.createElement('div');
+            divider.className = 'ascii-divider';
+            divider.setAttribute('aria-hidden', 'true');
+            divider.textContent = patterns[i % patterns.length];
+            section.parentNode.insertBefore(divider, section);
+        });
+    }
+
+    // ── Terminal Command Bar ──
+    function initTerminalBar() {
+        const toggle = document.getElementById('terminalToggle');
+        const input = document.getElementById('terminalInput');
+        const cmdInput = document.getElementById('terminalCmdInput');
+        const output = document.getElementById('terminalOutput');
+        if (!toggle || !input || !cmdInput || !output) return;
+
+        toggle.addEventListener('click', () => {
+            input.classList.toggle('active');
+            if (input.classList.contains('active')) {
+                setTimeout(() => cmdInput.focus(), 200);
+            }
+        });
+
+        // Close on click outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.terminal-bar')) {
+                input.classList.remove('active');
+            }
+        });
+
+        const commands = {
+            help: () => '<span class="cmd-info">Available commands:</span>\n  help        — show this message\n  about       — who is durjoy?\n  skills      — list skills\n  goto [sec]  — jump to section\n  whoami      — identity check\n  uptime      — site uptime\n  clear       — clear terminal\n  sudo        — try your luck\n  ping        — ping durjoy\n  ls          — list sections\n  cat flag    — capture the flag',
+            about: () => '<span class="cmd-success">Durjoy Majumdar</span> — Cybersec researcher, nerd, breaker of things.\nCurrently at IIT Patna. Seeking PhD Fall 2027.',
+            whoami: () => '<span class="cmd-success">guest@durjoy.dev</span> — You are a curious visitor. I like that.',
+            skills: () => '<span class="cmd-info">Loading arsenal...</span>\n  [■■■■■■■■■░] Network Security\n  [■■■■■■■■░░] Penetration Testing\n  [■■■■■■■░░░] Blockchain Security\n  [■■■■■■■■■░] Python / JS\n  [■■■■■■░░░░] ML for Security',
+            clear: () => { output.innerHTML = ''; return null; },
+            sudo: () => '<span class="cmd-error">Nice try. Permission denied. 🔒</span>',
+            uptime: () => {
+                const launch = new Date('2024-01-01');
+                const now = new Date();
+                const days = Math.floor((now - launch) / (1000 * 60 * 60 * 24));
+                return `<span class="cmd-success">Site uptime:</span> ${days} days, ${now.getHours()}h ${now.getMinutes()}m`;
+            },
+            ping: () => '<span class="cmd-success">PONG!</span> 64 bytes from durjoy.dev: time=0.42ms TTL=64',
+            ls: () => {
+                const secs = document.querySelectorAll('main > section[id]');
+                return '<span class="cmd-info">drwxr-xr-x  sections/</span>\n' + Array.from(secs).map(s => `  📂 ${s.id}`).join('\n');
+            },
+            cat: (args) => {
+                if (args === 'flag') return '<span class="cmd-success">🚩 CTF{y0u_f0und_th3_fl4g_1n_th3_t3rm1nal}</span>';
+                return '<span class="cmd-error">cat: ' + (args || '') + ': No such file</span>';
+            },
+            goto: (args) => {
+                if (!args) return '<span class="cmd-error">Usage: goto [section-name]</span>';
+                const target = document.getElementById(args);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    return `<span class="cmd-success">Jumping to ${args}...</span>`;
+                }
+                return `<span class="cmd-error">Section '${args}' not found. Try 'ls' to list sections.</span>`;
+            }
+        };
+
+        cmdInput.addEventListener('keydown', (e) => {
+            if (e.key !== 'Enter') return;
+            const raw = cmdInput.value.trim();
+            if (!raw) return;
+
+            const [cmd, ...rest] = raw.split(/\s+/);
+            const args = rest.join(' ');
+
+            output.innerHTML += `\n<span class="cmd-info">$</span> ${raw}\n`;
+
+            if (commands[cmd]) {
+                const result = commands[cmd](args);
+                if (result) output.innerHTML += result + '\n';
+            } else {
+                output.innerHTML += `<span class="cmd-error">command not found: ${cmd}</span>\n`;
+            }
+
+            cmdInput.value = '';
+            const body = output.closest('.terminal-bar-body');
+            if (body) body.scrollTop = body.scrollHeight;
+        });
+    }
+
+    // ── Konami Code ──
+    function initKonamiCode() {
+        const sequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
+        let pos = 0;
+        const popup = document.getElementById('konamiPopup');
+        const closeBtn = document.getElementById('konamiClose');
+        if (!popup) return;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === sequence[pos]) {
+                pos++;
+                if (pos === sequence.length) {
+                    popup.classList.add('active');
+                    pos = 0;
+                }
+            } else {
+                pos = 0;
+            }
+        });
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => popup.classList.remove('active'));
+        }
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) popup.classList.remove('active');
+        });
+    }
+
+    // ── Status Bar ──
+    function initStatusBar() {
+        const scrollEl = document.getElementById('statusBarScroll');
+        const timeEl = document.getElementById('statusBarTime');
+        const sectionEl = document.getElementById('statusBarSection');
+        if (!scrollEl || !timeEl) return;
+
+        // Scroll percentage
+        function updateScroll() {
+            const h = document.documentElement;
+            const pct = Math.round((h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100) || 0;
+            scrollEl.textContent = pct + '%';
+        }
+
+        // Current section tracking
+        function updateSection() {
+            if (!sectionEl) return;
+            const sections = document.querySelectorAll('main > section[id]');
+            let current = 'about';
+            sections.forEach(s => {
+                const rect = s.getBoundingClientRect();
+                if (rect.top <= 200) current = s.id;
+            });
+            sectionEl.textContent = '~/' + current;
+        }
+
+        // Time
+        function updateTime() {
+            const now = new Date();
+            timeEl.textContent = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+        }
+
+        window.addEventListener('scroll', () => { updateScroll(); updateSection(); }, { passive: true });
+        setInterval(updateTime, 10000);
+        updateScroll();
+        updateSection();
+        updateTime();
+    }
+
+    // ── Init All ──
+    document.addEventListener('DOMContentLoaded', () => {
+        injectAsciiDividers();
+        initTerminalBar();
+        initKonamiCode();
+        initStatusBar();
+    });
+
+})();
