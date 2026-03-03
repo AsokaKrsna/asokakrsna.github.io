@@ -2091,168 +2091,56 @@ body:not(.loading-active) .menu-button {
 
 /* Certifications timeline styling */
 
-/* ── Scratchpad / Failed Ideas ── */
+/* ── Scratchpad ── */
 .scratchpad {
     padding: 2rem 0;
 }
 
-.scratchpad-intro {
-    color: var(--slate);
-    font-size: 0.9rem;
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-    max-width: 600px;
-}
-
-.scratchpad-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    counter-reset: scratchpad-counter;
-}
-
-.scratchpad-card {
-    counter-increment: scratchpad-counter;
-    position: relative;
-    padding: 1.2rem 0 1.2rem 2rem;
-    border-bottom: 1px solid rgba(100, 255, 218, 0.08);
+.scratchpad-single-card {
+    background: var(--light-navy);
+    border: 1px solid rgba(100, 255, 218, 0.08);
+    border-radius: 8px;
+    padding: 1.4rem 1.6rem;
     transition: border-color 0.3s ease;
+    max-width: 480px;
 }
 
-.scratchpad-card:last-child {
-    border-bottom: none;
+.scratchpad-single-card:hover {
+    border-color: rgba(100, 255, 218, 0.25);
 }
 
-.scratchpad-card::before {
-    content: '[' counter(scratchpad-counter) ']';
-    position: absolute;
-    left: 0;
-    top: 1.2rem;
+.scratchpad-single-card .scratchpad-icon {
+    font-size: 1.2rem;
+    margin-bottom: 0.6rem;
+    display: block;
+}
+
+.scratchpad-single-card .scratchpad-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--lightest-slate);
+    margin-bottom: 0.4rem;
+}
+
+.scratchpad-single-card .scratchpad-text {
+    font-size: 0.82rem;
+    color: var(--slate);
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+}
+
+.scratchpad-single-card .scratchpad-link {
     font-family: var(--font-mono);
     font-size: 0.78rem;
-    color: var(--slate);
-    font-weight: 500;
-}
-
-.scratchpad-card:hover {
-    border-color: rgba(100, 255, 218, 0.3);
-}
-
-.scratchpad-card-header {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 0.3rem;
-}
-
-.scratchpad-card-header .status-icon {
-    font-size: 0.75rem;
-    opacity: 0.7;
-}
-
-.scratchpad-card-header .status-icon.abandoned { color: #ff5252; }
-.scratchpad-card-header .status-icon.paused { color: #ffc107; }
-.scratchpad-card-header .status-icon.exploring { color: var(--accent); }
-
-.scratchpad-title {
-    color: var(--lightest-slate);
-    font-size: 1.05rem;
-    font-weight: 500;
-    font-style: italic;
-    line-height: 1.4;
-    margin: 0;
-}
-
-.scratchpad-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    margin-bottom: 0.3rem;
-    flex-wrap: wrap;
-}
-
-.scratchpad-status {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
     font-weight: 500;
     color: var(--neon-blue);
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    padding: 0;
-    border: none;
-    background: none;
-    border-radius: 0;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 0.3s ease;
 }
 
-.scratchpad-status.abandoned {
-    color: #ff5252;
-    background: none;
-    border: none;
-}
-
-.scratchpad-status.paused {
-    color: #ffc107;
-    background: none;
-    border: none;
-}
-
-.scratchpad-status.exploring {
-    color: var(--accent);
-    background: none;
-    border: none;
-}
-
-.scratchpad-date {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--slate);
-}
-
-.scratchpad-description {
-    font-size: 0.82rem;
-    color: var(--light-slate);
-    margin-bottom: 0.4rem;
-    padding-left: 0.6rem;
-    border-left: 2px solid rgba(255, 82, 82, 0.4);
-    line-height: 1.5;
-}
-
-.scratchpad-lesson {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--slate);
-    font-style: italic;
-}
-
-.scratchpad-lesson strong {
-    color: var(--accent);
-    font-style: normal;
-}
-
-.scratchpad-tags {
-    display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-    margin-top: 0.4rem;
-}
-
-.scratchpad-tags span {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    color: var(--slate);
-    background: rgba(100, 255, 218, 0.05);
-    padding: 0.1rem 0.4rem;
-    border-radius: 2px;
-}
-
-@media (max-width: 768px) {
-    .scratchpad-card {
-        padding: 1rem 0 1rem 2rem;
-    }
-    
-    .scratchpad-meta {
-        gap: 0.5rem;
-    }
+.scratchpad-single-card .scratchpad-link:hover {
+    color: var(--neon-purple);
 }
 
 /* ── End Scratchpad ── */

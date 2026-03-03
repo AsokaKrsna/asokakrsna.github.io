@@ -229,16 +229,16 @@
                 <nav class="nav">
                     <ul>
                         <li><a href="#about">ABOUT</a></li>
-                        <li><a href="#research">RESEARCH</a></li>
-                        <li><a href="#experience">EXPERIENCE</a></li>
-                        <li><a href="#projects">PROJECTS</a></li>
-                        <li><a href="#cyber-arena">CYBER ARENA</a></li>
-                        <li><a href="#skills">ARSENAL</a></li>
                         <li><a href="#education">EDUCATION</a></li>
+                        <li><a href="#experience">EXPERIENCE</a></li>
+                        <li><a href="#research">RESEARCH</a></li>
+                        <li><a href="#projects">PROJECTS</a></li>
+                        <li><a href="#skills">ARSENAL</a></li>
                         <li><a href="#certifications">GLOBAL CERTIFICATIONS</a></li>
-                        <li><a href="#achievements">ACHIEVEMENTS</a></li>
+                        <li><a href="#cyber-arena">CYBER ARENA</a></li>
                         <li><a href="#blogs">WRITEUPS & BLOGS</a></li>
                         <li><a href="#scratchpad">SCRATCHPAD</a></li>
+                        <li><a href="#achievements">ACHIEVEMENTS</a></li>
                         <li><a href="#volunteering">VOLUNTEERING</a></li>
                         <li><a href="#contact">PING ME</a></li>
                     </ul>
@@ -275,6 +275,24 @@
                 </div>
             </section>
 
+            <section id="education" class="education">
+                <div class="container">
+                    <h2 class="section-title">Education</h2>
+                    <div class="education-content">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="experience" class="experience">
+                <div class="container">
+                    <h2 class="section-title">Experience</h2>
+                    <div class="experience-content">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+
             <section id="research" class="research">
                 <div class="container">
                     <h2 class="section-title">Research</h2>
@@ -290,15 +308,6 @@
                 </div>
             </section>
 
-            <section id="experience" class="experience">
-                <div class="container">
-                    <h2 class="section-title">Experience</h2>
-                    <div class="experience-content">
-                        <!-- Content loaded dynamically from data/portfolio-data.json -->
-                    </div>
-                </div>
-            </section>
-
             <section id="projects" class="projects">
                 <div class="container">
                     <h2 class="section-title">Projects</h2>
@@ -308,6 +317,24 @@
                 </div>
                 <div class="project-cta">
                     <button id="load-more-projects" class="btn load-more">Load More</button>
+                </div>
+            </section>
+
+            <section id="skills" class="skills">
+                <div class="container">
+                    <h2 class="section-title">Arsenal</h2>
+                    <div class="skills-content">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="certifications" class="certifications">
+                <div class="container">
+                    <h2 class="section-title">Global Certifications</h2>
+                    <div class="certifications-timeline">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
                 </div>
             </section>
 
@@ -326,42 +353,6 @@
                 </div>
             </section>
 
-            <section id="skills" class="skills">
-                <div class="container">
-                    <h2 class="section-title">Arsenal</h2>
-                    <div class="skills-content">
-                        <!-- Content loaded dynamically from data/portfolio-data.json -->
-                    </div>
-                </div>
-            </section>
-
-            <section id="education" class="education">
-                <div class="container">
-                    <h2 class="section-title">Education</h2>
-                    <div class="education-content">
-                        <!-- Content loaded dynamically from data/portfolio-data.json -->
-                    </div>
-                </div>
-            </section>
-
-            <section id="certifications" class="certifications">
-                <div class="container">
-                    <h2 class="section-title">Global Certifications</h2>
-                    <div class="certifications-timeline">
-                        <!-- Content loaded dynamically from data/portfolio-data.json -->
-                    </div>
-                </div>
-            </section>
-
-            <section id="achievements" class="achievements">
-                <div class="container">
-                    <h2 class="section-title">Achievements & Honors</h2>
-                    <div class="achievements-timeline">
-                        <!-- Content loaded dynamically from data/portfolio-data.json -->
-                    </div>
-                </div>
-            </section>
-
             <section id="blogs" class="blogs">
                 <div class="container">
                     <h2 class="section-title">Writeups & Blogs</h2>
@@ -376,9 +367,19 @@
 
             <section id="scratchpad" class="scratchpad">
                 <div class="container">
-                    <h2 class="section-title">Failed Ideas / Scratchpad</h2>
-                    <p class="scratchpad-intro"></p>
-                    <div class="scratchpad-grid">
+                    <div class="scratchpad-single-card">
+                        <span class="scratchpad-icon">📝</span>
+                        <div class="scratchpad-title">The Scratchpad</div>
+                        <p class="scratchpad-text">Where I document ideas that didn't work, experiments that failed, and lessons learned. Because research is mostly about the wrong turns.</p>
+                        <a href="#" class="scratchpad-link">Read on my blog →</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="achievements" class="achievements">
+                <div class="container">
+                    <h2 class="section-title">Achievements & Honors</h2>
+                    <div class="achievements-timeline">
                         <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
                 </div>
