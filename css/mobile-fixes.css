@@ -59,14 +59,6 @@ body.is-mobile .sidebar.active .nav a {
     letter-spacing: 1px;
 }
 
-/* Theme toggle positioning */
-body.is-mobile .sidebar.active .theme-toggle {
-    margin-top: auto;
-    padding-bottom: 2rem;
-    display: flex;
-    justify-content: center;
-}
-
 /* Scrollbar styling */
 body.is-mobile .sidebar::-webkit-scrollbar {
     width: 4px;
@@ -198,14 +190,6 @@ body.is-mobile .sidebar.active .nav ul li a {
 body.is-mobile .sidebar.active .sidebar-social {
     order: 3;
     margin-top: 1rem;
-}
-
-body.is-mobile .sidebar.active .theme-toggle {
-    order: 4;
-    margin-top: 1rem;
-    padding-bottom: 2rem;
-    display: flex;
-    justify-content: center;
 }
 
 /* Mobile fixes for sidebar */
@@ -378,23 +362,6 @@ body.is-mobile .profile-photo,
 /* Hide social links in mobile */
 .sidebar.active .sidebar-social {
     display: none !important;
-}
-
-/* Theme toggle at bottom of screen - revert to original styling */
-.sidebar.active .theme-toggle {
-    display: flex !important;
-    position: fixed !important;
-    bottom: 20px !important;
-    left: 20px !important;
-    z-index: 10010 !important;
-    width: 40px !important;
-    height: 40px !important;
-    background-color: transparent !important; /* Remove background color */
-    padding: 10px !important;
-    border-radius: 50% !important;
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3) !important; /* Original shadow */
-    align-items: center !important;
-    justify-content: center !important;
 }
 
 /* CRITICAL: Ensure first navigation items are visible and highlighted */

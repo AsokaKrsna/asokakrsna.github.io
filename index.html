@@ -29,27 +29,6 @@
                 });
             }, 300);
             
-            // Direct theme toggle initialization
-            const themeSwitch = document.getElementById('theme-switch');
-            if (themeSwitch) {
-                themeSwitch.addEventListener('click', function() {
-                    if (this.checked) {
-                        document.body.setAttribute('data-theme', 'light');
-                        localStorage.setItem('theme', 'light');
-                    } else {
-                        document.body.removeAttribute('data-theme');
-                        localStorage.setItem('theme', 'dark');
-                    }
-                });
-                
-                // Set initial state
-                const savedTheme = localStorage.getItem('theme');
-                if (savedTheme === 'light') {
-                    themeSwitch.checked = true;
-                    document.body.setAttribute('data-theme', 'light');
-                }
-            }
-            
             // Hex Stream Progress Bar Loading
             function handleLoadingScreen() {
                 const loadingScreen = document.querySelector('.loading-screen');
@@ -250,18 +229,18 @@
                 <nav class="nav">
                     <ul>
                         <li><a href="#about">ABOUT</a></li>
-                        <li><a href="#education">EDUCATION</a></li>
-                        <li><a href="#experience">EXPERIENCE</a></li>
                         <li><a href="#research-interests">RESEARCH INTERESTS</a></li>
-                        <li><a href="#research">RESEARCH</a></li>
-                        <li><a href="#skills">SKILLS</a></li>
+                        <li><a href="#experience">EXPERIENCE</a></li>
                         <li><a href="#projects">PROJECTS</a></li>
-                        <li><a href="#blogs">BLOGS</a></li>
+                        <li><a href="#research">RESEARCH</a></li>
                         <li><a href="#cyber-arena">CYBER ARENA</a></li>
+                        <li><a href="#skills">ARSENAL</a></li>
+                        <li><a href="#education">EDUCATION</a></li>
                         <li><a href="#certifications">GLOBAL CERTIFICATIONS</a></li>
                         <li><a href="#achievements">ACHIEVEMENTS</a></li>
+                        <li><a href="#blogs">WRITEUPS & BLOGS</a></li>
                         <li><a href="#volunteering">VOLUNTEERING</a></li>
-                        <li><a href="#contact">CONTACT</a></li>
+                        <li><a href="#contact">PING ME</a></li>
                     </ul>
                 </nav>
                 
@@ -273,15 +252,6 @@
                         <li><a href="https://www.instagram.com/asokakrsna/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a></li>
                         <li><a href="https://x.com/Durjoy_02" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a></li>
                     </ul>
-                </div>
-
-                <div class="theme-toggle">
-                    <input type="checkbox" id="theme-switch" class="theme-switch">
-                    <label for="theme-switch" class="switch-label">
-                        <i class="fas fa-sun"></i>
-                        <i class="fas fa-moon"></i>
-                        <span class="slider"></span>
-                    </label>
                 </div>
 
                 <div style="margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.06);">
@@ -305,12 +275,9 @@
                 </div>
             </section>
 
-            <section id="education" class="education">
+            <section id="research-interests" class="research-interests">
                 <div class="container">
-                    <h2 class="section-title">Education</h2>
-                    <div class="education-content">
-                        <!-- Content loaded dynamically from data/portfolio-data.json -->
-                    </div>
+                    <!-- Content loaded dynamically from data/portfolio-data.json -->
                 </div>
             </section>
 
@@ -318,33 +285,6 @@
                 <div class="container">
                     <h2 class="section-title">Experience</h2>
                     <div class="experience-content">
-                        <!-- Content loaded dynamically from data/portfolio-data.json -->
-                    </div>
-                </div>
-            </section>
-
-            <section id="research-interests" class="research-interests">
-                <div class="container">
-                    <!-- Content loaded dynamically from data/portfolio-data.json -->
-                </div>
-            </section>
-
-            <section id="research" class="research">
-                <div class="container">
-                    <h2 class="section-title">Research Publications</h2>
-                    <div class="research-content">
-                        <!-- Content loaded dynamically from data/portfolio-data.json -->
-                    </div>
-                    <div class="section-cta research-cta">
-                        <button id="load-more-research" class="btn small secondary">See More</button>
-                    </div>
-                </div>
-            </section>
-
-            <section id="skills" class="skills">
-                <div class="container">
-                    <h2 class="section-title">Skills</h2>
-                    <div class="skills-content">
                         <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
                 </div>
@@ -362,14 +302,14 @@
                 </div>
             </section>
 
-            <section id="blogs" class="blogs">
+            <section id="research" class="research">
                 <div class="container">
-                    <h2 class="section-title">Blogs</h2>
-                    <div class="blogs-grid">
+                    <h2 class="section-title">Research Publications</h2>
+                    <div class="research-content">
                         <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
-                    <div class="section-cta blog-cta">
-                        <button id="view-more-blogs" class="btn small secondary">View More</button>
+                    <div class="section-cta research-cta">
+                        <button id="load-more-research" class="btn small secondary">See More</button>
                     </div>
                 </div>
             </section>
@@ -385,6 +325,24 @@
                         <div class="arena-grid">
                             <!-- Content loaded dynamically from data/portfolio-data.json -->
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="skills" class="skills">
+                <div class="container">
+                    <h2 class="section-title">Arsenal</h2>
+                    <div class="skills-content">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="education" class="education">
+                <div class="container">
+                    <h2 class="section-title">Education</h2>
+                    <div class="education-content">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
                 </div>
             </section>
@@ -407,6 +365,18 @@
                 </div>
             </section>
 
+            <section id="blogs" class="blogs">
+                <div class="container">
+                    <h2 class="section-title">Writeups & Blogs</h2>
+                    <div class="blogs-grid">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                    <div class="section-cta blog-cta">
+                        <button id="view-more-blogs" class="btn small secondary">View More</button>
+                    </div>
+                </div>
+            </section>
+
             <section id="volunteering" class="volunteering">
                 <div class="container">
                     <h2 class="section-title">Volunteering & Community Service</h2>
@@ -418,7 +388,7 @@
 
             <section id="contact" class="contact">
                 <div class="container">
-                    <h2 class="section-title">Contact</h2>
+                    <h2 class="section-title">Ping Me</h2>
                     <p><!-- Content loaded dynamically from data/portfolio-data.json --></p>
                     
                     <div class="contact-info">
@@ -447,141 +417,6 @@
     <script src="js/data-loader.js"></script>
     <script src="js/main.js"></script>
     
-    <!-- Additional script to ensure content visibility in both themes -->
-    <script>
-        // Reset styles for dark theme
-        function resetDarkThemeStyles() {
-            // Reset Skills section
-            var skillsElements = document.querySelectorAll('.skills-list, .skills-category h3');
-            skillsElements.forEach(function(el) {
-                el.style.color = '';
-                el.style.visibility = '';
-                el.style.fontWeight = '';
-            });
-            
-            // Reset Cyber Arena section
-            var arenaElements = document.querySelectorAll('.arena-list li, .arena-title, .arena-link, .arena-intro');
-            arenaElements.forEach(function(el) {
-                el.style.color = '';
-                el.style.visibility = '';
-                el.style.fontWeight = '';
-            });
-            
-            // Reset Education section
-            var educationElements = document.querySelectorAll('.education-header h3, .education-location, .education-date, .education-item p');
-            educationElements.forEach(function(el) {
-                el.style.color = '';
-                el.style.visibility = '';
-                el.style.fontWeight = '';
-            });
-        }
-
-        // Apply styles for light theme
-        function applyLightThemeStyles() {
-            // Fix for Skills section
-            var skillsLists = document.querySelectorAll('.skills-list');
-            skillsLists.forEach(function(list) {
-                list.style.color = '#333333';
-                list.style.visibility = 'visible';
-            });
-            
-            var skillsHeadings = document.querySelectorAll('.skills-category h3');
-            skillsHeadings.forEach(function(heading) {
-                heading.style.color = '#222222';
-                heading.style.visibility = 'visible';
-            });
-
-            // Fix for Cyber Arena section
-            var arenaLists = document.querySelectorAll('.arena-list li');
-            arenaLists.forEach(function(item) {
-                item.style.color = '#333333';
-                item.style.visibility = 'visible';
-            });
-            
-            var arenaTitles = document.querySelectorAll('.arena-title');
-            arenaTitles.forEach(function(title) {
-                title.style.color = '#222222';
-                title.style.visibility = 'visible';
-            });
-            
-            var arenaLinks = document.querySelectorAll('.arena-link');
-            arenaLinks.forEach(function(link) {
-                link.style.color = '#007bff';
-                link.style.visibility = 'visible';
-            });
-            
-            var arenaIntro = document.querySelector('.arena-intro');
-            if (arenaIntro) {
-                arenaIntro.style.color = '#333333';
-                arenaIntro.style.visibility = 'visible';
-            }
-            
-            // Fix for Education section
-            var educationHeaders = document.querySelectorAll('.education-header h3');
-            educationHeaders.forEach(function(header) {
-                header.style.color = '#222222';
-                header.style.fontWeight = '600';
-                header.style.visibility = 'visible';
-            });
-            
-            var educationLocations = document.querySelectorAll('.education-location');
-            educationLocations.forEach(function(location) {
-                location.style.color = '#333333';
-                location.style.visibility = 'visible';
-            });
-            
-            var educationDates = document.querySelectorAll('.education-date');
-            educationDates.forEach(function(date) {
-                date.style.color = '#007bff';
-                date.style.visibility = 'visible';
-            });
-            
-            var educationDescriptions = document.querySelectorAll('.education-item p');
-            educationDescriptions.forEach(function(desc) {
-                desc.style.color = '#333333';
-                desc.style.visibility = 'visible';
-            });
-        }
-
-        // When DOM is loaded, check theme and apply appropriate styles
-        document.addEventListener('DOMContentLoaded', function() {
-            if (document.body.hasAttribute('data-theme') && document.body.getAttribute('data-theme') === 'light') {
-                setTimeout(function() {
-                    applyLightThemeStyles();
-                }, 500);
-            } else {
-                // Ensure dark theme has proper styles
-                setTimeout(function() {
-                    resetDarkThemeStyles();
-                }, 500);
-            }
-        });
-
-        // Listen for theme changes
-        const themeObserver = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.attributeName === 'data-theme') {
-                    if (document.body.hasAttribute('data-theme') && document.body.getAttribute('data-theme') === 'light') {
-                        applyLightThemeStyles();
-                    } else {
-                        resetDarkThemeStyles();
-                    }
-                }
-            });
-        });
-        
-        // Start observing the document body for theme changes
-        themeObserver.observe(document.body, { attributes: true });
-
-        // Fallback check after 2 seconds
-        setTimeout(function() {
-            if (document.body.hasAttribute('data-theme') && document.body.getAttribute('data-theme') === 'light') {
-                applyLightThemeStyles();
-            } else {
-                resetDarkThemeStyles();
-            }
-        }, 2000);
-    </script>
     <script>
         // Mode switching for nerd → classic
         (function() {

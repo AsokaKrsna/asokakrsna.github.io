@@ -25,7 +25,6 @@ setTimeout(() => {
     const navUl = document.querySelector('.nav ul');
     const navItems = document.querySelectorAll('.nav li');
     const sidebarSocial = document.querySelector('.sidebar-social');
-    const themeToggle = document.querySelector('.theme-toggle');
     
     // Add mobile detection to body
     function handleMobileDetection() {
@@ -48,7 +47,6 @@ setTimeout(() => {
             if (logo) logo.style.display = '';
             if (subtitle) subtitle.style.display = '';
             if (sidebarSocial) sidebarSocial.style.display = '';
-            if (themeToggle) themeToggle.style.display = '';
         }
     }
     
@@ -98,17 +96,10 @@ setTimeout(() => {
                         logo.style.borderRadius = '4px';
                         logo.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
                         
-                        // Apply theme-appropriate styling with specific colors
-                        const isDarkTheme = document.body.classList.contains('dark-theme');
-                        if (isDarkTheme) {
-                            logo.style.backgroundColor = 'rgba(8, 15, 30, 0.85)'; // Darker navy to match theme
-                            logo.style.textShadow = '0 0 3px rgba(0, 255, 255, 0.3)';
-                            logo.style.color = '#ffffff';
-                        } else {
-                            logo.style.backgroundColor = 'rgba(240, 240, 240, 0.9)';
-                            logo.style.textShadow = '0 0 3px rgba(0, 100, 255, 0.3)';
-                            logo.style.color = '#333333';
-                        }
+                        // Apply dark theme styling
+                        logo.style.backgroundColor = 'rgba(8, 15, 30, 0.85)';
+                        logo.style.textShadow = '0 0 3px rgba(0, 255, 255, 0.3)';
+                        logo.style.color = '#ffffff';
                         
                         // Disable glitch effect for mobile
                         const beforePseudo = document.createElement('style');
@@ -208,23 +199,6 @@ setTimeout(() => {
                         sidebarSocial.style.visibility = 'hidden';
                     }
                     
-                    // Position theme toggle button at bottom left - revert to original
-                    if (themeToggle) {
-                        themeToggle.style.position = 'fixed';
-                        themeToggle.style.bottom = '20px';
-                        themeToggle.style.left = '20px';
-                        themeToggle.style.zIndex = '10010';
-                        themeToggle.style.width = '40px';
-                        themeToggle.style.height = '40px';
-                        themeToggle.style.backgroundColor = 'transparent';
-                        themeToggle.style.padding = '10px';
-                        themeToggle.style.borderRadius = '50%';
-                        themeToggle.style.boxShadow = '0 0 10px rgba(0, 255, 255, 0.3)';
-                        themeToggle.style.display = 'flex';
-                        themeToggle.style.alignItems = 'center';
-                        themeToggle.style.justifyContent = 'center';
-                    }
-                    
                     // Hide any possible footer elements in mobile only
                     const sidebarFooter = sidebar.querySelector('.sidebar-footer');
                     if (sidebarFooter && window.innerWidth <= 768) {
@@ -267,7 +241,6 @@ setTimeout(() => {
                 });
                 
                 if (sidebarSocial) sidebarSocial.style = '';
-                if (themeToggle) themeToggle.style = '';
             }
         });
     }
@@ -852,9 +825,6 @@ function initializeAll() {
         // Remove the cyber cursor initialization
         // initCyberCursor();
         
-        // Init theme switcher
-        initThemeSwitcher();
-        
         // Initialize projects load more functionality
         initProjectsLoadMore();
         
@@ -1043,202 +1013,6 @@ function initCyberCursor() {
     console.log("Cursor effect disabled");
 }
 
-// Theme Switcher
-function initThemeSwitcher() {
-    console.log("Theme switcher initializing...");
-    const themeSwitch = document.getElementById('theme-switch');
-    
-    if (!themeSwitch) {
-        console.error("Theme switch element not found!");
-        return;
-    }
-    
-    console.log("Found theme switch element:", themeSwitch);
-    
-    // Check for saved theme preference or use preferred color scheme
-    const currentTheme = localStorage.getItem('theme');
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    console.log("Current theme from localStorage:", currentTheme);
-    console.log("System prefers dark mode:", prefersDarkScheme.matches);
-    
-    // If theme is saved in localStorage, use that
-    if (currentTheme) {
-        if (currentTheme === 'light') {
-            console.log("Setting light theme from localStorage");
-            document.body.setAttribute('data-theme', 'light');
-            themeSwitch.checked = true;
-            
-            // Fix skills visibility on initial page load in light theme
-            setTimeout(() => {
-                ensureSkillsVisibility();
-            }, 100);
-        } else {
-            console.log("Setting dark theme from localStorage");
-            document.body.removeAttribute('data-theme');
-            themeSwitch.checked = false;
-        }
-    } 
-    // Otherwise use system preference
-    else {
-        if (!prefersDarkScheme.matches) {
-            console.log("Setting light theme from system preference");
-            document.body.setAttribute('data-theme', 'light');
-            themeSwitch.checked = true;
-            localStorage.setItem('theme', 'light');
-            
-            // Fix skills visibility on initial page load in light theme
-            setTimeout(() => {
-                ensureSkillsVisibility();
-            }, 100);
-        } else {
-            console.log("Setting dark theme from system preference");
-            document.body.removeAttribute('data-theme');
-            themeSwitch.checked = false;
-            localStorage.setItem('theme', 'dark');
-        }
-    }
-    
-    // Helper function to ensure skills are visible in light theme
-    function ensureSkillsVisibility() {
-        const skillsLists = document.querySelectorAll('.skills-list');
-        skillsLists.forEach(list => {
-            list.style.color = '#333333';
-            list.style.visibility = 'visible';
-        });
-        
-        const skillsHeadings = document.querySelectorAll('.skills-category h3');
-        skillsHeadings.forEach(heading => {
-            heading.style.color = '#222222';
-            heading.style.visibility = 'visible';
-        });
-        
-        // Fix for Cyber Arena visibility in light theme
-        const arenaLists = document.querySelectorAll('.arena-list li');
-        arenaLists.forEach(item => {
-            item.style.color = '#333333';
-            item.style.visibility = 'visible';
-        });
-        
-        const arenaTitles = document.querySelectorAll('.arena-title');
-        arenaTitles.forEach(title => {
-            title.style.color = '#222222';
-            title.style.visibility = 'visible';
-        });
-        
-        const arenaLinks = document.querySelectorAll('.arena-link');
-        arenaLinks.forEach(link => {
-            link.style.color = '#007bff';
-            link.style.visibility = 'visible';
-        });
-        
-        const arenaIntro = document.querySelector('.arena-intro');
-        if (arenaIntro) {
-            arenaIntro.style.color = '#333333';
-            arenaIntro.style.visibility = 'visible';
-        }
-        
-        // Fix for Education section visibility in light theme
-        const educationHeaders = document.querySelectorAll('.education-header h3');
-        educationHeaders.forEach(header => {
-            header.style.color = '#222222';
-            header.style.fontWeight = '600';
-            header.style.visibility = 'visible';
-        });
-        
-        const educationLocations = document.querySelectorAll('.education-location');
-        educationLocations.forEach(location => {
-            location.style.color = '#333333';
-            location.style.visibility = 'visible';
-        });
-        
-        const educationDates = document.querySelectorAll('.education-date');
-        educationDates.forEach(date => {
-            date.style.color = '#007bff';
-            date.style.visibility = 'visible';
-        });
-        
-        const educationDescriptions = document.querySelectorAll('.education-item p');
-        educationDescriptions.forEach(desc => {
-            desc.style.color = '#333333';
-            desc.style.visibility = 'visible';
-        });
-    }
-    
-    // Add transition class after initial theme is set
-    setTimeout(() => {
-        document.body.classList.add('theme-transition');
-    }, 100);
-    
-    // Toggle theme when switch is clicked
-    themeSwitch.addEventListener('change', function() {
-        console.log("Theme switch clicked, checked state:", this.checked);
-        
-        if (this.checked) {
-            console.log("Switching to light theme");
-            document.body.setAttribute('data-theme', 'light');
-            localStorage.setItem('theme', 'light');
-            console.log("Is data-theme attribute set?", document.body.hasAttribute('data-theme'));
-            console.log("data-theme value:", document.body.getAttribute('data-theme'));
-            
-            // Fix for skills section visibility in light theme
-            setTimeout(() => {
-                ensureSkillsVisibility();
-            }, 50);
-        } else {
-            console.log("Switching to dark theme");
-            document.body.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'dark');
-            console.log("Is data-theme attribute set?", document.body.hasAttribute('data-theme'));
-            
-            // Reset inline styles when switching back to dark theme
-            setTimeout(() => {
-                resetDarkThemeStyles();
-            }, 50);
-        }
-        
-        // Add a subtle animation effect on theme change
-        document.body.classList.add('theme-changing');
-        setTimeout(() => {
-            document.body.classList.remove('theme-changing');
-        }, 700); // Match with CSS transition timing
-    });
-    
-    // Function to reset styles when switching to dark theme
-    function resetDarkThemeStyles() {
-        // Reset Skills section
-        const skillsElements = document.querySelectorAll('.skills-list, .skills-category h3');
-        skillsElements.forEach(el => {
-            el.style.color = '';
-            el.style.visibility = '';
-            el.style.fontWeight = '';
-        });
-        
-        // Reset Cyber Arena section
-        const arenaElements = document.querySelectorAll('.arena-list li, .arena-title, .arena-link, .arena-intro');
-        arenaElements.forEach(el => {
-            el.style.color = '';
-            el.style.visibility = '';
-            el.style.fontWeight = '';
-        });
-        
-        // Reset Education section
-        const educationElements = document.querySelectorAll('.education-header h3, .education-location, .education-date, .education-item p');
-        educationElements.forEach(el => {
-            el.style.color = '';
-            el.style.visibility = '';
-            el.style.fontWeight = '';
-        });
-    }
-    
-    // Log current state
-    console.log("Current theme switch state:", themeSwitch.checked);
-    console.log("Body has data-theme attribute:", document.body.hasAttribute('data-theme'));
-    if (document.body.hasAttribute('data-theme')) {
-        console.log("data-theme value:", document.body.getAttribute('data-theme'));
-    }
-}
-
 // Scroll reveal animation
 function initScrollReveal() {
     const fadeElements = document.querySelectorAll('.section-title, .about-content, .skills-content, .education-item, .experience-item, .project-card, .contact p, .contact .btn');
@@ -1260,45 +1034,6 @@ function initScrollReveal() {
         });
     }
 }
-
-// Add a direct theme toggle initialization to ensure it's working
-(function() {
-    console.log("Direct theme toggle initialization starting");
-    const themeSwitch = document.getElementById('theme-switch');
-    
-    if (!themeSwitch) {
-        console.error("Theme switch not found in direct initialization");
-        return;
-    }
-    
-    console.log("Found theme switch in direct initialization");
-    
-    // Set up click handler directly
-    themeSwitch.addEventListener('click', function() {
-        console.log("Theme switch clicked directly");
-        if (this.checked) {
-            console.log("Setting light theme directly");
-            document.body.setAttribute('data-theme', 'light');
-            localStorage.setItem('theme', 'light');
-        } else {
-            console.log("Setting dark theme directly");
-            document.body.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'dark');
-        }
-    });
-    
-    // Set initial state
-    const savedTheme = localStorage.getItem('theme');
-    console.log("Saved theme in direct initialization:", savedTheme);
-    
-    if (savedTheme === 'light') {
-        themeSwitch.checked = true;
-        document.body.setAttribute('data-theme', 'light');
-    } else {
-        themeSwitch.checked = false;
-        document.body.removeAttribute('data-theme');
-    }
-})();
 
 // Loading Screen Animation
 function initLoadingScreen() {

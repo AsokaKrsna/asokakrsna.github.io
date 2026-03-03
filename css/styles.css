@@ -792,26 +792,6 @@ ul {
     word-wrap: break-word; /* Added word wrapping for full width content */
 }
 
-/* Light theme overrides */
-[data-theme="light"] .skills-category {
-    background-color: #f8fafc;
-    box-shadow: 0 4px 20px -10px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-[data-theme="light"] .skills-category:hover {
-    box-shadow: 0 15px 30px -15px rgba(0, 0, 0, 0.2);
-    border-color: rgba(100, 100, 255, 0.3);
-}
-
-[data-theme="light"] .skills-list {
-    color: #333333;
-}
-
-[data-theme="light"] .skills-category h3 i {
-    color: var(--accent-light);
-}
-
 /* Make the skills section responsive */
 @media (max-width: 768px) {
     .skills-content {
@@ -1033,38 +1013,6 @@ ul {
     font-size: 1rem;
 }
 
-/* Light theme adjustments */
-[data-theme="light"] .experience-content::before {
-    background-color: rgba(45, 55, 72, 0.2);
-}
-
-[data-theme="light"] .experience-item::before {
-    background-color: var(--dark-purple);
-    box-shadow: 0 0 8px rgba(80, 70, 229, 0.5);
-}
-
-[data-theme="light"] .experience-item:hover::before {
-    background-color: #0080ff;
-    box-shadow: 0 0 12px rgba(0, 128, 255, 0.6);
-}
-
-[data-theme="light"] .experience-year {
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] .experience-title {
-    color: var(--text-color-dark);
-}
-
-[data-theme="light"] .experience-item:hover .experience-title {
-    color: #0080ff;
-    text-shadow: 0 0 5px rgba(0, 128, 255, 0.3);
-}
-
-[data-theme="light"] .experience-description li::before {
-    color: var(--dark-purple);
-}
-
 /* Mobile adjustments */
 @media (max-width: 768px) {
     .experience-content {
@@ -1266,7 +1214,6 @@ ul {
     box-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
 }
 
-
 /* Remove weird animation, use simple color fade */
 .btn.load-more {
     box-shadow: none;
@@ -1278,54 +1225,29 @@ ul {
     transition: background 0.3s, color 0.3s, border 0.3s;
 }
 
-/* Light theme adjustments */
-[data-theme="light"] .project-card {
-    background-color: rgba(245, 245, 250, 0.7);
-    border-left: 3px solid var(--dark-purple);
+/* Collapsible section items */
+.collapsible-hidden {
+    display: none;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.4s ease;
 }
 
-[data-theme="light"] .project-card:hover {
-    border-left: 3px solid #0080ff;
+.collapse-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
 }
 
-[data-theme="light"] .project-card::before {
-    background: linear-gradient(
-        to bottom,
-        transparent,
-        rgba(80, 70, 229, 0.15), /* Reduced opacity to match dark theme */
-        transparent
-    );
+.collapse-toggle i {
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
 }
 
-[data-theme="light"] .project-card:hover .folder-icon {
-    color: #0080ff;
-}
-
-[data-theme="light"] .project-title a:hover {
-    color: #0080ff;
-    text-shadow: 0 0 8px rgba(0, 128, 255, 0.3);
-}
-
-[data-theme="light"] .project-links a:hover {
-    color: #0080ff;
-}
-
-[data-theme="light"] .project-card:hover .project-tech-list li::before {
-    color: #0080ff;
-}
-
-[data-theme="light"] .btn.load-more {
-    color: var(--dark-purple);
-    border: 1px solid var(--dark-purple);
-}
-
-[data-theme="light"] .btn.load-more:hover {
-    background-color: rgba(80, 70, 229, 0.1);
-    box-shadow: 0 0 10px rgba(80, 70, 229, 0.3);
-}
-
-[data-theme="light"] .btn.load-more::before {
-    background: linear-gradient(90deg, transparent, #0080ff, transparent);
+.collapse-toggle.expanded i {
+    transform: rotate(180deg);
 }
 
 /* Contact Section */
@@ -1653,11 +1575,6 @@ footer {
         display: none;
     }
     
-    .theme-toggle {
-        bottom: 1.5rem;
-        left: 2rem;
-    }
-    
     /* Certifications timeline mobile styling */
     .certifications-timeline {
         padding-left: 25px;
@@ -1814,202 +1731,10 @@ body.menu-open {
     display: none !important;
 }
 
-/* Theme Toggle */
-.theme-toggle {
-    position: absolute;
-    bottom: 20px;
-    left: 1.5rem;
-    display: flex;
-    align-items: center;
-}
-
-.theme-switch {
-    height: 0;
-    width: 0;
-    visibility: hidden;
-}
-
-.switch-label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    width: 60px;
-    height: 30px;
-    background: #222;
-    border-radius: 30px;
-    position: relative;
-    transition: var(--transition);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    padding: 0 5px;
-    overflow: visible; /* Changed to fix content overflow */
-}
-
-/* Dark mode switch (default) */
-.switch-label {
-    background: #222;
-}
-
-/* Light mode switch */
-.theme-switch:checked + .switch-label {
-    background: #e0e0e0;
-}
-
-.switch-label i {
-    width: 20px;
-    height: 20px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1; /* Ensure this is below the slider z-index */
-    cursor: pointer;
-    position: relative; /* Added to ensure proper stacking context */
-}
-
-.switch-label i.fa-sun {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.switch-label i.fa-moon {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.theme-switch:checked + .switch-label i.fa-sun {
-    color: #f39c12;
-}
-
-.theme-switch:checked + .switch-label i.fa-moon {
-    color: rgba(0, 0, 0, 0.5);
-}
-
-.switch-label .slider {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    background: #fff;
-    box-sizing: border-box;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 2; /* Changed from -1 to ensure the slider appears on top */
-}
-
-.theme-switch:checked + .switch-label .slider {
-    left: calc(100% - 27px); /* Adjusted for better positioning */
-    background: #333;
-}
-
-/* Remove redundant padding that was causing alignment issues */
-.fa-sun, .fa-moon {
-    padding: 0;
-}
-
 /* Make About section full width */
 .about-text.full-width {
     width: 100%;
     max-width: 100%;
-}
-
-/* Add subtle hover effect for toggle */
-.switch-label:hover {
-    transform: scale(1.03);
-}
-
-.switch-label:active .slider {
-    transform: scale(0.95);
-}
-
-.theme-switch:checked + .switch-label:active .slider {
-    transform: translateX(-100%) scale(0.95);
-}
-
-/* Light Theme */
-[data-theme="light"] {
-    /* Background colors */
-    --navy: #ffffff !important;
-    --light-navy: #f5f5f5 !important;
-    --dark-navy: #e0e0e0 !important;
-    --bg-color: #ffffff !important;
-    --bg-color-light: #f5f5f5 !important;
-    --bg-color-lightest: #e0e0e0 !important;
-    
-    /* Text colors */
-    --slate: #333333 !important;
-    --light-slate: #555555 !important;
-    --lightest-slate: #222222 !important;
-    --white: #000000 !important;
-    --text-color: #333333 !important;
-    --text-color-light: #555555 !important;
-    --text-color-lightest: #777777 !important;
-    
-    /* Accent colors */
-    --neon-blue: #0a7a64 !important;
-    --neon-purple: #6d28d9 !important;
-    --dark-purple: #4c1d95 !important;
-    --cyber-accent: #0078d4 !important;
-    --accent-light: #0078d4 !important;
-    --accent: #0078d4 !important;
-}
-
-/* Direct element styles for light theme */
-body[data-theme="light"] {
-    background-color: white !important;
-    color: #333333 !important;
-}
-
-[data-theme="light"] .sidebar {
-    background-color: #f5f5f5 !important;
-    border-right: 1px solid rgba(0, 0, 0, 0.1) !important;
-}
-
-[data-theme="light"] .main-content {
-    background-color: white !important;
-}
-
-[data-theme="light"] .nav a:hover {
-    color: var(--neon-blue);
-}
-
-[data-theme="light"] .nav a.active {
-    color: var(--neon-blue);
-}
-
-[data-theme="light"] .project-card {
-    background-color: var(--light-navy);
-    box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="light"] .experience-year {
-    color: var(--neon-blue);
-}
-
-[data-theme="light"] .experience-title {
-    color: var(--text-color-dark);
-}
-
-[data-theme="light"] .btn {
-    border-color: var(--neon-blue);
-    color: var(--neon-blue);
-}
-
-[data-theme="light"] .btn:hover {
-    background-color: rgba(10, 122, 100, 0.1);
-}
-
-[data-theme="light"] .btn.primary {
-    background-color: var(--neon-blue);
-    color: white;
-}
-
-[data-theme="light"] .btn.primary:hover {
-    background-color: rgba(10, 122, 100, 0.9);
-}
-
-[data-theme="light"] .glitch-name {
-    color: var(--lightest-slate);
 }
 
 /* Force visibility for all sections and main content */
@@ -2028,145 +1753,6 @@ section, .main-content, .about-content, .skills-content,
     transform: translateY(0); /* No initial transform */
     transition: opacity 0.5s ease, transform 0.5s ease;
     will-change: opacity, transform;
-}
-
-/* Theme transition effects */
-.theme-transition {
-    transition: background-color 0.5s ease, 
-                color 0.5s ease,
-                border-color 0.5s ease,
-                box-shadow 0.5s ease !important;
-}
-
-.theme-transition * {
-    transition: background-color 0.5s ease, 
-                color 0.5s ease,
-                border-color 0.5s ease,
-                box-shadow 0.5s ease !important;
-}
-
-.theme-changing {
-    animation: themeChangeFlash 0.5s ease;
-}
-
-@keyframes themeChangeFlash {
-    0% { opacity: 1; }
-    50% { opacity: 0.8; }
-    100% { opacity: 1; }
-}
-
-[data-theme="light"] .section-title::after,
-[data-theme="light"] .section-title::before {
-    background-color: var(--neon-blue);
-}
-
-[data-theme="light"] .skills-category h3 {
-    color: #222222;
-}
-
-[data-theme="light"] .skills-category p {
-    color: #333333;
-}
-
-[data-theme="light"] .skills-category::before {
-    background: linear-gradient(180deg, var(--accent-light), var(--neon-purple));
-}
-
-[data-theme="light"] .skills-category::after {
-    background: radial-gradient(circle at bottom right, rgba(10, 122, 100, 0.1), transparent 70%);
-}
-
-[data-theme="light"] .skills-list li {
-    background-color: var(--bg-color-light);
-}
-
-[data-theme="light"] .folder-icon i {
-    color: var(--neon-blue);
-}
-
-[data-theme="light"] .project-links a {
-    color: var(--slate);
-}
-
-[data-theme="light"] .project-links a:hover {
-    color: var(--neon-blue);
-}
-
-[data-theme="light"] .project-tech-list li {
-    color: var(--text-color-light);
-    background-color: var(--bg-color-lightest);
-}
-
-[data-theme="light"] .switch-label {
-    background: var(--bg-color-lightest);
-}
-
-[data-theme="light"] .switch-label i {
-    color: var(--text-color);
-}
-
-[data-theme="light"] .switch-label .slider {
-    background: var(--neon-blue);
-}
-
-[data-theme="light"] a {
-    color: var(--neon-blue);
-}
-
-[data-theme="light"] a:hover {
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] h1, 
-[data-theme="light"] h2, 
-[data-theme="light"] h3, 
-[data-theme="light"] h4, 
-[data-theme="light"] h5, 
-[data-theme="light"] h6 {
-    color: var(--lightest-slate);
-}
-
-[data-theme="light"] .menu-button span {
-    background-color: var(--text-color);
-}
-
-[data-theme="light"] .project-title a {
-    color: var(--lightest-slate);
-}
-
-[data-theme="light"] .project-title a:hover {
-    color: var(--neon-blue);
-}
-
-[data-theme="light"] .experience-company {
-    color: var(--text-color);
-}
-
-/* Force theme styles */
-body[data-theme="light"] * {
-    color: inherit;
-}
-
-body[data-theme="light"] {
-    background-color: white !important;
-    color: #333333 !important;
-}
-
-body[data-theme="light"] .main-content {
-    background-color: white !important;
-}
-
-body[data-theme="light"] .sidebar {
-    background-color: #f5f5f5 !important;
-    border-right: 1px solid rgba(0, 0, 0, 0.1) !important;
-}
-
-body[data-theme="light"] .section-title {
-    color: #222222 !important;
-}
-
-body[data-theme="light"] p {
-    color: #333333 !important;
 }
 
 /* Loading Screen Styles */
@@ -2254,13 +1840,6 @@ body[data-theme="light"] p {
 
 .hex-progress-line::before, .hex-line::before { left: 0; }
 .hex-progress-line::after, .hex-line::after { right: 0; }
-
-[data-theme="light"] .hex-progress-line::before,
-[data-theme="light"] .hex-progress-line::after,
-[data-theme="light"] .hex-line::before,
-[data-theme="light"] .hex-line::after {
-    background: #ffffff;
-}
 
 /* Center Content */
 .loader-center {
@@ -2433,76 +2012,6 @@ body:not(.loading-active) .menu-button {
     font-size: 0.85rem;
 }
 
-/* Light theme styles for the simplified sections */
-[data-theme="light"] .research-item,
-[data-theme="light"] .blog-card,
-[data-theme="light"] .arena-card,
-[data-theme="light"] .certification-card,
-[data-theme="light"] .achievement-item,
-[data-theme="light"] .experience-item,
-[data-theme="light"] .project-card {
-    background-color: #f5f5f5;
-    border-left: 3px solid var(--dark-purple);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-[data-theme="light"] .research-item:hover,
-[data-theme="light"] .blog-card:hover,
-[data-theme="light"] .arena-card:hover,
-[data-theme="light"] .certification-card:hover,
-[data-theme="light"] .achievement-item:hover,
-[data-theme="light"] .experience-item:hover,
-[data-theme="light"] .project-card:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="light"] .research-year,
-[data-theme="light"] .blog-date,
-[data-theme="light"] .certification-issuer,
-[data-theme="light"] .achievement-year {
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] .research-title,
-[data-theme="light"] .blog-title a,
-[data-theme="light"] .arena-title,
-[data-theme="light"] .certification-title,
-[data-theme="light"] .achievement-title,
-[data-theme="light"] .project-title a,
-[data-theme="light"] .experience-title {
-    color: #102a42;
-}
-
-[data-theme="light"] .research-description,
-[data-theme="light"] .blog-excerpt,
-[data-theme="light"] .arena-list li,
-[data-theme="light"] .certification-date,
-[data-theme="light"] .certification-id,
-[data-theme="light"] .achievement-description,
-[data-theme="light"] .project-description,
-[data-theme="light"] .experience-description li {
-    color: #486581;
-}
-
-[data-theme="light"] .read-more,
-[data-theme="light"] .arena-link,
-[data-theme="light"] .certification-link {
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] .arena-list li::before,
-[data-theme="light"] .experience-description li::before {
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] .progress-bar {
-    background-color: rgba(127, 90, 240, 0.1);
-}
-
-[data-theme="light"] .progress-fill {
-    background-color: var(--dark-purple);
-}
-
 .blogs {
     padding: 2rem 0;
 }
@@ -2591,31 +2100,6 @@ body:not(.loading-active) .menu-button {
 }
 
 /* Light theme styles for the modified blog section */
-[data-theme="light"] .blog-card {
-    background-color: #f5f5f5;
-    border-left: 3px solid var(--dark-purple);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-[data-theme="light"] .blog-card:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="light"] .blog-date {
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] .blog-title a {
-    color: #102a42;
-}
-
-[data-theme="light"] .blog-title a:hover {
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] .blog-title a i {
-    color: var(--dark-purple);
-}
 
 /* Add blog-cta styling */
 .blog-cta {
@@ -2724,32 +2208,6 @@ body:not(.loading-active) .menu-button {
 }
 
 /* Light theme styles for certifications timeline */
-[data-theme="light"] .certifications-timeline:before {
-    background: linear-gradient(to bottom, 
-        rgba(86, 124, 228, 0.5), 
-        rgba(86, 124, 228, 0.2));
-}
-
-[data-theme="light"] .certification-dot {
-    background-color: var(--neon-blue);
-    border-color: var(--neon-blue);
-    box-shadow: 0 0 8px rgba(86, 124, 228, 0.5);
-}
-
-[data-theme="light"] .certification-content {
-    background-color: #f5f5f7;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="light"] .certification-item:hover .certification-content {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="light"] .certification-item:hover .certification-title {
-    color: #0080ff; /* Bright blue for light theme */
-    text-shadow: 0 0 8px rgba(0, 128, 255, 0.4); /* Enhanced glow for light theme */
-    transform: translateX(3px); /* Slight shift right on hover */
-}
 
 @keyframes fadeUp {
     to {
@@ -2824,16 +2282,6 @@ body:not(.loading-active) .menu-button {
 .achievement-description {
     display: none;
 }
-
-[data-theme="light"] .achievement-item::before {
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] .achievement-item:hover::before,
-[data-theme="light"] .achievement-item:hover .achievement-title {
-    color: #0080ff;
-    text-shadow: 0 0 5px rgba(0, 128, 255, 0.3);
-} 
 
 /* Cyber Arena Section Styling with Cybersecurity Theme */
 .cyber-arena {
@@ -3134,74 +2582,6 @@ body:not(.loading-active) .menu-button {
 /* Animation is defined above */
 
 /* Light theme */
-[data-theme="light"] .arena-card {
-    background-color: rgba(245, 245, 255, 0.8);
-    border-color: rgba(100, 100, 255, 0.2);
-    background-image: 
-        linear-gradient(rgba(245, 245, 255, 0.8) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(245, 245, 255, 0.8) 1px, transparent 1px);
-}
-
-[data-theme="light"] .arena-card::before {
-    background-image: radial-gradient(circle at 10px 10px, rgba(100, 100, 255, 0.2) 2px, transparent 2px);
-}
-
-[data-theme="light"] .arena-card::after {
-    background: linear-gradient(135deg, 
-                transparent 0%, 
-                rgba(0, 105, 217, 0.05) 45%,  
-                rgba(0, 105, 217, 0.1) 50%,
-                rgba(0, 105, 217, 0.05) 55%,
-                transparent 100%);
-}
-
-[data-theme="light"] .arena-card:hover {
-    box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.2),
-                0 0 15px rgba(100, 100, 255, 0.15);
-    border-color: rgba(100, 100, 255, 0.4);
-}
-
-[data-theme="light"] .arena-title {
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] .arena-title::after {
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] .arena-icon {
-    background: rgba(100, 100, 255, 0.1);
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] .arena-icon::before {
-    background: var(--dark-purple);
-}
-
-[data-theme="light"] .arena-list li {
-    color: var(--light-navy);
-}
-
-[data-theme="light"] .arena-list li::before {
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] .arena-card:hover .arena-list li {
-    color: var(--dark-navy);
-}
-
-[data-theme="light"] .arena-card:hover .arena-list li::before {
-    color: #0080ff;
-    text-shadow: 0 0 5px rgba(0, 128, 255, 0.4);
-}
-
-[data-theme="light"] .arena-link {
-    color: var(--dark-purple);
-}
-
-[data-theme="light"] .arena-link::before {
-    background-color: var(--dark-purple);
-}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -3363,36 +2743,6 @@ body:not(.loading-active) .menu-button {
     z-index: 2;
 }
 
-[data-theme="light"] .research-item {
-    background-color: #f0f5f9;
-    border-color: #e4e9ed;
-    box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
-}
-
-[data-theme="light"] .research-meta {
-    color: var(--slate-dark);
-}
-
-[data-theme="light"] .research-title {
-    color: var(--navy-dark);
-}
-
-[data-theme="light"] .research-title:hover {
-    color: var(--primary);
-}
-
-[data-theme="light"] .research-description {
-    color: var(--slate-dark);
-}
-
-[data-theme="light"] .external-icon {
-    color: var(--slate-dark);
-}
-
-[data-theme="light"] .research-item:hover .external-icon {
-    color: var(--primary);
-}
-
 /* Hidden research items */
 .research-item.hidden {
     display: none;
@@ -3427,26 +2777,7 @@ body:not(.loading-active) .menu-button {
     z-index: 1; cursor: pointer; /* Added pointer cursor for better UX */
 }
 
-[data-theme="light"] .skill-name span:first-child {
-    color: var(--navy);
-}
-
 /* Add new light theme styles for skills */
-[data-theme="light"] .skills-category h3 i {
-    color: var(--accent-light);
-}
-
-[data-theme="light"] .progress-fill {
-    background: linear-gradient(90deg, var(--accent-light), #9d80ff);
-}
-
-[data-theme="light"] .skill-percent {
-    color: #4a5568;
-}
-
-[data-theme="light"] .skills-list li:hover .skill-percent {
-    color: var(--accent-light);
-}
 
 /* Make the skills section responsive */
 @media (max-width: 768px) {
@@ -3462,20 +2793,6 @@ body:not(.loading-active) .menu-button {
         font-size: 1.1rem;
     }
 }
-
-[data-theme="light"] .about-content .skills-list li {
-    background-color: var(--bg-color-light);
-}
-
-[data-theme="light"] .about-content .skills-list li:hover .skill-percent {
-    color: var(--accent-light);
-}
-
-
-
-
-
-
 
 /* Enhanced hover effect for arena cards */
 .arena-card[data-hover='true'] {
@@ -3546,11 +2863,6 @@ body:not(.loading-active) .menu-button {
         text-shadow: none;
         transform: translate(0, 0);
     }
-}
-
-[data-theme="light"] .arena-card:hover .arena-title {
-    color: var(--accent-light);
-    animation: titleGlitchLight 3s infinite;
 }
 
 @keyframes titleGlitchLight {
@@ -3704,32 +3016,6 @@ body:not(.loading-active) .menu-button {
 }
 
 /* Light theme styles for education section */
-[data-theme="light"] .education-content::before {
-    background-color: rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="light"] .education-item::before {
-    background-color: var(--accent-light);
-    box-shadow: 0 0 8px rgba(0, 112, 201, 0.5);
-}
-
-[data-theme="light"] .education-item:hover::before {
-    background-color: var(--accent-light);
-    box-shadow: 0 0 12px rgba(0, 112, 201, 0.7);
-}
-
-[data-theme="light"] .education-date {
-    color: var(--accent-light);
-}
-
-[data-theme="light"] .education-header h3 {
-    color: var(--dark-navy);
-}
-
-[data-theme="light"] .education-item:hover h3 {
-    color: var(--accent-light);
-    text-shadow: 0 0 5px rgba(0, 112, 201, 0.4);
-}
 
 /* Responsive styles for education section */
 @media (max-width: 768px) {
@@ -3748,101 +3034,10 @@ body:not(.loading-active) .menu-button {
 }
 
 /* Comprehensive fix for skills section in light theme */
-[data-theme="light"] .skills-category * {
-    visibility: visible !important; 
-}
-
-[data-theme="light"] .skills-category {
-    background-color: #f8fafc;
-    box-shadow: 0 4px 20px -10px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-[data-theme="light"] .skills-list {
-    color: #333333;
-    font-weight: 500;
-}
-
-[data-theme="light"] .skills-category h3 {
-    color: #222222;
-    font-weight: 600;
-}
-
-
-
-
-
-
-
-
 
 /* Comprehensive fix for cyber arena in light theme */
-[data-theme="light"] .cyber-arena * {
-    visibility: visible !important;
-}
-
-[data-theme="light"] .arena-list li {
-    color: #333333;
-    font-weight: 500;
-}
-
-[data-theme="light"] .arena-card:hover .arena-list li {
-    color: #222222;
-}
-
-[data-theme="light"] .arena-title {
-    color: #222222;
-    font-weight: 600;
-}
-
-[data-theme="light"] .arena-link {
-    color: #007bff;
-    font-weight: 500;
-}
-
-[data-theme="light"] .arena-intro {
-    color: #333333;
-}
-
-
-
-
-
-
-
-
 
 /* Comprehensive fix for education section in light theme */
-[data-theme="light"] .education * {
-    visibility: visible !important;
-}
-
-[data-theme="light"] .education-header h3 {
-    color: #222222;
-    font-weight: 600;
-}
-
-[data-theme="light"] .education-location {
-    color: #333333;
-    font-weight: 500;
-}
-
-[data-theme="light"] .education-date {
-    color: #007bff;
-    font-weight: 500;
-}
-
-[data-theme="light"] .education-item p {
-    color: #333333;
-}
-
-
-
-
-
-
-
-
 
 /* Dark theme specific styles (these are the base styles) */
 .education-header h3 {
@@ -3879,14 +3074,6 @@ body:not(.loading-active) .menu-button {
 .arena-intro {
     color: var(--light-slate);
 }
-
-
-
-
-
-
-
-
 
 /* Add this at the end of the file to handle menu-open body state */
 body.menu-open {
@@ -4306,11 +3493,4 @@ body.is-mobile .resume-button {
 .volunteering-impact i {
     color: var(--neon-purple);
 }
-
-
-
-
-
-
-
 

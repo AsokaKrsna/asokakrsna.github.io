@@ -28,6 +28,9 @@ class PortfolioLoader {
                 initBlogViewMore();
             }
             
+            // Initialize collapsible section toggles
+            this.initCollapseToggles();
+            
             console.log('%c[Portfolio] %cData loaded successfully!', 'color: #4dfcff; font-weight: bold;', 'color: white;');
         } catch (error) {
             console.error('[Portfolio] Error loading data:', error);
@@ -70,6 +73,58 @@ class PortfolioLoader {
         this.renderContact();
         this.renderSocialLinks();
         this.renderFooter();
+    }
+
+    /**
+     * Initialize collapsible section toggle buttons
+     */
+    initCollapseToggles() {
+        document.querySelectorAll('.collapse-toggle').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const container = this.closest('section').querySelector(this.dataset.container);
+                if (!container) return;
+                
+                const hiddenItems = container.querySelectorAll('.collapsible-hidden');
+                const isExpanded = this.classList.contains('expanded');
+                
+                if (isExpanded) {
+                    // Collapse: hide items again
+                    hiddenItems.forEach(item => {
+                        item.style.maxHeight = item.scrollHeight + 'px';
+                        requestAnimationFrame(() => {
+                            item.style.maxHeight = '0';
+                            item.style.opacity = '0';
+                            item.style.marginTop = '0';
+                            item.style.marginBottom = '0';
+                            item.style.paddingTop = '0';
+                            item.style.paddingBottom = '0';
+                        });
+                    });
+                    this.classList.remove('expanded');
+                    this.innerHTML = 'Show More <i class="fas fa-chevron-down"></i>';
+                } else {
+                    // Expand: reveal items
+                    hiddenItems.forEach((item, i) => {
+                        item.style.display = '';
+                        item.style.maxHeight = '0';
+                        item.style.opacity = '0';
+                        requestAnimationFrame(() => {
+                            item.style.transition = `all 0.4s ease ${i * 0.08}s`;
+                            item.style.maxHeight = item.scrollHeight + 'px';
+                            item.style.opacity = '1';
+                            item.style.marginTop = '';
+                            item.style.marginBottom = '';
+                            item.style.paddingTop = '';
+                            item.style.paddingBottom = '';
+                        });
+                        // Clean up after animation
+                        setTimeout(() => { item.style.maxHeight = 'none'; }, 500 + i * 80);
+                    });
+                    this.classList.add('expanded');
+                    this.innerHTML = 'Show Less <i class="fas fa-chevron-up"></i>';
+                }
+            });
+        });
     }
 
     /**
@@ -151,8 +206,9 @@ class PortfolioLoader {
         const educationContent = document.querySelector('#education .education-content');
         if (!educationContent) return;
         
-        educationContent.innerHTML = this.data.education.map(edu => `
-            <div class="education-item">
+        const visibleCount = 2;
+        educationContent.innerHTML = this.data.education.map((edu, i) => `
+            <div class="education-item${i >= visibleCount ? ' collapsible-hidden' : ''}">
                 <div class="education-header">
                     <h3>${edu.institution}</h3>
                     <div class="education-meta">
@@ -163,6 +219,11 @@ class PortfolioLoader {
                 <p>${edu.degree}</p>
             </div>
         `).join('');
+        
+        if (this.data.education.length > visibleCount) {
+            educationContent.insertAdjacentHTML('afterend', 
+                `<div class="section-cta"><button class="btn small secondary collapse-toggle" data-section="education" data-container=".education-content" data-items=".education-item">Show More <i class="fas fa-chevron-down"></i></button></div>`);
+        }
     }
 
     /**
@@ -172,8 +233,9 @@ class PortfolioLoader {
         const experienceContent = document.querySelector('#experience .experience-content');
         if (!experienceContent) return;
         
-        experienceContent.innerHTML = this.data.experience.map(exp => `
-            <div class="experience-item">
+        const visibleCount = 3;
+        experienceContent.innerHTML = this.data.experience.map((exp, i) => `
+            <div class="experience-item${i >= visibleCount ? ' collapsible-hidden' : ''}">
                 <div class="experience-year">${exp.period}</div>
                 <div class="experience-details">
                     <h3 class="experience-title">${exp.title}</h3>
@@ -184,6 +246,11 @@ class PortfolioLoader {
                 </div>
             </div>
         `).join('');
+        
+        if (this.data.experience.length > visibleCount) {
+            experienceContent.insertAdjacentHTML('afterend', 
+                `<div class="section-cta"><button class="btn small secondary collapse-toggle" data-section="experience" data-container=".experience-content" data-items=".experience-item">Show More <i class="fas fa-chevron-down"></i></button></div>`);
+        }
     }
 
     /**
@@ -336,8 +403,9 @@ class PortfolioLoader {
         const certificationsTimeline = document.querySelector('#certifications .certifications-timeline');
         if (!certificationsTimeline) return;
         
-        certificationsTimeline.innerHTML = this.data.certifications.map(cert => `
-            <div class="certification-item">
+        const visibleCount = 4;
+        certificationsTimeline.innerHTML = this.data.certifications.map((cert, i) => `
+            <div class="certification-item${i >= visibleCount ? ' collapsible-hidden' : ''}">
                 <div class="certification-dot"></div>
                 <div class="certification-content">
                     <h3 class="certification-title">${cert.name}</h3>
@@ -345,6 +413,11 @@ class PortfolioLoader {
                 </div>
             </div>
         `).join('');
+        
+        if (this.data.certifications.length > visibleCount) {
+            certificationsTimeline.insertAdjacentHTML('afterend', 
+                `<div class="section-cta"><button class="btn small secondary collapse-toggle" data-section="certifications" data-container=".certifications-timeline" data-items=".certification-item">Show More <i class="fas fa-chevron-down"></i></button></div>`);
+        }
     }
 
     /**
@@ -356,34 +429,27 @@ class PortfolioLoader {
         
         const { achievements } = this.data;
         
-        achievementsTimeline.innerHTML = `
-            <div class="achievements-category">
-                <h3 class="category-title"><i class="fas fa-graduation-cap"></i> Academic Honors</h3>
-                ${achievements.academic.map(achievement => `
+        const categories = [
+            { key: 'academic', title: 'Academic Honors', icon: 'fas fa-graduation-cap' },
+            { key: 'competitions', title: 'Competitions & Recognitions', icon: 'fas fa-trophy' },
+            { key: 'leadership', title: 'Leadership & Service', icon: 'fas fa-users' }
+        ];
+        
+        achievementsTimeline.innerHTML = categories.map((cat, i) => `
+            <div class="achievements-category${i >= 1 ? ' collapsible-hidden' : ''}">
+                <h3 class="category-title"><i class="${cat.icon}"></i> ${cat.title}</h3>
+                ${achievements[cat.key].map(achievement => `
                     <div class="achievement-item">
                         <h4 class="achievement-title">${achievement}</h4>
                     </div>
                 `).join('')}
             </div>
-            
-            <div class="achievements-category">
-                <h3 class="category-title"><i class="fas fa-trophy"></i> Competitions & Recognitions</h3>
-                ${achievements.competitions.map(achievement => `
-                    <div class="achievement-item">
-                        <h4 class="achievement-title">${achievement}</h4>
-                    </div>
-                `).join('')}
-            </div>
-            
-            <div class="achievements-category">
-                <h3 class="category-title"><i class="fas fa-users"></i> Leadership & Service</h3>
-                ${achievements.leadership.map(achievement => `
-                    <div class="achievement-item">
-                        <h4 class="achievement-title">${achievement}</h4>
-                    </div>
-                `).join('')}
-            </div>
-        `;
+        `).join('');
+        
+        if (categories.length > 1) {
+            achievementsTimeline.insertAdjacentHTML('afterend', 
+                `<div class="section-cta"><button class="btn small secondary collapse-toggle" data-section="achievements" data-container=".achievements-timeline" data-items=".achievements-category">Show More <i class="fas fa-chevron-down"></i></button></div>`);
+        }
     }
 
     /**
