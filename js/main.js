@@ -1695,7 +1695,7 @@ window.addEventListener('resize', () => {
         ];
 
         const commands = {
-            help: () => '<span class="cmd-info">Available commands:</span>\n  help        — you\'re reading it\n  about       — who is this guy?\n  whoami      — identity crisis\n  skills      — peek at the arsenal\n  goto [sec]  — teleport to section\n  ls          — list the map\n  cat flag    — capture the flag 🚩\n  ping        — ping durjoy\n  uptime      — how long has this been running?\n  sudo        — nice try\n  rm          — don\'t even think about it\n  hack        — initiate hack sequence\n  fortune     — random wisdom\n  coffee      — essential fuel\n  matrix      — take the pill\n  8ball       — ask the oracle\n  leet [text] — 1337 translator\n  flip        — flip a coin\n  rickroll    — you know the rules\n  exit        — you can\'t escape\n  neofetch    — system info\n  <span class="cmd-success">snake</span>       — <span class="cmd-success">🐍 play packet snatcher!</span>\n  clear       — wipe the slate',
+            help: () => '<span class="cmd-info">Available commands:</span>\n  help        — you\'re reading it\n  about       — who is this guy?\n  whoami      — identity crisis\n  skills      — peek at the arsenal\n  goto [sec]  — teleport to section\n  ls          — list the map\n  cat flag    — capture the flag 🚩\n  ping        — ping durjoy\n  uptime      — how long?\n  sudo        — nice try\n  hack        — initiate hack sequence\n  fortune     — random wisdom\n  coffee      — essential fuel\n  matrix      — take the pill\n  8ball       — ask the oracle\n  leet [text] — 1337 translator\n  neofetch    — system info\n  <span class="cmd-success">snake</span>       — <span class="cmd-success">🐍 packet snatcher</span>\n  <span class="cmd-success">crack</span>       — <span class="cmd-success">🔐 hash cracker</span>\n  <span class="cmd-success">type</span>        — <span class="cmd-success">⌨️ type attack</span>\n  <span class="cmd-success">ttt</span>         — <span class="cmd-success">❌ tic-tac-toe</span>\n  clear       — wipe the slate',
             about: () => pick(aboutVariants),
             whoami: () => pick(whoamiVariants),
             skills: () => '<span class="cmd-info">cat /etc/arsenal.conf</span>\n\n  <span class="cmd-success">[Security Ops]</span>  Incident Response · Threat Hunting · Digital Forensics · Malware Analysis · SIEM\n  <span class="cmd-success">[Tools]</span>         Kali · Metasploit · Wireshark · Burp Suite · Nmap · Splunk · Snort · Volatility\n  <span class="cmd-success">[Dev]</span>           Python · JS · C · Bash · PowerShell · React · Django · Node\n  <span class="cmd-success">[Research]</span>      Literature Review · Experimental Design · Quantitative Analysis · Academic Writing',
@@ -1767,14 +1767,27 @@ window.addEventListener('resize', () => {
                 startSnakeGame(output, cmdInput);
                 return null;
             },
+            crack: () => {
+                startCrackGame(output, cmdInput);
+                return null;
+            },
+            type: () => {
+                startTypeAttack(output, cmdInput);
+                return null;
+            },
+            ttt: () => {
+                startTTT(output, cmdInput);
+                return null;
+            },
         };
 
         // ── Snake Game Engine ──
         let snakeGame = null;
+        let activeGame = null; // tracks any active game
 
         function startSnakeGame(outputEl, inputEl) {
-            const W = 22, H = 12;
-            let snake = [{x:11,y:6},{x:10,y:6},{x:9,y:6}];
+            const W = 20, H = 9;
+            let snake = [{x:10,y:4},{x:9,y:4},{x:8,y:4}];
             let dir = {x:1,y:0};
             let nextDir = {x:1,y:0};
             let score = 0;
@@ -1862,6 +1875,7 @@ window.addEventListener('resize', () => {
             function endGame() {
                 clearInterval(gameInterval);
                 snakeGame = null;
+                activeGame = null;
                 document.removeEventListener('keydown', handleGameKey);
 
                 if (score > highScore) {
@@ -1891,6 +1905,7 @@ window.addEventListener('resize', () => {
                     e.preventDefault();
                     clearInterval(gameInterval);
                     snakeGame = null;
+                    activeGame = null;
                     document.removeEventListener('keydown', handleGameKey);
                     outputEl.innerHTML += '\n\n<span class="cmd-info">Game exited. Score: ' + score + '</span>\n';
                     inputEl.focus();
@@ -1920,13 +1935,300 @@ window.addEventListener('resize', () => {
             // Activate game
             inputEl.blur();
             snakeGame = true;
+            activeGame = 'snake';
             document.addEventListener('keydown', handleGameKey);
             render();
             let gameInterval = setInterval(tick, speed);
         }
 
+        // ── Hash Cracker Game ──
+        function startCrackGame(outputEl, inputEl) {
+            const target = Math.floor(Math.random() * 100) + 1;
+            let attempts = 0;
+            const maxAttempts = 7;
+            const hash = '0x' + target.toString(16).padStart(2, '0').toUpperCase() + 'F'.repeat(6);
+
+            activeGame = 'crack';
+            outputEl.innerHTML = '<span class="cmd-success">🔐 HASH CRACKER v1.0</span>\n\n'
+                + '  Target hash: <span class="cmd-info">' + hash + '</span>\n'
+                + '  The plaintext is a number between 1-100.\n'
+                + '  You have <span class="cmd-error">' + maxAttempts + '</span> attempts to crack it.\n\n'
+                + '  <span class="cmd-info">Type a number and press Enter.</span> (Q to quit)\n';
+
+            const origHandler = cmdInput.onkeydown;
+            cmdInput.onkeydown = null;
+
+            function crackHandler(e) {
+                if (e.key !== 'Enter') return;
+                const val = cmdInput.value.trim();
+                cmdInput.value = '';
+                if (!val) return;
+
+                if (val.toLowerCase() === 'q') {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', crackHandler);
+                    outputEl.innerHTML += '\n<span class="cmd-info">Cracking aborted.</span>\n';
+                    return;
+                }
+
+                const guess = parseInt(val);
+                if (isNaN(guess) || guess < 1 || guess > 100) {
+                    outputEl.innerHTML += '<span class="cmd-error">  Invalid input. Enter 1-100.</span>\n';
+                    return;
+                }
+
+                attempts++;
+                const diff = Math.abs(guess - target);
+                let hint;
+                if (guess === target) {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', crackHandler);
+                    const msgs = ['Hash cracked!', 'Decrypted!', 'Plaintext recovered!'];
+                    outputEl.innerHTML += '\n<span class="cmd-success">  🚩 ' + pick(msgs) + ' The number was ' + target + '.</span>\n'
+                        + '  Attempts: ' + attempts + '/' + maxAttempts + '\n';
+                    if (attempts <= 3) outputEl.innerHTML += '  <span class="cmd-success">🏆 Elite hacker! Under 4 tries!</span>\n';
+                    return;
+                }
+
+                if (diff <= 3) hint = '<span class="cmd-error">🔥 BURNING HOT</span>';
+                else if (diff <= 8) hint = '<span class="cmd-error">🌶️ Hot</span>';
+                else if (diff <= 15) hint = '<span class="cmd-info">🌤️ Warm</span>';
+                else if (diff <= 30) hint = '<span class="cmd-info">☁️ Cool</span>';
+                else hint = '<span class="cmd-success">❄️ Freezing cold</span>';
+
+                const arrow = guess > target ? '▼' : '▲';
+                outputEl.innerHTML += '  [' + attempts + '/' + maxAttempts + '] ' + guess + ' → ' + hint + ' ' + arrow + '\n';
+
+                if (attempts >= maxAttempts) {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', crackHandler);
+                    outputEl.innerHTML += '\n<span class="cmd-error">  💀 Brute force failed. The number was ' + target + '.</span>\n'
+                        + '  <span class="cmd-info">Type "crack" to try again.</span>\n';
+                }
+
+                const body = outputEl.closest('.terminal-bar-body');
+                if (body) body.scrollTop = body.scrollHeight;
+            }
+
+            cmdInput.addEventListener('keydown', crackHandler);
+            inputEl.focus();
+        }
+
+        // ── Type Attack Game ──
+        function startTypeAttack(outputEl, inputEl) {
+            const words = [
+                'nmap','sudo','grep','chmod','ping','curl','bash','root',
+                'shell','hack','crack','sniff','port','scan','proxy',
+                'worm','virus','patch','crypt','token','admin','brute',
+                'fuzzing','payload','exploit','buffer','kernel','daemon',
+                'firewall','rootkit','malware','reverse','overflow',
+                'injection','phishing','forensic','incident','wireshark',
+            ];
+
+            let score = 0;
+            let lives = 3;
+            let level = 1;
+            let currentWord = '';
+            let wordsCleared = 0;
+            let speed = 4000;
+            let timeoutId = null;
+            let highScore = parseInt(localStorage.getItem('typeHigh') || '0');
+
+            activeGame = 'type';
+
+            function nextWord() {
+                if (lives <= 0) return;
+                // Pick longer words as level increases
+                const pool = words.filter(w => w.length <= 4 + level);
+                currentWord = pick(pool.length ? pool : words);
+                render();
+                timeoutId = setTimeout(() => {
+                    lives--;
+                    wordsCleared++;
+                    if (lives <= 0) { endTypeGame(); return; }
+                    outputEl.innerHTML += '<span class="cmd-error">  ✗ MISSED: ' + currentWord + '</span>  [❤️'.repeat(lives) + ']\n';
+                    const body = outputEl.closest('.terminal-bar-body');
+                    if (body) body.scrollTop = body.scrollHeight;
+                    nextWord();
+                }, speed);
+            }
+
+            function render() {
+                let header = '<span class="cmd-success">⌨️ TYPE ATTACK</span>  Score: <span class="cmd-info">' + score + '</span>  Hi: <span class="cmd-success">' + highScore + '</span>  Level: ' + level + '  ' + '❤️'.repeat(lives) + '\n\n';
+                header += '  Type this: <span class="cmd-error">' + currentWord + '</span>\n';
+                outputEl.innerHTML = header;
+            }
+
+            function endTypeGame() {
+                activeGame = null;
+                clearTimeout(timeoutId);
+                cmdInput.removeEventListener('keydown', typeHandler);
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('typeHigh', String(score));
+                }
+                outputEl.innerHTML += '\n<span class="cmd-error">  GAME OVER!</span> Final score: <span class="cmd-info">' + score + '</span>\n';
+                if (score >= highScore && score > 0) outputEl.innerHTML += '  <span class="cmd-success">🏆 NEW HIGH SCORE!</span>\n';
+                outputEl.innerHTML += '  <span class="cmd-info">Type "type" to play again.</span>\n';
+                inputEl.focus();
+            }
+
+            function typeHandler(e) {
+                if (e.key !== 'Enter') return;
+                const typed = cmdInput.value.trim().toLowerCase();
+                cmdInput.value = '';
+                if (!typed) return;
+
+                if (typed === 'q') {
+                    activeGame = null;
+                    clearTimeout(timeoutId);
+                    cmdInput.removeEventListener('keydown', typeHandler);
+                    outputEl.innerHTML += '\n<span class="cmd-info">Game exited. Score: ' + score + '</span>\n';
+                    inputEl.focus();
+                    return;
+                }
+
+                if (typed === currentWord) {
+                    clearTimeout(timeoutId);
+                    score += currentWord.length * 10;
+                    wordsCleared++;
+                    outputEl.innerHTML += '<span class="cmd-success">  ✓ ' + currentWord + '</span> +' + (currentWord.length * 10) + '\n';
+                    // Level up every 5 words
+                    if (wordsCleared % 5 === 0) {
+                        level++;
+                        speed = Math.max(1200, speed - 400);
+                        outputEl.innerHTML += '  <span class="cmd-info">⚡ Level ' + level + '! Speed up!</span>\n';
+                    }
+                    nextWord();
+                } else {
+                    outputEl.innerHTML += '<span class="cmd-error">  ✗ Wrong! Expected: ' + currentWord + '</span>\n';
+                }
+                const body = outputEl.closest('.terminal-bar-body');
+                if (body) body.scrollTop = body.scrollHeight;
+            }
+
+            cmdInput.addEventListener('keydown', typeHandler);
+            inputEl.focus();
+            nextWord();
+        }
+
+        // ── Tic-Tac-Toe Game ──
+        function startTTT(outputEl, inputEl) {
+            let board = Array(9).fill(null);
+            const HUMAN = 'X', AI = 'O';
+            activeGame = 'ttt';
+
+            function renderBoard() {
+                const cell = (i) => {
+                    if (board[i] === HUMAN) return '<span class="cmd-success">X</span>';
+                    if (board[i] === AI) return '<span class="cmd-error">O</span>';
+                    return '<span class="cmd-info">' + (i + 1) + '</span>';
+                };
+                let out = '<span class="cmd-success">❌ TIC-TAC-TOE</span>  You: <span class="cmd-success">X</span>  AI: <span class="cmd-error">O</span>\n\n';
+                out += '   ' + cell(0) + ' │ ' + cell(1) + ' │ ' + cell(2) + '\n';
+                out += '  ───┼───┼───\n';
+                out += '   ' + cell(3) + ' │ ' + cell(4) + ' │ ' + cell(5) + '\n';
+                out += '  ───┼───┼───\n';
+                out += '   ' + cell(6) + ' │ ' + cell(7) + ' │ ' + cell(8) + '\n\n';
+                out += '  <span class="cmd-info">Enter 1-9 to place X. Q to quit.</span>\n';
+                outputEl.innerHTML = out;
+            }
+
+            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+            function checkWin(player) {
+                return wins.some(combo => combo.every(i => board[i] === player));
+            }
+
+            function isFull() {
+                return board.every(c => c !== null);
+            }
+
+            // Simple AI: try to win, block, or pick best spot
+            function aiMove() {
+                // Try to win
+                for (let i = 0; i < 9; i++) {
+                    if (!board[i]) { board[i] = AI; if (checkWin(AI)) return i; board[i] = null; }
+                }
+                // Block human
+                for (let i = 0; i < 9; i++) {
+                    if (!board[i]) { board[i] = HUMAN; if (checkWin(HUMAN)) { board[i] = AI; return i; } board[i] = null; }
+                }
+                // Center
+                if (!board[4]) { board[4] = AI; return 4; }
+                // Corners
+                const corners = [0,2,6,8].filter(i => !board[i]);
+                if (corners.length) { const c = pick(corners); board[c] = AI; return c; }
+                // Any
+                const open = board.map((v,i) => v === null ? i : -1).filter(i => i >= 0);
+                if (open.length) { const o = pick(open); board[o] = AI; return o; }
+                return -1;
+            }
+
+            function tttHandler(e) {
+                if (e.key !== 'Enter') return;
+                const val = cmdInput.value.trim();
+                cmdInput.value = '';
+                if (!val) return;
+
+                if (val.toLowerCase() === 'q') {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', tttHandler);
+                    outputEl.innerHTML += '\n<span class="cmd-info">Game exited.</span>\n';
+                    inputEl.focus();
+                    return;
+                }
+
+                const pos = parseInt(val) - 1;
+                if (isNaN(pos) || pos < 0 || pos > 8 || board[pos] !== null) {
+                    renderBoard();
+                    outputEl.innerHTML += '<span class="cmd-error">  Invalid move!</span>\n';
+                    return;
+                }
+
+                board[pos] = HUMAN;
+                if (checkWin(HUMAN)) {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', tttHandler);
+                    renderBoard();
+                    outputEl.innerHTML += '<span class="cmd-success">  🏆 You win! Impressive... for a human.</span>\n';
+                    return;
+                }
+                if (isFull()) {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', tttHandler);
+                    renderBoard();
+                    outputEl.innerHTML += '<span class="cmd-info">  Draw! The only winning move is not to play.</span>\n';
+                    return;
+                }
+
+                aiMove();
+                if (checkWin(AI)) {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', tttHandler);
+                    renderBoard();
+                    outputEl.innerHTML += '<span class="cmd-error">  🤖 AI wins! Skynet sends its regards.</span>\n';
+                    return;
+                }
+                if (isFull()) {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', tttHandler);
+                    renderBoard();
+                    outputEl.innerHTML += '<span class="cmd-info">  Draw! Stalemate in the matrix.</span>\n';
+                    return;
+                }
+
+                renderBoard();
+            }
+
+            cmdInput.addEventListener('keydown', tttHandler);
+            inputEl.focus();
+            renderBoard();
+        }
+
         cmdInput.addEventListener('keydown', (e) => {
             if (snakeGame) { e.preventDefault(); return; }
+            if (activeGame) return; // other games handle their own input
             if (e.key !== 'Enter') return;
             const raw = cmdInput.value.trim();
             if (!raw) return;
