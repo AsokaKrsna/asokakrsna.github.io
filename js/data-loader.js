@@ -80,8 +80,13 @@ class PortfolioLoader {
      */
     initCollapseToggles() {
         document.querySelectorAll('.collapse-toggle').forEach(btn => {
+            // Store original text immediately
+            const toggleText = btn.querySelector('.toggle-text');
+            if (toggleText) btn.dataset.origText = toggleText.textContent;
+            
             btn.addEventListener('click', function() {
-                const container = this.closest('section').querySelector(this.dataset.container);
+                const container = this.closest('section')?.querySelector(this.dataset.container) 
+                                || this.parentElement;
                 if (!container) return;
                 
                 const hiddenItems = container.querySelectorAll('.collapsible-hidden');
@@ -101,7 +106,8 @@ class PortfolioLoader {
                         });
                     });
                     this.classList.remove('expanded');
-                    this.innerHTML = 'Show More <i class="fas fa-chevron-down"></i>';
+                    const origText = this.dataset.origText || 'Show more';
+                    this.innerHTML = `<span class="toggle-text">${origText}</span> <i class="fas fa-chevron-down"></i>`;
                 } else {
                     // Expand: reveal items
                     hiddenItems.forEach((item, i) => {
@@ -121,7 +127,8 @@ class PortfolioLoader {
                         setTimeout(() => { item.style.maxHeight = 'none'; }, 500 + i * 80);
                     });
                     this.classList.add('expanded');
-                    this.innerHTML = 'Show Less <i class="fas fa-chevron-up"></i>';
+                    this.dataset.origText = this.dataset.origText || this.querySelector('.toggle-text')?.textContent || 'Show more';
+                    this.innerHTML = '<span class="toggle-text">Show less</span> <i class="fas fa-chevron-up"></i>';
                 }
             });
         });
@@ -221,8 +228,9 @@ class PortfolioLoader {
         `).join('');
         
         if (this.data.education.length > visibleCount) {
-            educationContent.insertAdjacentHTML('afterend', 
-                `<div class="section-cta"><button class="btn small secondary collapse-toggle" data-section="education" data-container=".education-content" data-items=".education-item">Show More <i class="fas fa-chevron-down"></i></button></div>`);
+            const remaining = this.data.education.length - visibleCount;
+            educationContent.insertAdjacentHTML('beforeend', 
+                `<button class="collapse-toggle" data-section="education" data-container=".education-content" data-items=".education-item"><span class="toggle-text">Show ${remaining} more</span> <i class="fas fa-chevron-down"></i></button>`);
         }
     }
 
@@ -248,8 +256,9 @@ class PortfolioLoader {
         `).join('');
         
         if (this.data.experience.length > visibleCount) {
-            experienceContent.insertAdjacentHTML('afterend', 
-                `<div class="section-cta"><button class="btn small secondary collapse-toggle" data-section="experience" data-container=".experience-content" data-items=".experience-item">Show More <i class="fas fa-chevron-down"></i></button></div>`);
+            const remaining = this.data.experience.length - visibleCount;
+            experienceContent.insertAdjacentHTML('beforeend', 
+                `<button class="collapse-toggle" data-section="experience" data-container=".experience-content" data-items=".experience-item"><span class="toggle-text">Show ${remaining} more</span> <i class="fas fa-chevron-down"></i></button>`);
         }
     }
 
@@ -415,8 +424,9 @@ class PortfolioLoader {
         `).join('');
         
         if (this.data.certifications.length > visibleCount) {
-            certificationsTimeline.insertAdjacentHTML('afterend', 
-                `<div class="section-cta"><button class="btn small secondary collapse-toggle" data-section="certifications" data-container=".certifications-timeline" data-items=".certification-item">Show More <i class="fas fa-chevron-down"></i></button></div>`);
+            const remaining = this.data.certifications.length - visibleCount;
+            certificationsTimeline.insertAdjacentHTML('beforeend', 
+                `<button class="collapse-toggle" data-section="certifications" data-container=".certifications-timeline" data-items=".certification-item"><span class="toggle-text">Show ${remaining} more</span> <i class="fas fa-chevron-down"></i></button>`);
         }
     }
 
@@ -447,8 +457,9 @@ class PortfolioLoader {
         `).join('');
         
         if (categories.length > 1) {
-            achievementsTimeline.insertAdjacentHTML('afterend', 
-                `<div class="section-cta"><button class="btn small secondary collapse-toggle" data-section="achievements" data-container=".achievements-timeline" data-items=".achievements-category">Show More <i class="fas fa-chevron-down"></i></button></div>`);
+            const remaining = categories.length - 1;
+            achievementsTimeline.insertAdjacentHTML('beforeend', 
+                `<button class="collapse-toggle" data-section="achievements" data-container=".achievements-timeline" data-items=".achievements-category"><span class="toggle-text">Show ${remaining} more categories</span> <i class="fas fa-chevron-down"></i></button>`);
         }
     }
 
