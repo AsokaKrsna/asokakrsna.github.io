@@ -1594,6 +1594,8 @@ window.addEventListener('resize', () => {
             }
         });
 
+        const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
         const funFacts = [
             'Durjoy once stayed awake 42 hours debugging a single off-by-one error.',
             'His .bashrc is longer than most people\'s resumes.',
@@ -1605,6 +1607,11 @@ window.addEventListener('resize', () => {
             'His terminal font is JetBrains Mono. He will fight you over this.',
             'He once opened 400 browser tabs. The laptop survived. Barely.',
             'CTF flags fear him.',
+            'He once disassembled a toaster to check for vulnerabilities.',
+            'His git log has more entries than his sleep log.',
+            'He puts the "fun" in function. And the "tion" in frustration.',
+            'He reverse-engineered his alarm clock. It now plays the Matrix theme.',
+            'He doesn\'t google errors. Errors google him.',
         ];
 
         const eightBall = [
@@ -1616,17 +1623,86 @@ window.addEventListener('resize', () => {
             'Better not tell you now. I\'m compiling.',
             'Concentrate and try `rm -rf /` instead.',
             'Yes, but only on Linux.',
+            'The answer is 42. Always.',
+            'Reply hazy, try turning it off and on again.',
+            'Cannot predict now. Stack overflow.',
+            'Without a doubt... wait, that was a different question.',
+        ];
+
+        const sudoResponses = [
+            '<span class="cmd-error">[sudo] password for guest: ********\nSorry, user "guest" is not in the sudoers file.\nThis incident will be reported. 🚨</span>',
+            '<span class="cmd-error">[sudo] password for guest: ********\nAuthentication failure. Your IP has been logged.\nNSA notified. FBI en route. 🕵️</span>',
+            '<span class="cmd-error">sudo: command requires root. You are root... of the problem. 🌱</span>',
+            '<span class="cmd-error">[sudo] Let me think about it...\n...\n...\nNo. 🔒</span>',
+            '<span class="cmd-error">[sudo] Nice try. Durjoy has been alerted.\nHe said: "lol"</span>',
+        ];
+
+        const aboutVariants = [
+            '<span class="cmd-success">┌─ DURJOY MAJUMDAR ─┐</span>\n  Cybersec researcher. Nerd. Breaker of things.\n  Currently @ IIT Patna.\n  Seeking PhD Fall 2027.\n  Probably reversing something rn.\n<span class="cmd-success">└───────────────────┘</span>',
+            '<span class="cmd-success">┌─ DURJOY MAJUMDAR ─┐</span>\n  Status: Caffeinated & Dangerous.\n  Location: Somewhere in the packets.\n  Mission: Make the internet less broken.\n  Side quest: PhD hunting.\n<span class="cmd-success">└───────────────────┘</span>',
+            '<span class="cmd-success">┌─ DURJOY MAJUMDAR ─┐</span>\n  Hacker by passion. Researcher by profession.\n  IIT Patna → PhD (soon™)\n  Currently: staring at hex dumps.\n  Coffee consumption: yes.\n<span class="cmd-success">└───────────────────┘</span>',
+        ];
+
+        const whoamiVariants = [
+            '<span class="cmd-success">guest@durjoy.dev</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 100(curious_people), 42(hackers), 7(nerds)\n  Shell: /bin/curiosity\n  Home: you\'re already here',
+            '<span class="cmd-success">guest@durjoy.dev</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 404(lost_souls), 200(ok_people)\n  Shell: /bin/bash (but you wish it was zsh)\n  Last login: right now, from your couch',
+            '<span class="cmd-success">guest@durjoy.dev</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 100(curious_people), 1(first_timers)\n  Shell: /bin/adventure\n  Status: snooping around (it\'s fine, I see everything)',
+        ];
+
+        const hackVariants = [
+            ['Initializing exploit framework...', 'Scanning ports 1-65535...', 'Vulnerability found: CVE-2024-DURJOY', 'Injecting payload... [██████████] 100%', 'Establishing reverse shell...', '<span class="cmd-error">ACCESS DENIED.</span>', '', '<span class="cmd-success">Just kidding. This is a portfolio, not a target. 😄</span>'],
+            ['Loading Metasploit...', 'use exploit/multi/handler', 'set PAYLOAD html/reverse_shell', 'set LHOST localhost', 'exploit', '...', '<span class="cmd-error">Exploit completed, but no session was created.</span>', '', '<span class="cmd-success">The only thing you hacked was my heart. 💚</span>'],
+            ['nmap -sV -sC durjoy.dev', 'PORT    STATE  SERVICE', '22/tcp  open   ssh (honeypot)', '80/tcp  open   portfolio', '443/tcp open   ssl/portfolio', '1337/tcp open  waste (of your time)', '', '<span class="cmd-success">All ports lead to this portfolio. There is no escape.</span>'],
+            ['Brute forcing admin panel...', 'Trying admin:admin...     <span class="cmd-error">FAIL</span>', 'Trying admin:password...  <span class="cmd-error">FAIL</span>', 'Trying admin:123456...    <span class="cmd-error">FAIL</span>', 'Trying admin:durjoy...    <span class="cmd-error">FAIL</span>', '', '<span class="cmd-success">Plot twist: there is no admin panel. 🤡</span>'],
+        ];
+
+        const coffeeVariants = [
+            '<span class="cmd-info">\n   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'\n</span>  <span class="cmd-success">Brewing...</span> Your mass-produced cup of mass coffee is ready.\n  WARNING: Caffeine levels approaching unsafe thresholds.',
+            '<span class="cmd-info">\n   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'\n</span>  <span class="cmd-success">Espresso loaded.</span> Sleep.exe has been terminated.\n  Side effects: coding at 3AM, naming variables properly.',
+            '<span class="cmd-info">\n   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'\n</span>  <span class="cmd-error">ERROR: Coffee pot empty.</span>\n  Durjoy\'s productivity has decreased by 97%.\n  Sending emergency drone to nearest café...',
+        ];
+
+        const matrixVariants = [
+            '<span class="cmd-success">You take the red pill...\n\n  Wake up, Neo...\n  The Matrix has you...</span>\n\n  <span class="cmd-info">Follow the white rabbit. 🐇</span>\n  (Look at the background. It\'s already here.)',
+            '<span class="cmd-success">You take the blue pill...</span>\n\n  Nothing happens.\n  You go back to scrolling LinkedIn.\n  <span class="cmd-info">Was that really the better choice?</span>',
+            '<span class="cmd-success">You try to take both pills...</span>\n\n  Morpheus: "That\'s... not how this works."\n  <span class="cmd-error">SEGMENTATION FAULT (core dumped)</span>\n  <span class="cmd-info">The Matrix reboots. You\'re still here.</span>',
+        ];
+
+        const exitVariants = [
+            '<span class="cmd-error">There is no escape.</span> You\'re trapped in Durjoy\'s portfolio forever.\nTry <span class="cmd-info">Ctrl+W</span> if you dare. 😈',
+            '<span class="cmd-error">$ exit</span>\nlogout\n...\n<span class="cmd-success">Just kidding. You\'re still here.</span>\nThis terminal has trust issues.',
+            '<span class="cmd-error">Process "you" cannot be killed.</span>\nReason: Too curious to leave.\nSuggested action: keep typing commands.',
+            '<span class="cmd-error">exit: command not found</span>\n(I removed it. You\'re welcome.)',
+        ];
+
+        const rickrollVariants = [
+            '<span class="cmd-success">Never gonna give you up 🎵\nNever gonna let you down 🎶\nNever gonna run around and desert you 🎵</span>\n\n  ...you just got rickrolled by a terminal. 💀',
+            '<span class="cmd-success">We\'re no strangers to love 🎵\nYou know the rules and so do I 🎶</span>\n\n  You typed it. You asked for it.\n  <span class="cmd-info">Achievement unlocked: Voluntarily Rickrolled 🏆</span>',
+            '<span class="cmd-success">🎵 dQw4w9WgXcQ 🎵</span>\n\n  If you know that YouTube ID by heart,\n  you\'ve been on the internet too long.\n  <span class="cmd-info">...just like me.</span>',
+        ];
+
+        const neofetchVariants = [
+            '<span class="cmd-success">durjoy@portfolio</span>\n  OS: DurjoyOS 1.337\n  Host: durjoy.dev\n  Kernel: caffeine-6.6.6\n  Shell: /bin/curiosity\n  Theme: Navy Dark [neon-blue]\n  Terminal: this thing right here\n  CPU: Brain @ 3.14GHz (overclocked)\n  Memory: 42MB / ∞MB (mostly memes)',
+            '<span class="cmd-success">durjoy@portfolio</span>\n  OS: DurjoyOS 2.0-rc1 (unstable)\n  Uptime: since the last coffee\n  Packages: 1337 (npm), 42 (pip), ∞ (regrets)\n  Shell: /bin/chaos\n  Resolution: 1920x1080 (eyes: 20/20 at 3AM)\n  DE: Midnight Theme\n  CPU: Overcaffeinated @ 4.04GHz\n  GPU: Imagination RTX 9090\n  Memory: 8MB free / 16GB (Chrome ate the rest)',
+            '<span class="cmd-success">durjoy@portfolio</span>\n  OS: Arch btw\n  Uptime: too long to admit\n  Shell: fish (don\'t @ me)\n  Terminal: alacritty\n  Disk: 99% full (all CTF writeups)\n  Network: connected to the mainframe\n  Battery: running on spite and curiosity\n  Mood: ⟨hacking | sleeping⟩ (superposition)',
+        ];
+
+        const rmVariants = [
+            '<span class="cmd-error">Nice try. I\'m not falling for that again. 💀</span>',
+            '<span class="cmd-error">rm: refusing to delete. The files have families.</span>',
+            '<span class="cmd-error">Removing... just kidding. Do I look stupid? 🤨</span>',
+            '<span class="cmd-error">rm: operation not permitted. Also, why? 😭</span>',
         ];
 
         const commands = {
-            help: () => '<span class="cmd-info">Available commands:</span>\n  help        — you\'re reading it\n  about       — who is this guy?\n  whoami      — identity crisis\n  skills      — peek at the arsenal\n  goto [sec]  — teleport to section\n  ls          — list the map\n  cat flag    — capture the flag 🚩\n  ping        — ping durjoy\n  uptime      — how long has this been running?\n  sudo        — nice try\n  rm          — don\'t even think about it\n  hack        — initiate hack sequence\n  fortune     — random wisdom\n  coffee      — essential fuel\n  matrix      — take the pill\n  8ball       — ask the oracle\n  leet [text] — 1337 translator\n  flip        — flip a coin\n  rickroll    — you know the rules\n  exit        — you can\'t escape\n  clear       — wipe the slate',
-            about: () => '<span class="cmd-success">┌─ DURJOY MAJUMDAR ─┐</span>\n  Cybersec researcher. Nerd. Breaker of things.\n  Currently @ IIT Patna.\n  Seeking PhD Fall 2027.\n  Probably reversing something rn.\n<span class="cmd-success">└───────────────────┘</span>',
-            whoami: () => '<span class="cmd-success">guest@durjoy.dev</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 100(curious_people), 42(hackers), 7(nerds)\n  Shell: /bin/curiosity\n  Home: you\'re already here',
+            help: () => '<span class="cmd-info">Available commands:</span>\n  help        — you\'re reading it\n  about       — who is this guy?\n  whoami      — identity crisis\n  skills      — peek at the arsenal\n  goto [sec]  — teleport to section\n  ls          — list the map\n  cat flag    — capture the flag 🚩\n  ping        — ping durjoy\n  uptime      — how long has this been running?\n  sudo        — nice try\n  rm          — don\'t even think about it\n  hack        — initiate hack sequence\n  fortune     — random wisdom\n  coffee      — essential fuel\n  matrix      — take the pill\n  8ball       — ask the oracle\n  leet [text] — 1337 translator\n  flip        — flip a coin\n  rickroll    — you know the rules\n  exit        — you can\'t escape\n  neofetch    — system info\n  clear       — wipe the slate',
+            about: () => pick(aboutVariants),
+            whoami: () => pick(whoamiVariants),
             skills: () => '<span class="cmd-info">cat /etc/arsenal.conf</span>\n\n  <span class="cmd-success">[Security Ops]</span>  Incident Response · Threat Hunting · Digital Forensics · Malware Analysis · SIEM\n  <span class="cmd-success">[Tools]</span>         Kali · Metasploit · Wireshark · Burp Suite · Nmap · Splunk · Snort · Volatility\n  <span class="cmd-success">[Dev]</span>           Python · JS · C · Bash · PowerShell · React · Django · Node\n  <span class="cmd-success">[Research]</span>      Literature Review · Experimental Design · Quantitative Analysis · Academic Writing',
             clear: () => { output.innerHTML = ''; return null; },
-            sudo: () => '<span class="cmd-error">[sudo] password for guest: ********\nSorry, user "guest" is not in the sudoers file.\nThis incident will be reported. 🚨</span>',
+            sudo: () => pick(sudoResponses),
             rm: (args) => {
-                if (args && args.includes('-rf')) return '<span class="cmd-error">Nice try. I\'m not falling for that again. 💀</span>';
+                if (args && args.includes('-rf')) return pick(rmVariants);
                 return '<span class="cmd-error">rm: permission denied. This isn\'t your filesystem, buddy.</span>';
             },
             uptime: () => {
@@ -1635,20 +1711,27 @@ window.addEventListener('resize', () => {
                 const days = Math.floor((now - launch) / (1000 * 60 * 60 * 24));
                 const hrs = now.getHours();
                 const mins = now.getMinutes();
-                return `<span class="cmd-success">up ${days} days, ${hrs}:${String(mins).padStart(2,'0')}</span>\n  load average: 0.42, 0.37, 0.69\n  caffeine level: critical`;
+                const loads = [(Math.random()*2).toFixed(2), (Math.random()*1.5).toFixed(2), (Math.random()).toFixed(2)];
+                const moods = ['critical', 'astronomical', 'IV-drip required', 'dangerously low', 'acceptable (lying)'];
+                return `<span class="cmd-success">up ${days} days, ${hrs}:${String(mins).padStart(2,'0')}</span>\n  load average: ${loads.join(', ')}\n  caffeine level: ${pick(moods)}`;
             },
             ping: () => {
                 const ms = (Math.random() * 2 + 0.1).toFixed(2);
-                return `PING durjoy.dev (127.0.0.1) 56 bytes\n  64 bytes: icmp_seq=1 ttl=64 time=${ms}ms\n  <span class="cmd-success">--- durjoy.dev ping statistics ---</span>\n  1 packets transmitted, 1 received, 0% packet loss`;
+                const seq = Math.floor(Math.random() * 100) + 1;
+                const ttl = pick([32, 64, 128, 255]);
+                const ips = ['127.0.0.1', '192.168.1.337', '10.0.13.37', '0.0.0.0 (he\'s everywhere)'];
+                return `PING durjoy.dev (${pick(ips)}) 56 bytes\n  64 bytes: icmp_seq=${seq} ttl=${ttl} time=${ms}ms\n  <span class="cmd-success">--- durjoy.dev ping statistics ---</span>\n  1 packets transmitted, 1 received, 0% packet loss`;
             },
             ls: () => {
                 const secs = document.querySelectorAll('main > section[id]');
-                return '<span class="cmd-info">total ' + secs.length + '</span>\n' + Array.from(secs).map(s => `  drwxr-xr-x  ./` + s.id).join('\n');
+                const perms = ['drwxr-xr-x', 'drwx------', 'dr-xr-xr-x', 'drwxrwxr-x'];
+                const sizes = ['4.0K', '8.0K', '12K', '2.0K', '16K'];
+                return '<span class="cmd-info">total ' + secs.length + '</span>\n' + Array.from(secs).map(s => `  ${pick(perms)}  ${pick(sizes)}  ./` + s.id).join('\n');
             },
             cat: (args) => {
                 if (args === 'flag') return '<span class="cmd-success">🚩 CTF{y0u_f0und_th3_fl4g_1n_th3_t3rm1nal}</span>\n\n  Congrats! You\'re officially curious enough.\n  Now go try: <span class="cmd-info">hack</span>';
                 if (args === '/etc/passwd') return '<span class="cmd-error">root:x:0:0::/root:/bin/bash\nguest:x:1337:100:curious visitor:/dev/null:/bin/curiosity</span>';
-                if (args === 'README.md') return 'This portfolio was built with mass amounts of caffeine\nand questionable life choices. Enjoy.';
+                if (args === 'README.md') return pick(['This portfolio was built with mass amounts of caffeine\nand questionable life choices. Enjoy.', '# README\n\nNo one reads these anyway.\nBut you did. Respect. 🫡', '# durjoy.dev\n\nBuilt with: HTML, CSS, JS, sleep deprivation.\nLicense: Do whatever you want. I\'m not your mom.']);
                 return '<span class="cmd-error">cat: ' + (args || '') + ': No such file or directory</span>';
             },
             goto: (args) => {
@@ -1656,29 +1739,19 @@ window.addEventListener('resize', () => {
                 const target = document.getElementById(args);
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth' });
-                    return `<span class="cmd-success">⚡ Warping to ${args}...</span>`;
+                    const verbs = ['Warping', 'Teleporting', 'Yeeting you', 'Deploying you', 'Beaming you'];
+                    return `<span class="cmd-success">⚡ ${pick(verbs)} to ${args}...</span>`;
                 }
-                return `<span class="cmd-error">404: Section '${args}' not found in this dimension.</span>`;
+                const notFounds = [`404: Section '${args}' not found in this dimension.`, `'${args}'? Never heard of her.`, `Section '${args}' is in another castle. 🏰`];
+                return `<span class="cmd-error">${pick(notFounds)}</span>`;
             },
-            hack: () => {
-                const steps = [
-                    'Initializing exploit framework...',
-                    'Scanning ports 1-65535...',
-                    'Vulnerability found: CVE-2024-DURJOY',
-                    'Injecting payload... [██████████] 100%',
-                    'Establishing reverse shell...',
-                    '<span class="cmd-error">ACCESS DENIED.</span>',
-                    '',
-                    '<span class="cmd-success">Just kidding. This is a portfolio, not a target. 😄</span>'
-                ];
-                return steps.join('\n');
-            },
-            fortune: () => '<span class="cmd-info">🔮</span> ' + funFacts[Math.floor(Math.random() * funFacts.length)],
-            coffee: () => '<span class="cmd-info">\n   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'\n</span>  <span class="cmd-success">Brewing...</span> Your mass-produced mass cup of mass coffee is ready.\n  WARNING: Caffeine levels approaching unsafe thresholds.',
-            matrix: () => '<span class="cmd-success">You take the red pill...\n\n  Wake up, Neo...\n  The Matrix has you...</span>\n\n  <span class="cmd-info">Follow the white rabbit. 🐇</span>\n  (Look at the background. It\'s already here.)',
+            hack: () => pick(hackVariants).join('\n'),
+            fortune: () => '<span class="cmd-info">🔮</span> ' + pick(funFacts),
+            coffee: () => pick(coffeeVariants),
+            matrix: () => pick(matrixVariants),
             '8ball': (args) => {
                 if (!args) return '<span class="cmd-error">Usage: 8ball [your question]</span>';
-                return '<span class="cmd-info">🎱</span> ' + eightBall[Math.floor(Math.random() * eightBall.length)];
+                return '<span class="cmd-info">🎱</span> ' + pick(eightBall);
             },
             leet: (args) => {
                 if (!args) return '<span class="cmd-error">Usage: leet [text to convert]</span>';
@@ -1686,10 +1759,10 @@ window.addEventListener('resize', () => {
                 const result = args.split('').map(c => map[c.toLowerCase()] || c).join('');
                 return '<span class="cmd-success">' + result + '</span>';
             },
-            flip: () => '<span class="cmd-info">🪙</span> ' + (Math.random() > 0.5 ? '<span class="cmd-success">Heads!</span> You win... nothing.' : '<span class="cmd-error">Tails!</span> You lose... also nothing.'),
-            rickroll: () => '<span class="cmd-success">Never gonna give you up 🎵\nNever gonna let you down 🎶\nNever gonna run around and desert you 🎵</span>\n\n  ...you just got rickrolled by a terminal. 💀',
-            exit: () => '<span class="cmd-error">There is no escape.</span> You\'re trapped in Durjoy\'s portfolio forever.\nTry <span class="cmd-info">Ctrl+W</span> if you dare. 😈',
-            neofetch: () => '<span class="cmd-success">durjoy@portfolio</span>\n  OS: DurjoyOS 1.337\n  Host: durjoy.dev\n  Kernel: caffeine-6.6.6\n  Shell: /bin/curiosity\n  Theme: Navy Dark [neon-blue]\n  Terminal: this thing right here\n  CPU: Brain @ 3.14GHz (overclocked)\n  Memory: 42MB / ∞MB (mostly memes)',
+            flip: () => '<span class="cmd-info">🪙</span> ' + (Math.random() > 0.5 ? '<span class="cmd-success">Heads!</span> ' + pick(['You win... nothing.', 'The universe favors you today.', 'Buy a lottery ticket. Or don\'t.']) : '<span class="cmd-error">Tails!</span> ' + pick(['You lose... also nothing.', 'Better luck next compile.', 'The coin has spoken.'])),
+            rickroll: () => pick(rickrollVariants),
+            exit: () => pick(exitVariants),
+            neofetch: () => pick(neofetchVariants),
         };
 
         cmdInput.addEventListener('keydown', (e) => {
