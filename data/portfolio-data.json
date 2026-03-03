@@ -407,6 +407,43 @@
       "url": "https://x.com/Durjoy_02"
     }
   ],
+  "scratchpad": {
+    "intro": "Not every experiment works out — and that's fine. Here's a graveyard of half-baked ideas, abandoned rabbit holes, and things I learned the hard way.",
+    "items": [
+      {
+        "title": "Custom Packet Sniffer in Rust",
+        "status": "abandoned",
+        "date": "2024",
+        "description": "Tried building a raw packet sniffer entirely in Rust with zero dependencies. Got deep into raw sockets and AF_PACKET but hit platform portability walls.",
+        "lesson": "Sometimes libpcap exists for a reason. Reinventing the wheel taught me a lot about the kernel networking stack though.",
+        "tags": ["rust", "networking", "raw-sockets"]
+      },
+      {
+        "title": "ML-based Malware Classifier from Syscalls",
+        "status": "paused",
+        "date": "2024",
+        "description": "Hooked syscalls from sandboxed binaries and tried feeding sequences into an LSTM for behavioral classification. Accuracy plateaued at ~72%.",
+        "lesson": "Feature engineering > model complexity. Syscall n-grams helped more than raw sequences. Might revisit with transformers.",
+        "tags": ["ml", "malware-analysis", "lstm"]
+      },
+      {
+        "title": "Decentralized CTF Platform on IPFS",
+        "status": "abandoned",
+        "date": "2023",
+        "description": "Wanted to host CTF challenges on IPFS so they'd be censorship-resistant. Turned out challenge isolation and scoring are fundamentally hard without a central server.",
+        "lesson": "Decentralization is cool until you need state management and real-time scoring.",
+        "tags": ["ipfs", "ctf", "web3"]
+      },
+      {
+        "title": "Browser Extension for Live CVE Alerts",
+        "status": "exploring",
+        "date": "2025",
+        "description": "A browser extension that cross-references the tech stack of the page you're visiting with NVD/CVE databases and shows active vulnerabilities. WIP.",
+        "lesson": "Fingerprinting tech stacks client-side is messier than expected. Wappalyzer's approach is heavier than I thought.",
+        "tags": ["browser-ext", "cve", "security"]
+      }
+    ]
+  },
   "footer": {
     "text": "Built with ❤️ by Durjoy Majumdar with the help of Claude AI",
     "copyright": "© 2025 All Rights Reserved"

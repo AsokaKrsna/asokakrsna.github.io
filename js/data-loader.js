@@ -66,6 +66,7 @@ class PortfolioLoader {
         this.renderCyberArena();
         this.renderCertifications();
         this.renderAchievements();
+        this.renderScratchpad();
         this.renderVolunteering();
         this.renderContact();
         this.renderSocialLinks();
@@ -370,6 +371,44 @@ class PortfolioLoader {
                         <h4 class="achievement-title">${achievement}</h4>
                     </div>
                 `).join('')}
+            </div>
+        `).join('');
+    }
+
+    /**
+     * Render Scratchpad / Failed Ideas section
+     */
+    renderScratchpad() {
+        const scratchpadIntro = document.querySelector('#scratchpad .scratchpad-intro');
+        const scratchpadGrid = document.querySelector('#scratchpad .scratchpad-grid');
+        if (!scratchpadGrid) return;
+        
+        const { scratchpad } = this.data;
+        if (!scratchpad) return;
+        
+        if (scratchpadIntro) {
+            scratchpadIntro.textContent = scratchpad.intro;
+        }
+        
+        const statusIcons = {
+            abandoned: 'fas fa-skull-crossbones',
+            paused: 'fas fa-pause-circle',
+            exploring: 'fas fa-flask'
+        };
+        
+        scratchpadGrid.innerHTML = scratchpad.items.map(item => `
+            <div class="scratchpad-card">
+                <div class="scratchpad-card-header">
+                    <i class="${statusIcons[item.status] || 'fas fa-question'} status-icon ${item.status}"></i>
+                    <h3 class="scratchpad-title">${item.title}</h3>
+                </div>
+                <div class="scratchpad-meta">
+                    <span class="scratchpad-status ${item.status}">${item.status}</span>
+                    <span class="scratchpad-date">${item.date}</span>
+                </div>
+                <p class="scratchpad-description">${item.description}</p>
+                <div class="scratchpad-lesson"><strong>Takeaway:</strong> ${item.lesson}</div>
+                <div class="scratchpad-tags">${item.tags.map(t => `<span>${t}</span>`).join('')}</div>
             </div>
         `).join('');
     }
