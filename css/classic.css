@@ -101,15 +101,15 @@ body {
 }
 
 .sidebar-header {
-    margin-bottom: 2rem;
+    margin-bottom: 1.2rem;
 }
 
 .profile-photo {
-    width: 90px;
-    height: 90px;
+    width: 105px;
+    height: 105px;
     border-radius: 50%;
     overflow: hidden;
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
     border: 2px solid var(--border);
     transition: var(--transition);
 }
@@ -155,7 +155,7 @@ body {
 /* ─── Navigation ─── */
 
 .sidebar-nav {
-    margin: 1.5rem 0;
+    margin: 1rem 0;
     flex: 1;
 }
 
@@ -332,14 +332,14 @@ section {
     letter-spacing: 0.02em;
     margin-bottom: 1.5rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(212, 165, 116, 0.18);
 }
 
 /* ─── About ─── */
 
 .about-text {
     font-size: 0.95rem;
-    line-height: 1.8;
+    line-height: 1.7;
     color: var(--text-secondary);
 }
 
@@ -382,7 +382,7 @@ section {
 
 .news-date {
     flex-shrink: 0;
-    width: 80px;
+    width: 90px;
     color: var(--text-muted);
     font-size: 0.8rem;
     font-weight: 500;
