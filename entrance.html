@@ -251,24 +251,11 @@
             </a>
         </div>
 
-        <p class="entrance-footer">Your choice is remembered for next time</p>
+        <p class="entrance-footer">You can always switch modes from the sidebar</p>
     </div>
 
     <script>
-        // Check if user has a saved preference
-        (function() {
-            const savedMode = localStorage.getItem('portfolio-mode');
-            if (savedMode === 'classic') {
-                window.location.href = 'classic.html';
-                return;
-            }
-            if (savedMode === 'nerd') {
-                window.location.href = 'index.html';
-                return;
-            }
-        })();
-
-        // Save choice on click
+        // Save choice on click (no auto-redirect — user can always revisit this page)
         document.querySelectorAll('.mode-card').forEach(card => {
             card.addEventListener('click', function(e) {
                 const mode = this.dataset.mode;

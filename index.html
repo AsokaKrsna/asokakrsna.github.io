@@ -305,7 +305,7 @@
 
                 <div style="margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.06);">
                     <a href="#" id="switch-to-classic" style="font-size: 0.72rem; color: #5a5550; text-decoration: none; transition: color 0.3s ease; letter-spacing: 0.02em;">
-                        Switch to Classic Mode <span style="transition: transform 0.2s ease; display: inline-block;">→</span>
+                        Switch Mode <span style="transition: transform 0.2s ease; display: inline-block;">→</span>
                     </a>
                 </div>
             </div>
@@ -475,14 +475,14 @@
     <script src="js/main.js"></script>
     
     <script>
-        // Mode switching for nerd → classic
+        // Mode switching for nerd → entrance (choose mode)
         (function() {
             var switchBtn = document.getElementById('switch-to-classic');
             if (switchBtn) {
                 switchBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    localStorage.setItem('portfolio-mode', 'classic');
-                    window.location.href = 'classic.html';
+                    localStorage.removeItem('portfolio-mode');
+                    window.location.href = 'entrance.html';
                 });
                 switchBtn.addEventListener('mouseenter', function() {
                     this.style.color = '#8892b0';

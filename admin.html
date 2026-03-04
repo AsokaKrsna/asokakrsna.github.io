@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Admin Panel</title>
+    <link rel="shortcut icon" href="./images/AsokaKrsna.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0e17;
+            --surface: #111827;
+            --surface-2: #1a2332;
+            --border: #1e293b;
+            --border-hover: #334155;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --text-muted: #64748b;
+            --accent: #64ffda;
+            --accent-dim: rgba(100,255,218,0.15);
+            --danger: #f87171;
+            --danger-dim: rgba(248,113,113,0.15);
+            --warn: #fbbf24;
+            --success: #34d399;
+            --purple: #a78bfa;
+            --radius: 8px;
+            --mono: 'JetBrains Mono', monospace;
+            --sans: 'Inter', sans-serif;
+        }
+
+        body {
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ─── Gate ─── */
+        #gate {
+            position: fixed; inset: 0; z-index: 9999;
+            background: var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column; gap: 1.5rem;
+        }
+        #gate.hidden { display: none; }
+        #gate h1 { font-family: var(--mono); color: var(--accent); font-size: 1.3rem; }
+        #gate p { color: var(--text-dim); font-size: 0.85rem; }
+        #gate input {
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            color: var(--text); padding: 0.7rem 1.2rem; font-size: 0.9rem; width: 280px;
+            font-family: var(--mono); text-align: center;
+        }
+        #gate input:focus { outline: none; border-color: var(--accent); }
+        #gate .gate-error { color: var(--danger); font-size: 0.8rem; display: none; }
+
+        /* ─── Top bar ─── */
+        .topbar {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(10,14,23,0.92); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .topbar-title {
+            font-family: var(--mono); font-size: 0.85rem; color: var(--accent);
+        }
+        .topbar-actions { display: flex; gap: 0.5rem; }
+
+        /* ─── Layout ─── */
+        .layout { display: flex; min-height: calc(100vh - 45px); }
+
+        .sidebar {
+            width: 220px; min-width: 220px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky; top: 45px;
+            height: calc(100vh - 45px);
+            overflow-y: auto;
+        }
+        .sidebar a {
+            display: block; padding: 0.45rem 1.2rem;
+            color: var(--text-dim); text-decoration: none;
+            font-size: 0.8rem; transition: all 0.2s;
+            border-left: 2px solid transparent;
+        }
+        .sidebar a:hover { color: var(--text); background: rgba(100,255,218,0.04); }
+        .sidebar a.active {
+            color: var(--accent); border-left-color: var(--accent);
+            background: var(--accent-dim);
+        }
+        .sidebar .sidebar-label {
+            padding: 0.8rem 1.2rem 0.3rem;
+            font-size: 0.65rem; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .content {
+            flex: 1; padding: 1.5rem 2rem; max-width: 900px;
+        }
+
+        /* ─── Section panels ─── */
+        .panel { display: none; }
+        .panel.active { display: block; }
+
+        .panel-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 1.5rem; padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .panel-header h2 {
+            font-family: var(--mono); font-size: 1.1rem; color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* ─── Form elements ─── */
+        .field { margin-bottom: 1rem; }
+        .field label {
+            display: block; font-size: 0.75rem; color: var(--text-dim);
+            margin-bottom: 0.3rem; font-weight: 500;
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .field input, .field textarea, .field select {
+            width: 100%; background: var(--surface);
+            border: 1px solid var(--border); border-radius: var(--radius);
+            color: var(--text); padding: 0.55rem 0.8rem;
+            font-size: 0.85rem; font-family: var(--sans);
+            transition: border-color 0.2s;
+        }
+        .field input:focus, .field textarea:focus, .field select:focus {
+            outline: none; border-color: var(--accent);
+        }
+        .field textarea { resize: vertical; min-height: 80px; font-family: var(--mono); font-size: 0.8rem; }
+        .field small { color: var(--text-muted); font-size: 0.7rem; margin-top: 0.2rem; display: block; }
+
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+
+        /* ─── Buttons ─── */
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.45rem 0.9rem; border-radius: var(--radius);
+            font-size: 0.78rem; font-weight: 500; cursor: pointer;
+            border: 1px solid transparent; transition: all 0.2s;
+            font-family: var(--sans);
+        }
+        .btn-primary { background: var(--accent-dim); color: var(--accent); border-color: rgba(100,255,218,0.3); }
+        .btn-primary:hover { background: rgba(100,255,218,0.25); }
+        .btn-danger { background: var(--danger-dim); color: var(--danger); border-color: rgba(248,113,113,0.3); }
+        .btn-danger:hover { background: rgba(248,113,113,0.25); }
+        .btn-ghost { background: transparent; color: var(--text-dim); border-color: var(--border); }
+        .btn-ghost:hover { color: var(--text); border-color: var(--border-hover); }
+        .btn-save { background: var(--accent); color: var(--bg); font-weight: 600; }
+        .btn-save:hover { background: #52e0c4; }
+        .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.72rem; }
+
+        /* ─── Array items ─── */
+        .array-list { display: flex; flex-direction: column; gap: 0.8rem; }
+        .array-item {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+            position: relative;
+        }
+        .array-item:hover { border-color: var(--border-hover); }
+        .array-item-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 0.8rem; cursor: pointer;
+        }
+        .array-item-title {
+            font-family: var(--mono); font-size: 0.82rem; color: var(--purple);
+            font-weight: 500;
+        }
+        .array-item-actions { display: flex; gap: 0.3rem; }
+        .array-item-body { display: block; }
+        .array-item.collapsed .array-item-body { display: none; }
+
+        /* ─── Tags / chips ─── */
+        .chip-input-wrap {
+            display: flex; flex-wrap: wrap; gap: 0.3rem;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 0.4rem 0.6rem;
+            min-height: 38px; align-items: center;
+            cursor: text;
+        }
+        .chip-input-wrap:focus-within { border-color: var(--accent); }
+        .chip {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            background: var(--accent-dim); color: var(--accent);
+            padding: 0.15rem 0.5rem; border-radius: 4px;
+            font-size: 0.72rem; font-family: var(--mono);
+        }
+        .chip .chip-remove {
+            cursor: pointer; opacity: 0.6; font-size: 0.8rem;
+        }
+        .chip .chip-remove:hover { opacity: 1; }
+        .chip-input {
+            border: none !important; background: transparent !important;
+            padding: 0.15rem !important; font-size: 0.8rem !important;
+            flex: 1; min-width: 80px; color: var(--text) !important;
+        }
+        .chip-input:focus { outline: none !important; }
+
+        /* ─── String list (simple array of strings) ─── */
+        .string-list { display: flex; flex-direction: column; gap: 0.4rem; }
+        .string-list-item {
+            display: flex; gap: 0.4rem; align-items: center;
+        }
+        .string-list-item input { flex: 1; }
+
+        /* ─── Status badge ─── */
+        .status-dot {
+            width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+        }
+        .status-dot.saved { background: var(--success); }
+        .status-dot.unsaved { background: var(--warn); }
+        .status-msg { font-size: 0.75rem; color: var(--text-dim); margin-left: 0.4rem; }
+
+        /* ─── Toast ─── */
+        .toast {
+            position: fixed; bottom: 1.5rem; right: 1.5rem;
+            background: var(--surface-2); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 0.7rem 1.2rem;
+            font-size: 0.82rem; color: var(--text); z-index: 9000;
+            opacity: 0; transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--danger); }
+
+        /* ─── Modal ─── */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 8000;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.5rem; width: 480px; max-width: 90vw;
+            max-height: 80vh; overflow-y: auto;
+        }
+        .modal h3 { font-family: var(--mono); color: var(--accent); font-size: 0.95rem; margin-bottom: 1rem; }
+        .modal-actions { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1.2rem; }
+
+        /* ─── Scrollbar ─── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .content { padding: 1rem; }
+            .field-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Gate -->
+<div id="gate">
+    <h1>[ admin@portfolio ]</h1>
+    <p>Enter admin passphrase to continue</p>
+    <input type="password" id="gate-pass" placeholder="passphrase" autofocus>
+    <p class="gate-error" id="gate-error">Invalid passphrase</p>
+    <p style="color: var(--text-muted); font-size: 0.7rem; margin-top: 0.5rem;">
+        Default: <code style="color: var(--accent); font-family: var(--mono);">admin</code> — change in source
+    </p>
+</div>
+
+<!-- Top bar -->
+<div class="topbar" style="display:none" id="app">
+    <div class="topbar-title">┌─[ PORTFOLIO ADMIN ]──</div>
+    <div class="topbar-actions">
+        <span class="status-dot unsaved" id="statusDot"></span>
+        <span class="status-msg" id="statusMsg">No changes</span>
+        <button class="btn btn-ghost btn-sm" onclick="downloadJSON()" title="Download JSON">↓ Download</button>
+        <button class="btn btn-ghost btn-sm" onclick="showGitHubModal()" title="Push to GitHub">⬆ GitHub Push</button>
+        <button class="btn btn-save btn-sm" onclick="previewJSON()">{ } Preview</button>
+    </div>
+</div>
+
+<!-- Layout -->
+<div class="layout" style="display:none" id="layout">
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-label">Core</div>
+        <a href="#" data-panel="personal" class="active">Personal</a>
+        <a href="#" data-panel="about">About</a>
+        <a href="#" data-panel="contact">Contact</a>
+        <a href="#" data-panel="socialLinks">Social Links</a>
+        <div class="sidebar-label">Academic</div>
+        <a href="#" data-panel="education">Education</a>
+        <a href="#" data-panel="researchInterests">Research Interests</a>
+        <a href="#" data-panel="research">Publications</a>
+        <a href="#" data-panel="certifications">Certifications</a>
+        <div class="sidebar-label">Professional</div>
+        <a href="#" data-panel="experience">Experience</a>
+        <a href="#" data-panel="skills">Skills / Arsenal</a>
+        <a href="#" data-panel="projects">Projects</a>
+        <div class="sidebar-label">Extras</div>
+        <a href="#" data-panel="cyberArena">Cyber Arena</a>
+        <a href="#" data-panel="blogs">Blogs & Writeups</a>
+        <a href="#" data-panel="achievements">Achievements</a>
+        <a href="#" data-panel="volunteering">Volunteering</a>
+        <a href="#" data-panel="scratchpad">Scratchpad</a>
+        <div class="sidebar-label">Site</div>
+        <a href="#" data-panel="footer">Footer</a>
+    </nav>
+
+    <div class="content" id="contentArea"></div>
+</div>
+
+<!-- GitHub Modal -->
+<div class="modal-overlay" id="githubModal">
+    <div class="modal">
+        <h3>Push to GitHub</h3>
+        <div class="field">
+            <label>Personal Access Token</label>
+            <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx">
+            <small>Needs <code>repo</code> scope. Token is never stored on any server.</small>
+        </div>
+        <div class="field">
+            <label>Repository (owner/repo)</label>
+            <input type="text" id="gh-repo" placeholder="AsokaKrsna/asokakrsna.github.io">
+        </div>
+        <div class="field">
+            <label>Branch</label>
+            <input type="text" id="gh-branch" value="redesign/dual-mode">
+        </div>
+        <div class="field">
+            <label>Commit Message</label>
+            <input type="text" id="gh-message" value="Update portfolio data via admin panel">
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closeGitHubModal()">Cancel</button>
+            <button class="btn btn-save" onclick="pushToGitHub()" id="gh-push-btn">Push Commit</button>
+        </div>
+    </div>
+</div>
+
+<!-- Preview Modal -->
+<div class="modal-overlay" id="previewModal">
+    <div class="modal" style="width: 640px;">
+        <h3>JSON Preview</h3>
+        <textarea id="previewArea" style="width:100%; height: 400px; background: var(--bg); border: 1px solid var(--border); color: var(--accent); font-family: var(--mono); font-size: 0.75rem; border-radius: var(--radius); padding: 0.8rem;" readonly></textarea>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closePreview()">Close</button>
+            <button class="btn btn-primary" onclick="copyJSON()">Copy</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   PORTFOLIO ADMIN PANEL
+   Full CRUD for portfolio-data.json
+   ═══════════════════════════════════════════════════════════ */
+
+const ADMIN_PASS = 'admin'; // change this
+const DATA_PATH  = 'data/portfolio-data.json';
+
+let data = {};
+let dirty = false;
+
+// ─── Gate ───
+document.getElementById('gate-pass').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+        if (e.target.value === ADMIN_PASS) {
+            document.getElementById('gate').classList.add('hidden');
+            document.getElementById('app').style.display = 'flex';
+            document.getElementById('layout').style.display = 'flex';
+            loadData();
+        } else {
+            document.getElementById('gate-error').style.display = 'block';
+            e.target.select();
+        }
+    }
+});
+
+// ─── Data Loading ───
+async function loadData() {
+    try {
+        const resp = await fetch(DATA_PATH + '?t=' + Date.now());
+        data = await resp.json();
+        renderPanel('personal');
+        toast('Data loaded', 'success');
+    } catch (err) {
+        toast('Failed to load data: ' + err.message, 'error');
+    }
+}
+
+// ─── Sidebar Navigation ───
+document.getElementById('sidebar').addEventListener('click', e => {
+    const a = e.target.closest('a[data-panel]');
+    if (!a) return;
+    e.preventDefault();
+    document.querySelectorAll('#sidebar a').forEach(x => x.classList.remove('active'));
+    a.classList.add('active');
+    renderPanel(a.dataset.panel);
+});
+
+// ─── Mark Dirty ───
+function markDirty() {
+    dirty = true;
+    document.getElementById('statusDot').className = 'status-dot unsaved';
+    document.getElementById('statusMsg').textContent = 'Unsaved changes';
+}
+function markClean() {
+    dirty = false;
+    document.getElementById('statusDot').className = 'status-dot saved';
+    document.getElementById('statusMsg').textContent = 'Saved';
+}
+
+// ─── Toast ───
+function toast(msg, type = '') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + type;
+    setTimeout(() => t.className = 'toast', 2500);
+}
+
+// ─── Render Panel ───
+function renderPanel(name) {
+    const area = document.getElementById('contentArea');
+    const renderers = {
+        personal: renderPersonal,
+        about: renderAbout,
+        contact: renderContact,
+        socialLinks: renderSocialLinks,
+        education: renderEducation,
+        researchInterests: renderResearchInterests,
+        research: renderResearch,
+        certifications: renderCertifications,
+        experience: renderExperience,
+        skills: renderSkills,
+        projects: renderProjects,
+        cyberArena: renderCyberArena,
+        blogs: renderBlogs,
+        achievements: renderAchievements,
+        volunteering: renderVolunteering,
+        scratchpad: renderScratchpad,
+        footer: renderFooter,
+    };
+    area.innerHTML = '';
+    if (renderers[name]) {
+        const panel = document.createElement('div');
+        panel.className = 'panel active';
+        panel.innerHTML = renderers[name]();
+        area.appendChild(panel);
+        attachHandlers(panel, name);
+    }
+}
+
+// ═══ HELPER: field HTML generators ═══
+
+function textField(label, value, key, opts = {}) {
+    const type = opts.type || 'text';
+    const small = opts.help ? `<small>${opts.help}</small>` : '';
+    const cls = opts.wide ? '' : '';
+    return `<div class="field ${cls}">
+        <label>${label}</label>
+        <input type="${type}" value="${esc(value || '')}" data-key="${key}" ${opts.readonly ? 'readonly' : ''}>
+        ${small}
+    </div>`;
+}
+
+function textareaField(label, value, key, opts = {}) {
+    const small = opts.help ? `<small>${opts.help}</small>` : '';
+    const rows = opts.rows || 3;
+    return `<div class="field">
+        <label>${label}</label>
+        <textarea rows="${rows}" data-key="${key}">${esc(value || '')}</textarea>
+        ${small}
+    </div>`;
+}
+
+function selectField(label, value, key, options) {
+    const opts = options.map(o => `<option value="${o}" ${o === value ? 'selected' : ''}>${o}</option>`).join('');
+    return `<div class="field">
+        <label>${label}</label>
+        <select data-key="${key}">${opts}</select>
+    </div>`;
+}
+
+function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function panelHeader(title, addBtn = '') {
+    return `<div class="panel-header"><h2>${title}</h2><div>${addBtn}</div></div>`;
+}
+
+// ═══ SECTION RENDERERS ═══
+
+function renderPersonal() {
+    const p = data.personal || {};
+    return panelHeader('Personal Info') +
+        textField('Name', p.name, 'personal.name') +
+        textField('Alias / Handle', p.alias, 'personal.alias') +
+        textField('Title', p.title, 'personal.title') +
+        textField('Tagline', p.tagline, 'personal.tagline') +
+        textField('Profile Image Path', p.profileImage, 'personal.profileImage', {help: 'Relative path e.g. images/profile.png'}) +
+        textField('Favicon Path', p.favicon, 'personal.favicon') +
+        textField('Resume Link', p.resumeLink, 'personal.resumeLink');
+}
+
+function renderAbout() {
+    const paragraphs = (data.about && data.about.paragraphs) || [];
+    let html = panelHeader('About', `<button class="btn btn-primary btn-sm" onclick="addAboutParagraph()">+ Paragraph</button>`);
+    html += '<div class="array-list" id="aboutList">';
+    paragraphs.forEach((p, i) => {
+        html += `<div class="array-item" data-index="${i}">
+            <div class="array-item-header">
+                <span class="array-item-title">Paragraph ${i + 1}</span>
+                <div class="array-item-actions">
+                    <button class="btn btn-danger btn-sm" onclick="removeAboutParagraph(${i})">✕</button>
+                </div>
+            </div>
+            <div class="array-item-body">
+                <div class="field">
+                    <textarea rows="3" data-key="about.paragraphs.${i}">${esc(p)}</textarea>
+                    <small>HTML allowed (links, bold, etc.)</small>
+                </div>
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderContact() {
+    const c = data.contact || {};
+    let html = panelHeader('Contact');
+    html += textareaField('Description', c.description, 'contact.description', {rows: 3});
+    html += textField('Phone', c.phone, 'contact.phone');
+    html += textField('Calendly URL', c.calendlyUrl, 'contact.calendlyUrl');
+    // Emails as string list
+    html += '<div class="field"><label>Emails</label>';
+    html += '<div class="string-list" id="emailList">';
+    (c.emails || []).forEach((email, i) => {
+        html += `<div class="string-list-item">
+            <input type="email" value="${esc(email)}" data-key="contact.emails.${i}">
+            <button class="btn btn-danger btn-sm" onclick="removeEmail(${i})">✕</button>
+        </div>`;
+    });
+    html += '</div>';
+    html += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addEmail()">+ Email</button>`;
+    html += '</div>';
+    return html;
+}
+
+function renderSocialLinks() {
+    const links = data.socialLinks || [];
+    let html = panelHeader('Social Links', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('socialLinks', {platform:'',icon:'',url:''})">+ Link</button>`);
+    html += '<div class="array-list">';
+    links.forEach((l, i) => {
+        html += `<div class="array-item" data-index="${i}">
+            <div class="array-item-header" onclick="toggleCollapse(this)">
+                <span class="array-item-title">${l.platform || 'New Link'}</span>
+                <div class="array-item-actions">
+                    ${moveButtons(i, links.length, 'socialLinks')}
+                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('socialLinks', ${i})">✕</button>
+                </div>
+            </div>
+            <div class="array-item-body">
+                ${textField('Platform', l.platform, `socialLinks.${i}.platform`)}
+                ${textField('Icon Class', l.icon, `socialLinks.${i}.icon`, {help: 'FontAwesome class e.g. fab fa-github'})}
+                ${textField('URL', l.url, `socialLinks.${i}.url`)}
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderEducation() {
+    const items = data.education || [];
+    let html = panelHeader('Education', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('education', {institution:'',location:'',grade:'',period:'',degree:''})">+ Entry</button>`);
+    html += '<div class="array-list">';
+    items.forEach((e, i) => {
+        html += `<div class="array-item" data-index="${i}">
+            <div class="array-item-header" onclick="toggleCollapse(this)">
+                <span class="array-item-title">${e.institution || 'New Entry'}</span>
+                <div class="array-item-actions">
+                    ${moveButtons(i, items.length, 'education')}
+                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('education', ${i})">✕</button>
+                </div>
+            </div>
+            <div class="array-item-body">
+                ${textField('Institution', e.institution, `education.${i}.institution`)}
+                ${textField('Degree', e.degree, `education.${i}.degree`)}
+                <div class="field-row">
+                    ${textField('Period', e.period, `education.${i}.period`)}
+                    ${textField('Location', e.location, `education.${i}.location`)}
+                </div>
+                ${textField('Grade', e.grade, `education.${i}.grade`)}
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderResearchInterests() {
+    const r = data.researchInterests || {};
+    let html = panelHeader('Research Interests');
+    html += textField('Section Title', r.title, 'researchInterests.title');
+    html += textareaField('Research Statement', r.statement, 'researchInterests.statement', {rows: 4, help: 'Your research focus statement'});
+    // Areas as string list
+    html += '<div class="field"><label>Research Areas</label>';
+    html += '<div class="string-list" id="areasList">';
+    (r.areas || []).forEach((a, i) => {
+        html += `<div class="string-list-item">
+            <input type="text" value="${esc(a)}" data-key="researchInterests.areas.${i}">
+            <button class="btn btn-danger btn-sm" onclick="removeStringItem('researchInterests', 'areas', ${i})">✕</button>
+        </div>`;
+    });
+    html += '</div>';
+    html += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addStringItem('researchInterests', 'areas')">+ Area</button>`;
+    html += '</div>';
+    html += textareaField('Future Goals', r.futureGoals, 'researchInterests.futureGoals', {rows: 2});
+    return html;
+}
+
+function renderResearch() {
+    const items = data.research || [];
+    let html = panelHeader('Publications', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('research', {date:'',publication:'',title:'',description:'',tldr:'',url:'',type:'published',yourRole:'',impactArea:''})">+ Publication</button>`);
+    html += '<div class="array-list">';
+    items.forEach((r, i) => {
+        html += `<div class="array-item" data-index="${i}">
+            <div class="array-item-header" onclick="toggleCollapse(this)">
+                <span class="array-item-title">${r.title || 'New Publication'}</span>
+                <div class="array-item-actions">
+                    ${moveButtons(i, items.length, 'research')}
+                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('research', ${i})">✕</button>
+                </div>
+            </div>
+            <div class="array-item-body">
+                ${textField('Title', r.title, `research.${i}.title`)}
+                <div class="field-row">
+                    ${textField('Date', r.date, `research.${i}.date`)}
+                    ${textField('Publication / Venue', r.publication, `research.${i}.publication`)}
+                </div>
+                ${textareaField('Description', r.description, `research.${i}.description`, {rows: 3})}
+                ${textField('TLDR', r.tldr, `research.${i}.tldr`)}
+                ${textField('URL', r.url, `research.${i}.url`)}
+                <div class="field-row">
+                    ${selectField('Type', r.type, `research.${i}.type`, ['published', 'preprint', 'in-review', 'working'])}
+                    ${textField('Your Role', r.yourRole, `research.${i}.yourRole`)}
+                </div>
+                ${textField('Impact Area', r.impactArea, `research.${i}.impactArea`)}
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderCertifications() {
+    const items = data.certifications || [];
+    let html = panelHeader('Certifications', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('certifications', {name:'',date:''})">+ Certification</button>`);
+    html += '<div class="array-list">';
+    items.forEach((c, i) => {
+        html += `<div class="array-item" data-index="${i}">
+            <div class="array-item-header" onclick="toggleCollapse(this)">
+                <span class="array-item-title">${c.name || 'New Cert'}</span>
+                <div class="array-item-actions">
+                    ${moveButtons(i, items.length, 'certifications')}
+                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('certifications', ${i})">✕</button>
+                </div>
+            </div>
+            <div class="array-item-body">
+                <div class="field-row">
+                    ${textField('Name', c.name, `certifications.${i}.name`)}
+                    ${textField('Date', c.date, `certifications.${i}.date`)}
+                </div>
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderExperience() {
+    const items = data.experience || [];
+    let html = panelHeader('Experience', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('experience', {period:'',title:'',company:'',location:'',responsibilities:[]})">+ Position</button>`);
+    html += '<div class="array-list">';
+    items.forEach((e, i) => {
+        let respHtml = '<div class="field"><label>Responsibilities</label><div class="string-list" id="resp-' + i + '">';
+        (e.responsibilities || []).forEach((r, j) => {
+            respHtml += `<div class="string-list-item">
+                <input type="text" value="${esc(r)}" data-key="experience.${i}.responsibilities.${j}">
+                <button class="btn btn-danger btn-sm" onclick="removeNestedString('experience', ${i}, 'responsibilities', ${j})">✕</button>
+            </div>`;
+        });
+        respHtml += '</div>';
+        respHtml += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addNestedString('experience', ${i}, 'responsibilities')">+ Responsibility</button></div>`;
+
+        html += `<div class="array-item" data-index="${i}">
+            <div class="array-item-header" onclick="toggleCollapse(this)">
+                <span class="array-item-title">${e.title || 'New Position'} — ${e.company || ''}</span>
+                <div class="array-item-actions">
+                    ${moveButtons(i, items.length, 'experience')}
+                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('experience', ${i})">✕</button>
+                </div>
+            </div>
+            <div class="array-item-body">
+                ${textField('Job Title', e.title, `experience.${i}.title`)}
+                ${textField('Company / Organization', e.company, `experience.${i}.company`)}
+                <div class="field-row">
+                    ${textField('Period', e.period, `experience.${i}.period`)}
+                    ${textField('Location', e.location, `experience.${i}.location`)}
+                </div>
+                ${respHtml}
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderSkills() {
+    const items = data.skills || [];
+    let html = panelHeader('Skills / Arsenal', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('skills', {category:'',icon:'',items:''})">+ Category</button>`);
+    html += '<div class="array-list">';
+    items.forEach((s, i) => {
+        html += `<div class="array-item" data-index="${i}">
+            <div class="array-item-header" onclick="toggleCollapse(this)">
+                <span class="array-item-title">${s.category || 'New Category'}</span>
+                <div class="array-item-actions">
+                    ${moveButtons(i, items.length, 'skills')}
+                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('skills', ${i})">✕</button>
+                </div>
+            </div>
+            <div class="array-item-body">
+                ${textField('Category Name', s.category, `skills.${i}.category`)}
+                ${textField('Icon Class', s.icon, `skills.${i}.icon`, {help: 'FontAwesome class'})}
+                ${textareaField('Items', s.items, `skills.${i}.items`, {rows: 2, help: 'Comma-separated skills'})}
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderProjects() {
+    const items = data.projects || [];
+    let html = panelHeader('Projects', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('projects', {title:'',description:'',technologies:[],githubUrl:'',liveUrl:''})">+ Project</button>`);
+    html += '<div class="array-list">';
+    items.forEach((p, i) => {
+        html += `<div class="array-item" data-index="${i}">
+            <div class="array-item-header" onclick="toggleCollapse(this)">
+                <span class="array-item-title">${p.title || 'New Project'}</span>
+                <div class="array-item-actions">
+                    ${moveButtons(i, items.length, 'projects')}
+                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('projects', ${i})">✕</button>
+                </div>
+            </div>
+            <div class="array-item-body">
+                ${textField('Title', p.title, `projects.${i}.title`)}
+                ${textareaField('Description', p.description, `projects.${i}.description`, {rows: 2})}
+                ${textField('Technologies', (p.technologies || []).join(', '), `projects.${i}.technologies`, {help: 'Comma-separated'})}
+                <div class="field-row">
+                    ${textField('GitHub URL', p.githubUrl, `projects.${i}.githubUrl`)}
+                    ${textField('Live URL', p.liveUrl, `projects.${i}.liveUrl`)}
+                </div>
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderCyberArena() {
+    const ca = data.cyberArena || {};
+    let html = panelHeader('Cyber Arena', `<button class="btn btn-primary btn-sm" onclick="addCyberPlatform()">+ Platform</button>`);
+    html += textareaField('Intro', ca.intro, 'cyberArena.intro', {rows: 2});
+    html += '<div class="array-list" style="margin-top:1rem">';
+    (ca.platforms || []).forEach((p, i) => {
+        let highlightsHtml = '<div class="field"><label>Highlights</label><div class="string-list" id="ca-hl-' + i + '">';
+        (p.highlights || []).forEach((h, j) => {
+            highlightsHtml += `<div class="string-list-item">
+                <input type="text" value="${esc(h)}" data-key="cyberArena.platforms.${i}.highlights.${j}">
+                <button class="btn btn-danger btn-sm" onclick="removeNestedString('cyberArena.platforms', ${i}, 'highlights', ${j})">✕</button>
+            </div>`;
+        });
+        highlightsHtml += '</div>';
+        highlightsHtml += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addNestedString('cyberArena.platforms', ${i}, 'highlights')">+ Highlight</button></div>`;
+
+        html += `<div class="array-item" data-index="${i}">
+            <div class="array-item-header" onclick="toggleCollapse(this)">
+                <span class="array-item-title">${p.name || 'New Platform'}</span>
+                <div class="array-item-actions">
+                    ${moveButtons(i, (ca.platforms||[]).length, 'cyberArena.platforms')}
+                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeCyberPlatform(${i})">✕</button>
+                </div>
+            </div>
+            <div class="array-item-body">
+                ${textField('Platform Name', p.name, `cyberArena.platforms.${i}.name`)}
+                ${textField('Icon Class', p.icon, `cyberArena.platforms.${i}.icon`)}
+                ${highlightsHtml}
+                <div class="field-row">
+                    ${textField('Link Text', p.linkText, `cyberArena.platforms.${i}.linkText`)}
+                    ${textField('URL', p.url, `cyberArena.platforms.${i}.url`)}
+                </div>
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderBlogs() {
+    const items = data.blogs || [];
+    let html = panelHeader('Blogs & Writeups', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('blogs', {date:'',title:'',url:''})">+ Blog</button>`);
+    html += '<div class="array-list">';
+    items.forEach((b, i) => {
+        html += `<div class="array-item" data-index="${i}">
+            <div class="array-item-header" onclick="toggleCollapse(this)">
+                <span class="array-item-title">${b.title || 'New Blog'}</span>
+                <div class="array-item-actions">
+                    ${moveButtons(i, items.length, 'blogs')}
+                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('blogs', ${i})">✕</button>
+                </div>
+            </div>
+            <div class="array-item-body">
+                ${textField('Title', b.title, `blogs.${i}.title`)}
+                <div class="field-row">
+                    ${textField('Date', b.date, `blogs.${i}.date`)}
+                    ${textField('URL', b.url, `blogs.${i}.url`)}
+                </div>
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderAchievements() {
+    const a = data.achievements || {};
+    let html = panelHeader('Achievements');
+    // Academic
+    html += renderStringArraySection('Academic', 'achievements', 'academic', a.academic || []);
+    html += '<hr style="border: none; border-top: 1px solid var(--border); margin: 1.2rem 0;">';
+    // Competitions
+    html += renderStringArraySection('Competitions', 'achievements', 'competitions', a.competitions || []);
+    html += '<hr style="border: none; border-top: 1px solid var(--border); margin: 1.2rem 0;">';
+    // Leadership
+    html += renderStringArraySection('Leadership', 'achievements', 'leadership', a.leadership || []);
+    return html;
+}
+
+function renderStringArraySection(label, parent, key, items) {
+    let html = `<div class="field"><label>${label}</label>`;
+    html += `<div class="string-list" id="${parent}-${key}">`;
+    items.forEach((item, i) => {
+        html += `<div class="string-list-item">
+            <input type="text" value="${esc(item)}" data-key="${parent}.${key}.${i}">
+            <button class="btn btn-danger btn-sm" onclick="removeStringItem('${parent}', '${key}', ${i})">✕</button>
+        </div>`;
+    });
+    html += '</div>';
+    html += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addStringItem('${parent}', '${key}')">+ ${label}</button>`;
+    html += '</div>';
+    return html;
+}
+
+function renderVolunteering() {
+    const items = data.volunteering || [];
+    let html = panelHeader('Volunteering', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('volunteering', {organization:'',role:'',period:'',description:'',impact:''})">+ Entry</button>`);
+    html += '<div class="array-list">';
+    items.forEach((v, i) => {
+        html += `<div class="array-item" data-index="${i}">
+            <div class="array-item-header" onclick="toggleCollapse(this)">
+                <span class="array-item-title">${v.organization || 'New Entry'}</span>
+                <div class="array-item-actions">
+                    ${moveButtons(i, items.length, 'volunteering')}
+                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('volunteering', ${i})">✕</button>
+                </div>
+            </div>
+            <div class="array-item-body">
+                ${textField('Organization', v.organization, `volunteering.${i}.organization`)}
+                <div class="field-row">
+                    ${textField('Role', v.role, `volunteering.${i}.role`)}
+                    ${textField('Period', v.period, `volunteering.${i}.period`)}
+                </div>
+                ${textareaField('Description', v.description, `volunteering.${i}.description`, {rows: 2})}
+                ${textField('Impact', v.impact, `volunteering.${i}.impact`)}
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderScratchpad() {
+    const sp = data.scratchpad || {};
+    let html = panelHeader('Scratchpad', `<button class="btn btn-primary btn-sm" onclick="addScratchpadItem()">+ Experiment</button>`);
+    html += textareaField('Intro', sp.intro, 'scratchpad.intro', {rows: 2});
+    html += '<div class="array-list" style="margin-top:1rem">';
+    (sp.items || []).forEach((item, i) => {
+        html += `<div class="array-item" data-index="${i}">
+            <div class="array-item-header" onclick="toggleCollapse(this)">
+                <span class="array-item-title">${item.title || 'New Experiment'}</span>
+                <div class="array-item-actions">
+                    ${moveButtons(i, (sp.items||[]).length, 'scratchpad.items')}
+                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeScratchpadItem(${i})">✕</button>
+                </div>
+            </div>
+            <div class="array-item-body">
+                ${textField('Title', item.title, `scratchpad.items.${i}.title`)}
+                <div class="field-row">
+                    ${selectField('Status', item.status, `scratchpad.items.${i}.status`, ['exploring', 'paused', 'abandoned', 'completed'])}
+                    ${textField('Date', item.date, `scratchpad.items.${i}.date`)}
+                </div>
+                ${textareaField('Description', item.description, `scratchpad.items.${i}.description`, {rows: 2})}
+                ${textareaField('Lesson Learned', item.lesson, `scratchpad.items.${i}.lesson`, {rows: 2})}
+                ${textField('Tags', (item.tags || []).join(', '), `scratchpad.items.${i}.tags`, {help: 'Comma-separated'})}
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderFooter() {
+    const f = data.footer || {};
+    return panelHeader('Footer') +
+        textField('Footer Text', f.text, 'footer.text', {help: 'HTML allowed'}) +
+        textField('Copyright', f.copyright, 'footer.copyright');
+}
+
+// ═══ MOVE BUTTONS ═══
+function moveButtons(i, len, section) {
+    let btns = '';
+    if (i > 0) btns += `<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); moveItem('${section}', ${i}, -1)" title="Move up">↑</button>`;
+    if (i < len - 1) btns += `<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); moveItem('${section}', ${i}, 1)" title="Move down">↓</button>`;
+    return btns;
+}
+
+// ═══ DATA MANIPULATION (CRUD) ═══
+
+function setNestedValue(obj, path, value) {
+    const keys = path.split('.');
+    let cur = obj;
+    for (let i = 0; i < keys.length - 1; i++) {
+        const k = isNaN(keys[i]) ? keys[i] : parseInt(keys[i]);
+        if (cur[k] === undefined) cur[k] = isNaN(keys[i+1]) ? {} : [];
+        cur = cur[k];
+    }
+    const lastKey = isNaN(keys[keys.length-1]) ? keys[keys.length-1] : parseInt(keys[keys.length-1]);
+    cur[lastKey] = value;
+}
+
+function getNestedValue(obj, path) {
+    const keys = path.split('.');
+    let cur = obj;
+    for (const k of keys) {
+        const key = isNaN(k) ? k : parseInt(k);
+        if (cur === undefined) return undefined;
+        cur = cur[key];
+    }
+    return cur;
+}
+
+function getNestedArray(path) {
+    return getNestedValue(data, path);
+}
+
+// Attach input change handler
+function attachHandlers(panel) {
+    panel.addEventListener('input', e => {
+        const el = e.target;
+        const key = el.dataset.key;
+        if (!key) return;
+        let val = el.value;
+        // Handle special comma-separated arrays
+        if (key.match(/\btechnologies$/) || key.match(/\btags$/)) {
+            val = val.split(',').map(s => s.trim()).filter(Boolean);
+        }
+        setNestedValue(data, key, val);
+        markDirty();
+    });
+    panel.addEventListener('change', e => {
+        const el = e.target;
+        const key = el.dataset.key;
+        if (!key) return;
+        setNestedValue(data, key, el.value);
+        markDirty();
+    });
+}
+
+// Toggle collapse
+function toggleCollapse(header) {
+    header.parentElement.classList.toggle('collapsed');
+}
+
+// ─── Generic array operations ───
+function addArrayItem(section, template) {
+    if (!data[section]) data[section] = [];
+    data[section].push(JSON.parse(JSON.stringify(template)));
+    markDirty();
+    renderPanel(section);
+}
+
+function removeArrayItem(section, index) {
+    if (!data[section]) return;
+    data[section].splice(index, 1);
+    markDirty();
+    renderPanel(section);
+}
+
+function moveItem(sectionPath, index, direction) {
+    const arr = getNestedArray(sectionPath);
+    if (!arr) return;
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= arr.length) return;
+    [arr[index], arr[newIndex]] = [arr[newIndex], arr[index]];
+    markDirty();
+    // Find the active panel
+    const activeLink = document.querySelector('#sidebar a.active');
+    if (activeLink) renderPanel(activeLink.dataset.panel);
+}
+
+// ─── About paragraphs ───
+function addAboutParagraph() {
+    if (!data.about) data.about = { paragraphs: [] };
+    if (!data.about.paragraphs) data.about.paragraphs = [];
+    data.about.paragraphs.push('');
+    markDirty();
+    renderPanel('about');
+}
+function removeAboutParagraph(i) {
+    data.about.paragraphs.splice(i, 1);
+    markDirty();
+    renderPanel('about');
+}
+
+// ─── Emails ───
+function addEmail() {
+    if (!data.contact) data.contact = {};
+    if (!data.contact.emails) data.contact.emails = [];
+    data.contact.emails.push('');
+    markDirty();
+    renderPanel('contact');
+}
+function removeEmail(i) {
+    data.contact.emails.splice(i, 1);
+    markDirty();
+    renderPanel('contact');
+}
+
+// ─── String items in nested objects ───
+function addStringItem(parent, key) {
+    if (!data[parent]) data[parent] = {};
+    if (!data[parent][key]) data[parent][key] = [];
+    data[parent][key].push('');
+    markDirty();
+    // Find panel
+    const activeLink = document.querySelector('#sidebar a.active');
+    if (activeLink) renderPanel(activeLink.dataset.panel);
+}
+function removeStringItem(parent, key, index) {
+    data[parent][key].splice(index, 1);
+    markDirty();
+    const activeLink = document.querySelector('#sidebar a.active');
+    if (activeLink) renderPanel(activeLink.dataset.panel);
+}
+
+// ─── Nested strings (e.g., experience[i].responsibilities[j]) ───
+function addNestedString(sectionPath, index, field) {
+    const arr = getNestedArray(sectionPath);
+    if (!arr || !arr[index]) return;
+    if (!arr[index][field]) arr[index][field] = [];
+    arr[index][field].push('');
+    markDirty();
+    const activeLink = document.querySelector('#sidebar a.active');
+    if (activeLink) renderPanel(activeLink.dataset.panel);
+}
+function removeNestedString(sectionPath, index, field, itemIndex) {
+    const arr = getNestedArray(sectionPath);
+    if (!arr || !arr[index] || !arr[index][field]) return;
+    arr[index][field].splice(itemIndex, 1);
+    markDirty();
+    const activeLink = document.querySelector('#sidebar a.active');
+    if (activeLink) renderPanel(activeLink.dataset.panel);
+}
+
+// ─── Cyber Arena platforms ───
+function addCyberPlatform() {
+    if (!data.cyberArena) data.cyberArena = { intro: '', platforms: [] };
+    if (!data.cyberArena.platforms) data.cyberArena.platforms = [];
+    data.cyberArena.platforms.push({ name: '', icon: '', highlights: [], linkText: '', url: '' });
+    markDirty();
+    renderPanel('cyberArena');
+}
+function removeCyberPlatform(i) {
+    data.cyberArena.platforms.splice(i, 1);
+    markDirty();
+    renderPanel('cyberArena');
+}
+
+// ─── Scratchpad items ───
+function addScratchpadItem() {
+    if (!data.scratchpad) data.scratchpad = { intro: '', items: [] };
+    if (!data.scratchpad.items) data.scratchpad.items = [];
+    data.scratchpad.items.push({ title: '', status: 'exploring', date: '', description: '', lesson: '', tags: [] });
+    markDirty();
+    renderPanel('scratchpad');
+}
+function removeScratchpadItem(i) {
+    data.scratchpad.items.splice(i, 1);
+    markDirty();
+    renderPanel('scratchpad');
+}
+
+// ═══ SAVE / EXPORT ═══
+
+function getJSON() {
+    return JSON.stringify(data, null, 2);
+}
+
+function downloadJSON() {
+    const blob = new Blob([getJSON()], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'portfolio-data.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Downloaded portfolio-data.json', 'success');
+}
+
+function previewJSON() {
+    document.getElementById('previewArea').value = getJSON();
+    document.getElementById('previewModal').classList.add('show');
+}
+function closePreview() {
+    document.getElementById('previewModal').classList.remove('show');
+}
+function copyJSON() {
+    navigator.clipboard.writeText(getJSON()).then(() => toast('Copied to clipboard', 'success'));
+}
+
+// ═══ GITHUB API ═══
+
+function showGitHubModal() {
+    // Restore saved values
+    const saved = JSON.parse(localStorage.getItem('admin-gh') || '{}');
+    if (saved.repo) document.getElementById('gh-repo').value = saved.repo;
+    if (saved.branch) document.getElementById('gh-branch').value = saved.branch;
+    document.getElementById('githubModal').classList.add('show');
+}
+function closeGitHubModal() {
+    document.getElementById('githubModal').classList.remove('show');
+}
+
+async function pushToGitHub() {
+    const token   = document.getElementById('gh-token').value.trim();
+    const repo    = document.getElementById('gh-repo').value.trim();
+    const branch  = document.getElementById('gh-branch').value.trim();
+    const message = document.getElementById('gh-message').value.trim();
+
+    if (!token || !repo || !branch || !message) {
+        toast('Fill all fields', 'error');
+        return;
+    }
+
+    // Save non-sensitive settings
+    localStorage.setItem('admin-gh', JSON.stringify({ repo, branch }));
+
+    const btn = document.getElementById('gh-push-btn');
+    btn.textContent = 'Pushing...';
+    btn.disabled = true;
+
+    try {
+        const filePath = DATA_PATH;
+        const apiBase  = `https://api.github.com/repos/${repo}/contents/${filePath}`;
+        const headers  = {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
+        };
+
+        // Get current file SHA
+        const getResp = await fetch(`${apiBase}?ref=${branch}`, { headers });
+        let sha = '';
+        if (getResp.ok) {
+            const fileData = await getResp.json();
+            sha = fileData.sha;
+        }
+
+        // Create/Update file
+        const content = btoa(unescape(encodeURIComponent(getJSON())));
+        const body = {
+            message,
+            content,
+            branch,
+        };
+        if (sha) body.sha = sha;
+
+        const putResp = await fetch(apiBase, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify(body)
+        });
+
+        if (putResp.ok) {
+            toast('Pushed to GitHub successfully!', 'success');
+            markClean();
+            closeGitHubModal();
+        } else {
+            const err = await putResp.json();
+            toast('GitHub error: ' + (err.message || putResp.status), 'error');
+        }
+    } catch (err) {
+        toast('Push failed: ' + err.message, 'error');
+    } finally {
+        btn.textContent = 'Push Commit';
+        btn.disabled = false;
+    }
+}
+
+// ─── Warn before leaving with unsaved changes ───
+window.addEventListener('beforeunload', e => {
+    if (dirty) {
+        e.preventDefault();
+        e.returnValue = '';
+    }
+});
+
+</script>
+</body>
+</html>

@@ -147,8 +147,8 @@
     if (switchBtn) {
         switchBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.setItem('portfolio-mode', 'nerd');
-            window.location.href = 'index.html';
+            localStorage.removeItem('portfolio-mode');
+            window.location.href = 'entrance.html';
         });
     }
 
