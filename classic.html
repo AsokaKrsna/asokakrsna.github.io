@@ -2,6 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script>
+        // Check if this is the first time the user opens the portfolio in this session
+        if (!sessionStorage.getItem('portfolio-session-active')) {
+            window.location.replace('entrance.html');
+        }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Durjoy Majumdar — Cybersecurity Researcher</title>
     <meta name="description" content="Durjoy Majumdar — Graduate researcher at IIT Patna working on blockchain and distributed systems security. Seeking PhD positions for Fall 2027.">
