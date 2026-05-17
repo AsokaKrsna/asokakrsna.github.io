@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio Admin Panel</title>
     <link rel="shortcut icon" href="./images/AsokaKrsna.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         :root {
             --bg: #0a0e17;
@@ -19,9 +28,9 @@
             --text-dim: #94a3b8;
             --text-muted: #64748b;
             --accent: #64ffda;
-            --accent-dim: rgba(100,255,218,0.15);
+            --accent-dim: rgba(100, 255, 218, 0.15);
             --danger: #f87171;
-            --danger-dim: rgba(248,113,113,0.15);
+            --danger-dim: rgba(248, 113, 113, 0.15);
             --warn: #fbbf24;
             --success: #34d399;
             --purple: #a78bfa;
@@ -40,125 +49,312 @@
 
         /* ─── Gate ─── */
         #gate {
-            position: fixed; inset: 0; z-index: 9999;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
             background: var(--bg);
-            display: flex; align-items: center; justify-content: center;
-            flex-direction: column; gap: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1.5rem;
         }
-        #gate.hidden { display: none; }
-        #gate h1 { font-family: var(--mono); color: var(--accent); font-size: 1.3rem; }
-        #gate p { color: var(--text-dim); font-size: 0.85rem; }
+
+        #gate.hidden {
+            display: none;
+        }
+
+        #gate h1 {
+            font-family: var(--mono);
+            color: var(--accent);
+            font-size: 1.3rem;
+        }
+
+        #gate p {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
         #gate input {
-            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-            color: var(--text); padding: 0.7rem 1.2rem; font-size: 0.9rem; width: 280px;
-            font-family: var(--mono); text-align: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            padding: 0.7rem 1.2rem;
+            font-size: 0.9rem;
+            width: 280px;
+            font-family: var(--mono);
+            text-align: center;
         }
-        #gate input:focus { outline: none; border-color: var(--accent); }
-        #gate .gate-error { color: var(--danger); font-size: 0.8rem; display: none; }
+
+        #gate input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        #gate .gate-error {
+            color: var(--danger);
+            font-size: 0.8rem;
+            display: none;
+        }
 
         /* ─── Top bar ─── */
         .topbar {
-            position: sticky; top: 0; z-index: 100;
-            background: rgba(10,14,23,0.92); backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 14, 23, 0.92);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
             padding: 0.6rem 1.5rem;
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
+
         .topbar-title {
-            font-family: var(--mono); font-size: 0.85rem; color: var(--accent);
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--accent);
         }
-        .topbar-actions { display: flex; gap: 0.5rem; }
+
+        .topbar-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
 
         /* ─── Layout ─── */
-        .layout { display: flex; min-height: calc(100vh - 45px); }
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 45px);
+        }
 
         .sidebar {
-            width: 220px; min-width: 220px;
+            width: 220px;
+            min-width: 220px;
             background: var(--surface);
             border-right: 1px solid var(--border);
             padding: 1rem 0;
-            position: sticky; top: 45px;
+            position: sticky;
+            top: 45px;
             height: calc(100vh - 45px);
             overflow-y: auto;
         }
+
         .sidebar a {
-            display: block; padding: 0.45rem 1.2rem;
-            color: var(--text-dim); text-decoration: none;
-            font-size: 0.8rem; transition: all 0.2s;
+            display: block;
+            padding: 0.45rem 1.2rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.2s;
             border-left: 2px solid transparent;
         }
-        .sidebar a:hover { color: var(--text); background: rgba(100,255,218,0.04); }
+
+        .sidebar a:hover {
+            color: var(--text);
+            background: rgba(100, 255, 218, 0.04);
+        }
+
         .sidebar a.active {
-            color: var(--accent); border-left-color: var(--accent);
+            color: var(--accent);
+            border-left-color: var(--accent);
             background: var(--accent-dim);
         }
+
         .sidebar .sidebar-label {
             padding: 0.8rem 1.2rem 0.3rem;
-            font-size: 0.65rem; text-transform: uppercase;
-            letter-spacing: 0.1em; color: var(--text-muted);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
             font-weight: 600;
         }
 
         .content {
-            flex: 1; padding: 1.5rem 2rem; max-width: 900px;
+            flex: 1;
+            padding: 1.5rem 2rem;
+            max-width: 900px;
+        }
+
+        .preview-panel {
+            flex: 1.2;
+            display: none;
+            flex-direction: column;
+            border-left: 1px solid var(--border);
+            background: var(--bg);
+            min-width: 400px;
+        }
+        .preview-panel.open {
+            display: flex;
+        }
+        .preview-header {
+            height: 45px;
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        #livePreviewIframe {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: #fff;
         }
 
         /* ─── Section panels ─── */
-        .panel { display: none; }
-        .panel.active { display: block; }
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
 
         .panel-header {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 1.5rem; padding-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
             border-bottom: 1px solid var(--border);
         }
+
         .panel-header h2 {
-            font-family: var(--mono); font-size: 1.1rem; color: var(--accent);
+            font-family: var(--mono);
+            font-size: 1.1rem;
+            color: var(--accent);
             font-weight: 500;
         }
 
         /* ─── Form elements ─── */
-        .field { margin-bottom: 1rem; }
-        .field label {
-            display: block; font-size: 0.75rem; color: var(--text-dim);
-            margin-bottom: 0.3rem; font-weight: 500;
-            text-transform: uppercase; letter-spacing: 0.05em;
+        .field {
+            margin-bottom: 1rem;
         }
-        .field input, .field textarea, .field select {
-            width: 100%; background: var(--surface);
-            border: 1px solid var(--border); border-radius: var(--radius);
-            color: var(--text); padding: 0.55rem 0.8rem;
-            font-size: 0.85rem; font-family: var(--sans);
+
+        .field label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            padding: 0.55rem 0.8rem;
+            font-size: 0.85rem;
+            font-family: var(--sans);
             transition: border-color 0.2s;
         }
-        .field input:focus, .field textarea:focus, .field select:focus {
-            outline: none; border-color: var(--accent);
-        }
-        .field textarea { resize: vertical; min-height: 80px; font-family: var(--mono); font-size: 0.8rem; }
-        .field small { color: var(--text-muted); font-size: 0.7rem; margin-top: 0.2rem; display: block; }
 
-        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+        .field input:focus,
+        .field textarea:focus,
+        .field select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .field textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+        }
+
+        .field small {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            margin-top: 0.2rem;
+            display: block;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
 
         /* ─── Buttons ─── */
         .btn {
-            display: inline-flex; align-items: center; gap: 0.4rem;
-            padding: 0.45rem 0.9rem; border-radius: var(--radius);
-            font-size: 0.78rem; font-weight: 500; cursor: pointer;
-            border: 1px solid transparent; transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 0.9rem;
+            border-radius: var(--radius);
+            font-size: 0.78rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
             font-family: var(--sans);
         }
-        .btn-primary { background: var(--accent-dim); color: var(--accent); border-color: rgba(100,255,218,0.3); }
-        .btn-primary:hover { background: rgba(100,255,218,0.25); }
-        .btn-danger { background: var(--danger-dim); color: var(--danger); border-color: rgba(248,113,113,0.3); }
-        .btn-danger:hover { background: rgba(248,113,113,0.25); }
-        .btn-ghost { background: transparent; color: var(--text-dim); border-color: var(--border); }
-        .btn-ghost:hover { color: var(--text); border-color: var(--border-hover); }
-        .btn-save { background: var(--accent); color: var(--bg); font-weight: 600; }
-        .btn-save:hover { background: #52e0c4; }
-        .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.72rem; }
+
+        .btn-primary {
+            background: var(--accent-dim);
+            color: var(--accent);
+            border-color: rgba(100, 255, 218, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: rgba(100, 255, 218, 0.25);
+        }
+
+        .btn-danger {
+            background: var(--danger-dim);
+            color: var(--danger);
+            border-color: rgba(248, 113, 113, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: rgba(248, 113, 113, 0.25);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-dim);
+            border-color: var(--border);
+        }
+
+        .btn-ghost:hover {
+            color: var(--text);
+            border-color: var(--border-hover);
+        }
+
+        .btn-save {
+            background: var(--accent);
+            color: var(--bg);
+            font-weight: 600;
+        }
+
+        .btn-save:hover {
+            background: #52e0c4;
+        }
+
+        .btn-sm {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.72rem;
+        }
 
         /* ─── Array items ─── */
-        .array-list { display: flex; flex-direction: column; gap: 0.8rem; }
+        .array-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
         .array-item {
             background: var(--surface-2);
             border: 1px solid var(--border);
@@ -166,436 +362,601 @@
             padding: 1rem;
             position: relative;
         }
-        .array-item:hover { border-color: var(--border-hover); }
-        .array-item-header {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 0.8rem; cursor: pointer;
+
+        .array-item:hover {
+            border-color: var(--border-hover);
         }
+
+        .array-item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+        }
+
         .array-item-title {
-            font-family: var(--mono); font-size: 0.82rem; color: var(--purple);
+            font-family: var(--mono);
+            font-size: 0.82rem;
+            color: var(--purple);
             font-weight: 500;
         }
-        .array-item-actions { display: flex; gap: 0.3rem; }
-        .array-item-body { display: block; }
-        .array-item.collapsed .array-item-body { display: none; }
+
+        .array-item-actions {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .array-item-body {
+            display: block;
+        }
+
+        .array-item.collapsed .array-item-body {
+            display: none;
+        }
 
         /* ─── Tags / chips ─── */
         .chip-input-wrap {
-            display: flex; flex-wrap: wrap; gap: 0.3rem;
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 0.4rem 0.6rem;
-            min-height: 38px; align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.4rem 0.6rem;
+            min-height: 38px;
+            align-items: center;
             cursor: text;
         }
-        .chip-input-wrap:focus-within { border-color: var(--accent); }
+
+        .chip-input-wrap:focus-within {
+            border-color: var(--accent);
+        }
+
         .chip {
-            display: inline-flex; align-items: center; gap: 0.3rem;
-            background: var(--accent-dim); color: var(--accent);
-            padding: 0.15rem 0.5rem; border-radius: 4px;
-            font-size: 0.72rem; font-family: var(--mono);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: var(--accent-dim);
+            color: var(--accent);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-family: var(--mono);
         }
+
         .chip .chip-remove {
-            cursor: pointer; opacity: 0.6; font-size: 0.8rem;
+            cursor: pointer;
+            opacity: 0.6;
+            font-size: 0.8rem;
         }
-        .chip .chip-remove:hover { opacity: 1; }
+
+        .chip .chip-remove:hover {
+            opacity: 1;
+        }
+
         .chip-input {
-            border: none !important; background: transparent !important;
-            padding: 0.15rem !important; font-size: 0.8rem !important;
-            flex: 1; min-width: 80px; color: var(--text) !important;
+            border: none !important;
+            background: transparent !important;
+            padding: 0.15rem !important;
+            font-size: 0.8rem !important;
+            flex: 1;
+            min-width: 80px;
+            color: var(--text) !important;
         }
-        .chip-input:focus { outline: none !important; }
+
+        .chip-input:focus {
+            outline: none !important;
+        }
 
         /* ─── String list (simple array of strings) ─── */
-        .string-list { display: flex; flex-direction: column; gap: 0.4rem; }
-        .string-list-item {
-            display: flex; gap: 0.4rem; align-items: center;
+        .string-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
         }
-        .string-list-item input { flex: 1; }
+
+        .string-list-item {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+        }
+
+        .string-list-item input {
+            flex: 1;
+        }
 
         /* ─── Status badge ─── */
         .status-dot {
-            width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
         }
-        .status-dot.saved { background: var(--success); }
-        .status-dot.unsaved { background: var(--warn); }
-        .status-msg { font-size: 0.75rem; color: var(--text-dim); margin-left: 0.4rem; }
+
+        .status-dot.saved {
+            background: var(--success);
+        }
+
+        .status-dot.unsaved {
+            background: var(--warn);
+        }
+
+        .status-msg {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-left: 0.4rem;
+        }
 
         /* ─── Toast ─── */
         .toast {
-            position: fixed; bottom: 1.5rem; right: 1.5rem;
-            background: var(--surface-2); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 0.7rem 1.2rem;
-            font-size: 0.82rem; color: var(--text); z-index: 9000;
-            opacity: 0; transform: translateY(10px);
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.7rem 1.2rem;
+            font-size: 0.82rem;
+            color: var(--text);
+            z-index: 9000;
+            opacity: 0;
+            transform: translateY(10px);
             transition: all 0.3s ease;
         }
-        .toast.show { opacity: 1; transform: translateY(0); }
-        .toast.success { border-color: var(--success); }
-        .toast.error { border-color: var(--danger); }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            border-color: var(--success);
+        }
+
+        .toast.error {
+            border-color: var(--danger);
+        }
 
         /* ─── Modal ─── */
         .modal-overlay {
-            position: fixed; inset: 0; z-index: 8000;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-            display: none; align-items: center; justify-content: center;
+            position: fixed;
+            inset: 0;
+            z-index: 8000;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
         }
-        .modal-overlay.show { display: flex; }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
         .modal {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; padding: 1.5rem; width: 480px; max-width: 90vw;
-            max-height: 80vh; overflow-y: auto;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            width: 480px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
         }
-        .modal h3 { font-family: var(--mono); color: var(--accent); font-size: 0.95rem; margin-bottom: 1rem; }
-        .modal-actions { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1.2rem; }
+
+        .modal h3 {
+            font-family: var(--mono);
+            color: var(--accent);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+            margin-top: 1.2rem;
+        }
 
         /* ─── Scrollbar ─── */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border-hover);
+        }
 
         /* ─── Responsive ─── */
         @media (max-width: 768px) {
-            .sidebar { display: none; }
-            .content { padding: 1rem; }
-            .field-row { grid-template-columns: 1fr; }
+            .sidebar {
+                display: none;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .field-row {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<!-- Gate -->
-<div id="gate">
-    <h1>[ edit@portfolio ]</h1>
-    <p>Enter passphrase to continue</p>
-    <input type="password" id="gate-pass" placeholder="passphrase" autofocus>
-    <p class="gate-error" id="gate-error">Invalid passphrase</p>
-</div>
-
-<!-- Top bar -->
-<div class="topbar" style="display:none" id="app">
-    <div class="topbar-title">┌─[ PORTFOLIO EDITOR ]──</div>
-    <div class="topbar-actions">
-        <span class="status-dot unsaved" id="statusDot"></span>
-        <span class="status-msg" id="statusMsg">No changes</span>
-        <button class="btn btn-ghost btn-sm" onclick="downloadJSON()" title="Download JSON">↓ Download</button>
-        <button class="btn btn-ghost btn-sm" onclick="showGitHubModal()" title="Push to GitHub">⬆ GitHub Push</button>
-        <button class="btn btn-save btn-sm" onclick="previewJSON()">{ } Preview</button>
+    <!-- Gate -->
+    <div id="gate">
+        <h1>[ edit@portfolio ]</h1>
+        <p>Enter passphrase to continue</p>
+        <input type="password" id="gate-pass" placeholder="passphrase" autofocus>
+        <p class="gate-error" id="gate-error">Invalid passphrase</p>
     </div>
-</div>
 
-<!-- Layout -->
-<div class="layout" style="display:none" id="layout">
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-label">Core</div>
-        <a href="#" data-panel="personal" class="active">Personal</a>
-        <a href="#" data-panel="about">About</a>
-        <a href="#" data-panel="contact">Contact</a>
-        <a href="#" data-panel="socialLinks">Social Links</a>
-        <div class="sidebar-label">Academic</div>
-        <a href="#" data-panel="education">Education</a>
-        <a href="#" data-panel="researchInterests">Research Interests</a>
-        <a href="#" data-panel="research">Publications</a>
-        <a href="#" data-panel="certifications">Certifications</a>
-        <div class="sidebar-label">Professional</div>
-        <a href="#" data-panel="experience">Experience</a>
-        <a href="#" data-panel="skills">Skills / Arsenal</a>
-        <a href="#" data-panel="projects">Projects</a>
-        <div class="sidebar-label">Extras</div>
-        <a href="#" data-panel="cyberArena">Cyber Arena</a>
-        <a href="#" data-panel="blogs">Blogs & Writeups</a>
-        <a href="#" data-panel="achievements">Achievements</a>
-        <a href="#" data-panel="volunteering">Volunteering</a>
-        <a href="#" data-panel="scratchpad">Scratchpad</a>
-        <div class="sidebar-label">Site</div>
-        <a href="#" data-panel="footer">Footer</a>
-    </nav>
-
-    <div class="content" id="contentArea"></div>
-</div>
-
-<!-- GitHub Modal -->
-<div class="modal-overlay" id="githubModal">
-    <div class="modal">
-        <h3>Push to GitHub</h3>
-        <div class="field">
-            <label>Personal Access Token</label>
-            <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx">
-            <small>Needs <code>repo</code> scope. Token is never stored on any server.</small>
-        </div>
-        <div class="field">
-            <label>Repository (owner/repo)</label>
-            <input type="text" id="gh-repo" placeholder="AsokaKrsna/asokakrsna.github.io">
-        </div>
-        <div class="field">
-            <label>Branch</label>
-            <input type="text" id="gh-branch" value="redesign/dual-mode">
-        </div>
-        <div class="field">
-            <label>Commit Message</label>
-            <input type="text" id="gh-message" value="Update portfolio data via admin panel">
-        </div>
-        <div class="modal-actions">
-            <button class="btn btn-ghost" onclick="closeGitHubModal()">Cancel</button>
-            <button class="btn btn-save" onclick="pushToGitHub()" id="gh-push-btn">Push Commit</button>
+    <!-- Top bar -->
+    <div class="topbar" style="display:none" id="app">
+        <div class="topbar-title">┌─[ PORTFOLIO EDITOR ]──</div>
+        <div class="topbar-actions">
+            <span class="status-dot unsaved" id="statusDot"></span>
+            <span class="status-msg" id="statusMsg">No changes</span>
+            <button class="btn btn-ghost btn-sm" onclick="downloadJSON()" title="Download JSON">↓ Download</button>
+            <button class="btn btn-ghost btn-sm" onclick="showGitHubModal()" title="Push to GitHub">⬆ GitHub
+                Push</button>
+            <button class="btn btn-ghost btn-sm" onclick="previewJSON()" title="Preview JSON">{ } JSON</button>
+            <button class="btn btn-save btn-sm" onclick="previewSite()" title="Live Preview">👁 Live Preview</button>
         </div>
     </div>
-</div>
 
-<!-- Preview Modal -->
-<div class="modal-overlay" id="previewModal">
-    <div class="modal" style="width: 640px;">
-        <h3>JSON Preview</h3>
-        <textarea id="previewArea" style="width:100%; height: 400px; background: var(--bg); border: 1px solid var(--border); color: var(--accent); font-family: var(--mono); font-size: 0.75rem; border-radius: var(--radius); padding: 0.8rem;" readonly></textarea>
-        <div class="modal-actions">
-            <button class="btn btn-ghost" onclick="closePreview()">Close</button>
-            <button class="btn btn-primary" onclick="copyJSON()">Copy</button>
+    <!-- Layout -->
+    <div class="layout" style="display:none" id="layout">
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-label">Core</div>
+            <a href="#" data-panel="personal" class="active">Personal</a>
+            <a href="#" data-panel="about">About</a>
+            <a href="#" data-panel="contact">Contact</a>
+            <a href="#" data-panel="socialLinks">Social Links</a>
+            <div class="sidebar-label">Academic</div>
+            <a href="#" data-panel="education">Education</a>
+            <a href="#" data-panel="researchInterests">Research Interests</a>
+            <a href="#" data-panel="research">Publications</a>
+            <a href="#" data-panel="certifications">Certifications</a>
+            <div class="sidebar-label">Professional</div>
+            <a href="#" data-panel="experience">Experience</a>
+            <a href="#" data-panel="skills">Skills / Arsenal</a>
+            <a href="#" data-panel="projects">Projects</a>
+            <div class="sidebar-label">Extras</div>
+            <a href="#" data-panel="cyberArena">Cyber Arena</a>
+            <a href="#" data-panel="blogs">Blogs & Writeups</a>
+            <a href="#" data-panel="achievements">Achievements</a>
+            <a href="#" data-panel="volunteering">Volunteering</a>
+            <a href="#" data-panel="scratchpad">Scratchpad</a>
+            <div class="sidebar-label">Site</div>
+            <a href="#" data-panel="footer">Footer</a>
+        </nav>
+
+        <div class="content" id="contentArea"></div>
+        <div class="preview-panel" id="previewPanel">
+            <div class="preview-header">
+                <span>Live Preview</span>
+                <div>
+                    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('livePreviewIframe').src = 'index.html?preview=1'" title="Reload Nerd Mode" style="padding: 0.2rem 0.5rem; margin-right: 0.2rem;">Nerd</button>
+                    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('livePreviewIframe').src = 'classic.html?preview=1'" title="Reload Classic Mode" style="padding: 0.2rem 0.5rem; margin-right: 0.5rem;">Classic</button>
+                    <button class="btn btn-ghost btn-sm" onclick="closeLivePreview()" style="padding: 0.2rem 0.5rem;">✕</button>
+                </div>
+            </div>
+            <iframe id="livePreviewIframe" src=""></iframe>
         </div>
     </div>
-</div>
 
-<!-- Toast -->
-<div class="toast" id="toast"></div>
+    <!-- GitHub Modal -->
+    <div class="modal-overlay" id="githubModal">
+        <div class="modal">
+            <h3>Push to GitHub</h3>
+            <div class="field">
+                <label>Personal Access Token</label>
+                <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx">
+                <small>Needs <code>repo</code> scope. Token is never stored on any server.</small>
+            </div>
+            <div class="field">
+                <label>Repository (owner/repo)</label>
+                <input type="text" id="gh-repo" placeholder="AsokaKrsna/asokakrsna.github.io">
+            </div>
+            <div class="field">
+                <label>Branch</label>
+                <input type="text" id="gh-branch" value="redesign/dual-mode">
+            </div>
+            <div class="field">
+                <label>Commit Message</label>
+                <input type="text" id="gh-message" value="Update portfolio data via admin panel">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-ghost" onclick="closeGitHubModal()">Cancel</button>
+                <button class="btn btn-save" onclick="pushToGitHub()" id="gh-push-btn">Push Commit</button>
+            </div>
+        </div>
+    </div>
 
-<script>
-/* ═══════════════════════════════════════════════════════════
-   PORTFOLIO ADMIN PANEL
-   Full CRUD for portfolio-data.json
-   ═══════════════════════════════════════════════════════════ */
+    <!-- Preview Modal -->
+    <div class="modal-overlay" id="previewModal">
+        <div class="modal" style="width: 640px;">
+            <h3>JSON Preview</h3>
+            <textarea id="previewArea"
+                style="width:100%; height: 400px; background: var(--bg); border: 1px solid var(--border); color: var(--accent); font-family: var(--mono); font-size: 0.75rem; border-radius: var(--radius); padding: 0.8rem;"
+                readonly></textarea>
+            <div class="modal-actions">
+                <button class="btn btn-ghost" onclick="closePreview()">Close</button>
+                <button class="btn btn-primary" onclick="copyJSON()">Copy</button>
+            </div>
+        </div>
+    </div>
 
-const PASS_HASH = 'b2e847850c83a1cecb780af769ee7b25';
-const DATA_PATH = 'data/portfolio-data.json';
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
 
-let data = {};
-let dirty = false;
+    <script>
+        /* ═══════════════════════════════════════════════════════════
+           PORTFOLIO ADMIN PANEL
+           Full CRUD for portfolio-data.json
+           ═══════════════════════════════════════════════════════════ */
 
-// ─── MD5 (RFC 1321 minimal implementation) ───
-function md5(string) {
-    function md5cycle(x, k) {
-        var a = x[0], b = x[1], c = x[2], d = x[3];
-        a = ff(a, b, c, d, k[0], 7, -680876936); d = ff(d, a, b, c, k[1], 12, -389564586);
-        c = ff(c, d, a, b, k[2], 17, 606105819); b = ff(b, c, d, a, k[3], 22, -1044525330);
-        a = ff(a, b, c, d, k[4], 7, -176418897); d = ff(d, a, b, c, k[5], 12, 1200080426);
-        c = ff(c, d, a, b, k[6], 17, -1473231341); b = ff(b, c, d, a, k[7], 22, -45705983);
-        a = ff(a, b, c, d, k[8], 7, 1770035416); d = ff(d, a, b, c, k[9], 12, -1958414417);
-        c = ff(c, d, a, b, k[10], 17, -42063); b = ff(b, c, d, a, k[11], 22, -1990404162);
-        a = ff(a, b, c, d, k[12], 7, 1804603682); d = ff(d, a, b, c, k[13], 12, -40341101);
-        c = ff(c, d, a, b, k[14], 17, -1502002290); b = ff(b, c, d, a, k[15], 22, 1236535329);
-        a = gg(a, b, c, d, k[1], 5, -165796510); d = gg(d, a, b, c, k[6], 9, -1069501632);
-        c = gg(c, d, a, b, k[11], 14, 643717713); b = gg(b, c, d, a, k[0], 20, -373897302);
-        a = gg(a, b, c, d, k[5], 5, -701558691); d = gg(d, a, b, c, k[10], 9, 38016083);
-        c = gg(c, d, a, b, k[15], 14, -660478335); b = gg(b, c, d, a, k[4], 20, -405537848);
-        a = gg(a, b, c, d, k[9], 5, 568446438); d = gg(d, a, b, c, k[14], 9, -1019803690);
-        c = gg(c, d, a, b, k[3], 14, -187363961); b = gg(b, c, d, a, k[8], 20, 1163531501);
-        a = gg(a, b, c, d, k[13], 5, -1444681467); d = gg(d, a, b, c, k[2], 9, -51403784);
-        c = gg(c, d, a, b, k[7], 14, 1735328473); b = gg(b, c, d, a, k[12], 20, -1926607734);
-        a = hh(a, b, c, d, k[5], 4, -378558); d = hh(d, a, b, c, k[8], 11, -2022574463);
-        c = hh(c, d, a, b, k[11], 16, 1839030562); b = hh(b, c, d, a, k[14], 23, -35309556);
-        a = hh(a, b, c, d, k[1], 4, -1530992060); d = hh(d, a, b, c, k[4], 11, 1272893353);
-        c = hh(c, d, a, b, k[7], 16, -155497632); b = hh(b, c, d, a, k[10], 23, -1094730640);
-        a = hh(a, b, c, d, k[13], 4, 681279174); d = hh(d, a, b, c, k[0], 11, -358537222);
-        c = hh(c, d, a, b, k[3], 16, -722521979); b = hh(b, c, d, a, k[6], 23, 76029189);
-        a = hh(a, b, c, d, k[9], 4, -640364487); d = hh(d, a, b, c, k[12], 11, -421815835);
-        c = hh(c, d, a, b, k[15], 16, 530742520); b = hh(b, c, d, a, k[2], 23, -995338651);
-        a = ii(a, b, c, d, k[0], 6, -198630844); d = ii(d, a, b, c, k[7], 10, 1126891415);
-        c = ii(c, d, a, b, k[14], 15, -1416354905); b = ii(b, c, d, a, k[5], 21, -57434055);
-        a = ii(a, b, c, d, k[12], 6, 1700485571); d = ii(d, a, b, c, k[3], 10, -1894986606);
-        c = ii(c, d, a, b, k[10], 15, -1051523); b = ii(b, c, d, a, k[1], 21, -2054922799);
-        a = ii(a, b, c, d, k[8], 6, 1873313359); d = ii(d, a, b, c, k[15], 10, -30611744);
-        c = ii(c, d, a, b, k[6], 15, -1560198380); b = ii(b, c, d, a, k[13], 21, 1309151649);
-        a = ii(a, b, c, d, k[4], 6, -145523070); d = ii(d, a, b, c, k[11], 10, -1120210379);
-        c = ii(c, d, a, b, k[2], 15, 718787259); b = ii(b, c, d, a, k[9], 21, -343485551);
-        x[0] = add32(a, x[0]); x[1] = add32(b, x[1]); x[2] = add32(c, x[2]); x[3] = add32(d, x[3]);
-    }
-    function cmn(q, a, b, x, s, t) { a = add32(add32(a, q), add32(x, t)); return add32((a << s) | (a >>> (32 - s)), b); }
-    function ff(a, b, c, d, x, s, t) { return cmn((b & c) | ((~b) & d), a, b, x, s, t); }
-    function gg(a, b, c, d, x, s, t) { return cmn((b & d) | (c & (~d)), a, b, x, s, t); }
-    function hh(a, b, c, d, x, s, t) { return cmn(b ^ c ^ d, a, b, x, s, t); }
-    function ii(a, b, c, d, x, s, t) { return cmn(c ^ (b | (~d)), a, b, x, s, t); }
-    function md5blk(s) {
-        var md5blks = [], i;
-        for (i = 0; i < 64; i += 4)
-            md5blks[i >> 2] = s.charCodeAt(i) + (s.charCodeAt(i + 1) << 8) + (s.charCodeAt(i + 2) << 16) + (s.charCodeAt(i + 3) << 24);
-        return md5blks;
-    }
-    function md5blk_array(a) {
-        var md5blks = [], i;
-        for (i = 0; i < 64; i += 4)
-            md5blks[i >> 2] = a[i] + (a[i + 1] << 8) + (a[i + 2] << 16) + (a[i + 3] << 24);
-        return md5blks;
-    }
-    function add32(a, b) { return (a + b) & 0xFFFFFFFF; }
-    function rhex(n) {
-        var s = '', j;
-        for (j = 0; j < 4; j++)
-            s += ('0' + ((n >> (j * 8 + 4)) & 0x0F).toString(16)).slice(-1) +
-                 ('0' + ((n >> (j * 8)) & 0x0F).toString(16)).slice(-1);
-        return s;
-    }
-    function hex(x) { for (var i = 0; i < x.length; i++) x[i] = rhex(x[i]); return x.join(''); }
-    function md5_core(s) {
-        var n = s.length, state = [1732584193, -271733879, -1732584194, 271733878], i;
-        for (i = 64; i <= n; i += 64) md5cycle(state, md5blk(s.substring(i - 64, i)));
-        s = s.substring(i - 64);
-        var tail = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        for (i = 0; i < s.length; i++) tail[i >> 2] |= s.charCodeAt(i) << ((i % 4) << 3);
-        tail[i >> 2] |= 0x80 << ((i % 4) << 3);
-        if (i > 55) { md5cycle(state, tail); tail = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]; }
-        tail[14] = n * 8;
-        md5cycle(state, tail);
-        return state;
-    }
-    return hex(md5_core(string));
-}
+        const PASS_HASH = 'efa88170397c87c264cb471f3cf86e6d';
+        const DATA_PATH = 'data/portfolio-data.json';
 
-// ─── Gate ───
-document.getElementById('gate-pass').addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-        if (md5(e.target.value) === PASS_HASH) {
-            document.getElementById('gate').classList.add('hidden');
-            document.getElementById('app').style.display = 'flex';
-            document.getElementById('layout').style.display = 'flex';
-            loadData();
-        } else {
-            document.getElementById('gate-error').style.display = 'block';
-            e.target.select();
+        let data = {};
+        let dirty = false;
+
+        // ─── MD5 (RFC 1321 minimal implementation) ───
+        function md5(string) {
+            function md5cycle(x, k) {
+                var a = x[0], b = x[1], c = x[2], d = x[3];
+                a = ff(a, b, c, d, k[0], 7, -680876936); d = ff(d, a, b, c, k[1], 12, -389564586);
+                c = ff(c, d, a, b, k[2], 17, 606105819); b = ff(b, c, d, a, k[3], 22, -1044525330);
+                a = ff(a, b, c, d, k[4], 7, -176418897); d = ff(d, a, b, c, k[5], 12, 1200080426);
+                c = ff(c, d, a, b, k[6], 17, -1473231341); b = ff(b, c, d, a, k[7], 22, -45705983);
+                a = ff(a, b, c, d, k[8], 7, 1770035416); d = ff(d, a, b, c, k[9], 12, -1958414417);
+                c = ff(c, d, a, b, k[10], 17, -42063); b = ff(b, c, d, a, k[11], 22, -1990404162);
+                a = ff(a, b, c, d, k[12], 7, 1804603682); d = ff(d, a, b, c, k[13], 12, -40341101);
+                c = ff(c, d, a, b, k[14], 17, -1502002290); b = ff(b, c, d, a, k[15], 22, 1236535329);
+                a = gg(a, b, c, d, k[1], 5, -165796510); d = gg(d, a, b, c, k[6], 9, -1069501632);
+                c = gg(c, d, a, b, k[11], 14, 643717713); b = gg(b, c, d, a, k[0], 20, -373897302);
+                a = gg(a, b, c, d, k[5], 5, -701558691); d = gg(d, a, b, c, k[10], 9, 38016083);
+                c = gg(c, d, a, b, k[15], 14, -660478335); b = gg(b, c, d, a, k[4], 20, -405537848);
+                a = gg(a, b, c, d, k[9], 5, 568446438); d = gg(d, a, b, c, k[14], 9, -1019803690);
+                c = gg(c, d, a, b, k[3], 14, -187363961); b = gg(b, c, d, a, k[8], 20, 1163531501);
+                a = gg(a, b, c, d, k[13], 5, -1444681467); d = gg(d, a, b, c, k[2], 9, -51403784);
+                c = gg(c, d, a, b, k[7], 14, 1735328473); b = gg(b, c, d, a, k[12], 20, -1926607734);
+                a = hh(a, b, c, d, k[5], 4, -378558); d = hh(d, a, b, c, k[8], 11, -2022574463);
+                c = hh(c, d, a, b, k[11], 16, 1839030562); b = hh(b, c, d, a, k[14], 23, -35309556);
+                a = hh(a, b, c, d, k[1], 4, -1530992060); d = hh(d, a, b, c, k[4], 11, 1272893353);
+                c = hh(c, d, a, b, k[7], 16, -155497632); b = hh(b, c, d, a, k[10], 23, -1094730640);
+                a = hh(a, b, c, d, k[13], 4, 681279174); d = hh(d, a, b, c, k[0], 11, -358537222);
+                c = hh(c, d, a, b, k[3], 16, -722521979); b = hh(b, c, d, a, k[6], 23, 76029189);
+                a = hh(a, b, c, d, k[9], 4, -640364487); d = hh(d, a, b, c, k[12], 11, -421815835);
+                c = hh(c, d, a, b, k[15], 16, 530742520); b = hh(b, c, d, a, k[2], 23, -995338651);
+                a = ii(a, b, c, d, k[0], 6, -198630844); d = ii(d, a, b, c, k[7], 10, 1126891415);
+                c = ii(c, d, a, b, k[14], 15, -1416354905); b = ii(b, c, d, a, k[5], 21, -57434055);
+                a = ii(a, b, c, d, k[12], 6, 1700485571); d = ii(d, a, b, c, k[3], 10, -1894986606);
+                c = ii(c, d, a, b, k[10], 15, -1051523); b = ii(b, c, d, a, k[1], 21, -2054922799);
+                a = ii(a, b, c, d, k[8], 6, 1873313359); d = ii(d, a, b, c, k[15], 10, -30611744);
+                c = ii(c, d, a, b, k[6], 15, -1560198380); b = ii(b, c, d, a, k[13], 21, 1309151649);
+                a = ii(a, b, c, d, k[4], 6, -145523070); d = ii(d, a, b, c, k[11], 10, -1120210379);
+                c = ii(c, d, a, b, k[2], 15, 718787259); b = ii(b, c, d, a, k[9], 21, -343485551);
+                x[0] = add32(a, x[0]); x[1] = add32(b, x[1]); x[2] = add32(c, x[2]); x[3] = add32(d, x[3]);
+            }
+            function cmn(q, a, b, x, s, t) { a = add32(add32(a, q), add32(x, t)); return add32((a << s) | (a >>> (32 - s)), b); }
+            function ff(a, b, c, d, x, s, t) { return cmn((b & c) | ((~b) & d), a, b, x, s, t); }
+            function gg(a, b, c, d, x, s, t) { return cmn((b & d) | (c & (~d)), a, b, x, s, t); }
+            function hh(a, b, c, d, x, s, t) { return cmn(b ^ c ^ d, a, b, x, s, t); }
+            function ii(a, b, c, d, x, s, t) { return cmn(c ^ (b | (~d)), a, b, x, s, t); }
+            function md5blk(s) {
+                var md5blks = [], i;
+                for (i = 0; i < 64; i += 4)
+                    md5blks[i >> 2] = s.charCodeAt(i) + (s.charCodeAt(i + 1) << 8) + (s.charCodeAt(i + 2) << 16) + (s.charCodeAt(i + 3) << 24);
+                return md5blks;
+            }
+            function md5blk_array(a) {
+                var md5blks = [], i;
+                for (i = 0; i < 64; i += 4)
+                    md5blks[i >> 2] = a[i] + (a[i + 1] << 8) + (a[i + 2] << 16) + (a[i + 3] << 24);
+                return md5blks;
+            }
+            function add32(a, b) { return (a + b) & 0xFFFFFFFF; }
+            function rhex(n) {
+                var s = '', j;
+                for (j = 0; j < 4; j++)
+                    s += ('0' + ((n >> (j * 8 + 4)) & 0x0F).toString(16)).slice(-1) +
+                        ('0' + ((n >> (j * 8)) & 0x0F).toString(16)).slice(-1);
+                return s;
+            }
+            function hex(x) { for (var i = 0; i < x.length; i++) x[i] = rhex(x[i]); return x.join(''); }
+            function md5_core(s) {
+                var n = s.length, state = [1732584193, -271733879, -1732584194, 271733878], i;
+                for (i = 64; i <= n; i += 64) md5cycle(state, md5blk(s.substring(i - 64, i)));
+                s = s.substring(i - 64);
+                var tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                for (i = 0; i < s.length; i++) tail[i >> 2] |= s.charCodeAt(i) << ((i % 4) << 3);
+                tail[i >> 2] |= 0x80 << ((i % 4) << 3);
+                if (i > 55) { md5cycle(state, tail); tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; }
+                tail[14] = n * 8;
+                md5cycle(state, tail);
+                return state;
+            }
+            return hex(md5_core(string));
         }
-    }
-});
 
-// ─── Data Loading ───
-async function loadData() {
-    try {
-        const resp = await fetch(DATA_PATH + '?t=' + Date.now());
-        data = await resp.json();
-        renderPanel('personal');
-        toast('Data loaded', 'success');
-    } catch (err) {
-        toast('Failed to load data: ' + err.message, 'error');
-    }
-}
+        // ─── Gate ───
+        document.getElementById('gate-pass').addEventListener('keydown', e => {
+            if (e.key === 'Enter') {
+                if (md5(e.target.value) === PASS_HASH) {
+                    document.getElementById('gate').classList.add('hidden');
+                    document.getElementById('app').style.display = 'flex';
+                    document.getElementById('layout').style.display = 'flex';
+                    loadData();
+                } else {
+                    document.getElementById('gate-error').style.display = 'block';
+                    e.target.select();
+                }
+            }
+        });
 
-// ─── Sidebar Navigation ───
-document.getElementById('sidebar').addEventListener('click', e => {
-    const a = e.target.closest('a[data-panel]');
-    if (!a) return;
-    e.preventDefault();
-    document.querySelectorAll('#sidebar a').forEach(x => x.classList.remove('active'));
-    a.classList.add('active');
-    renderPanel(a.dataset.panel);
-});
+        // ─── Data Loading ───
+        async function loadData() {
+            try {
+                const resp = await fetch(DATA_PATH + '?t=' + Date.now());
+                data = await resp.json();
+                renderPanel('personal');
+                toast('Data loaded', 'success');
+            } catch (err) {
+                toast('Failed to load data: ' + err.message, 'error');
+            }
+        }
 
-// ─── Mark Dirty ───
-function markDirty() {
-    dirty = true;
-    document.getElementById('statusDot').className = 'status-dot unsaved';
-    document.getElementById('statusMsg').textContent = 'Unsaved changes';
-}
-function markClean() {
-    dirty = false;
-    document.getElementById('statusDot').className = 'status-dot saved';
-    document.getElementById('statusMsg').textContent = 'Saved';
-}
+        // ─── Sidebar Navigation ───
+        document.getElementById('sidebar').addEventListener('click', e => {
+            const a = e.target.closest('a[data-panel]');
+            if (!a) return;
+            e.preventDefault();
+            document.querySelectorAll('#sidebar a').forEach(x => x.classList.remove('active'));
+            a.classList.add('active');
+            renderPanel(a.dataset.panel);
+        });
 
-// ─── Toast ───
-function toast(msg, type = '') {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast show ' + type;
-    setTimeout(() => t.className = 'toast', 2500);
-}
+        // ─── Mark Dirty ───
+        function markDirty() {
+            dirty = true;
+            document.getElementById('statusDot').className = 'status-dot unsaved';
+            document.getElementById('statusMsg').textContent = 'Unsaved changes';
+            
+            // Auto-update live preview iframe if it's open
+            const panel = document.getElementById('previewPanel');
+            const iframe = document.getElementById('livePreviewIframe');
+            if (panel && panel.classList.contains('open') && iframe.contentWindow) {
+                // Throttle the postMessage to avoid freezing on fast typing
+                clearTimeout(window._previewThrottle);
+                window._previewThrottle = setTimeout(() => {
+                    try {
+                        const jsonData = JSON.parse(getJSON());
+                        iframe.contentWindow.postMessage({ type: 'livePreviewUpdate', data: jsonData }, '*');
+                    } catch(e) {}
+                }, 300);
+            }
+        }
+        function markClean() {
+            dirty = false;
+            document.getElementById('statusDot').className = 'status-dot saved';
+            document.getElementById('statusMsg').textContent = 'Saved';
+        }
 
-// ─── Render Panel ───
-function renderPanel(name) {
-    const area = document.getElementById('contentArea');
-    const renderers = {
-        personal: renderPersonal,
-        about: renderAbout,
-        contact: renderContact,
-        socialLinks: renderSocialLinks,
-        education: renderEducation,
-        researchInterests: renderResearchInterests,
-        research: renderResearch,
-        certifications: renderCertifications,
-        experience: renderExperience,
-        skills: renderSkills,
-        projects: renderProjects,
-        cyberArena: renderCyberArena,
-        blogs: renderBlogs,
-        achievements: renderAchievements,
-        volunteering: renderVolunteering,
-        scratchpad: renderScratchpad,
-        footer: renderFooter,
-    };
-    area.innerHTML = '';
-    if (renderers[name]) {
-        const panel = document.createElement('div');
-        panel.className = 'panel active';
-        panel.innerHTML = renderers[name]();
-        area.appendChild(panel);
-        attachHandlers(panel, name);
-    }
-}
+        // ─── Toast ───
+        function toast(msg, type = '') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast show ' + type;
+            setTimeout(() => t.className = 'toast', 2500);
+        }
 
-// ═══ HELPER: field HTML generators ═══
+        // ─── Render Panel ───
+        function renderPanel(name) {
+            const area = document.getElementById('contentArea');
+            const renderers = {
+                personal: renderPersonal,
+                about: renderAbout,
+                contact: renderContact,
+                socialLinks: renderSocialLinks,
+                education: renderEducation,
+                researchInterests: renderResearchInterests,
+                research: renderResearch,
+                certifications: renderCertifications,
+                experience: renderExperience,
+                skills: renderSkills,
+                projects: renderProjects,
+                cyberArena: renderCyberArena,
+                blogs: renderBlogs,
+                achievements: renderAchievements,
+                volunteering: renderVolunteering,
+                scratchpad: renderScratchpad,
+                footer: renderFooter,
+            };
+            area.innerHTML = '';
+            if (renderers[name]) {
+                const panel = document.createElement('div');
+                panel.className = 'panel active';
+                panel.innerHTML = renderers[name]();
+                area.appendChild(panel);
+                attachHandlers(panel, name);
+            }
+        }
 
-function textField(label, value, key, opts = {}) {
-    const type = opts.type || 'text';
-    const small = opts.help ? `<small>${opts.help}</small>` : '';
-    const cls = opts.wide ? '' : '';
-    return `<div class="field ${cls}">
+        // ═══ HELPER: field HTML generators ═══
+
+        function textField(label, value, key, opts = {}) {
+            const type = opts.type || 'text';
+            const small = opts.help ? `<small>${opts.help}</small>` : '';
+            const cls = opts.wide ? '' : '';
+            return `<div class="field ${cls}">
         <label>${label}</label>
         <input type="${type}" value="${esc(value || '')}" data-key="${key}" ${opts.readonly ? 'readonly' : ''}>
         ${small}
     </div>`;
-}
+        }
 
-function textareaField(label, value, key, opts = {}) {
-    const small = opts.help ? `<small>${opts.help}</small>` : '';
-    const rows = opts.rows || 3;
-    return `<div class="field">
+        function textareaField(label, value, key, opts = {}) {
+            const small = opts.help ? `<small>${opts.help}</small>` : '';
+            const rows = opts.rows || 3;
+            return `<div class="field">
         <label>${label}</label>
         <textarea rows="${rows}" data-key="${key}">${esc(value || '')}</textarea>
         ${small}
     </div>`;
-}
+        }
 
-function selectField(label, value, key, options) {
-    const opts = options.map(o => `<option value="${o}" ${o === value ? 'selected' : ''}>${o}</option>`).join('');
-    return `<div class="field">
+        function selectField(label, value, key, options) {
+            const opts = options.map(o => `<option value="${o}" ${o === value ? 'selected' : ''}>${o}</option>`).join('');
+            return `<div class="field">
         <label>${label}</label>
         <select data-key="${key}">${opts}</select>
     </div>`;
-}
+        }
 
-function esc(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+        function esc(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
 
-function panelHeader(title, addBtn = '') {
-    return `<div class="panel-header"><h2>${title}</h2><div>${addBtn}</div></div>`;
-}
+        function panelHeader(title, addBtn = '') {
+            return `<div class="panel-header"><h2>${title}</h2><div>${addBtn}</div></div>`;
+        }
 
-// ═══ SECTION RENDERERS ═══
+        // ═══ SECTION RENDERERS ═══
 
-function renderPersonal() {
-    const p = data.personal || {};
-    return panelHeader('Personal Info') +
-        textField('Name', p.name, 'personal.name') +
-        textField('Alias / Handle', p.alias, 'personal.alias') +
-        textField('Title', p.title, 'personal.title') +
-        textField('Tagline', p.tagline, 'personal.tagline') +
-        textField('Profile Image Path', p.profileImage, 'personal.profileImage', {help: 'Relative path e.g. images/profile.png'}) +
-        textField('Favicon Path', p.favicon, 'personal.favicon') +
-        textField('Resume Link', p.resumeLink, 'personal.resumeLink');
-}
+        function renderPersonal() {
+            const p = data.personal || {};
+            return panelHeader('Personal Info') +
+                textField('Name', p.name, 'personal.name') +
+                textField('Alias / Handle', p.alias, 'personal.alias') +
+                textField('Title', p.title, 'personal.title') +
+                textField('Tagline', p.tagline, 'personal.tagline') +
+                textField('Profile Image Path', p.profileImage, 'personal.profileImage', { help: 'Relative path e.g. images/profile.png' }) +
+                textField('Favicon Path', p.favicon, 'personal.favicon') +
+                textField('Resume Link', p.resumeLink, 'personal.resumeLink');
+        }
 
-function renderAbout() {
-    const paragraphs = (data.about && data.about.paragraphs) || [];
-    let html = panelHeader('About', `<button class="btn btn-primary btn-sm" onclick="addAboutParagraph()">+ Paragraph</button>`);
-    html += '<div class="array-list" id="aboutList">';
-    paragraphs.forEach((p, i) => {
-        html += `<div class="array-item" data-index="${i}">
+        function renderAbout() {
+            const paragraphs = (data.about && data.about.paragraphs) || [];
+            let html = panelHeader('About', `<button class="btn btn-primary btn-sm" onclick="addAboutParagraph()">+ Paragraph</button>`);
+            html += '<div class="array-list" id="aboutList">';
+            paragraphs.forEach((p, i) => {
+                html += `<div class="array-item" data-index="${i}">
             <div class="array-item-header">
                 <span class="array-item-title">Paragraph ${i + 1}</span>
                 <div class="array-item-actions">
@@ -609,38 +970,38 @@ function renderAbout() {
                 </div>
             </div>
         </div>`;
-    });
-    html += '</div>';
-    return html;
-}
+            });
+            html += '</div>';
+            return html;
+        }
 
-function renderContact() {
-    const c = data.contact || {};
-    let html = panelHeader('Contact');
-    html += textareaField('Description', c.description, 'contact.description', {rows: 3});
-    html += textField('Phone', c.phone, 'contact.phone');
-    html += textField('Calendly URL', c.calendlyUrl, 'contact.calendlyUrl');
-    // Emails as string list
-    html += '<div class="field"><label>Emails</label>';
-    html += '<div class="string-list" id="emailList">';
-    (c.emails || []).forEach((email, i) => {
-        html += `<div class="string-list-item">
+        function renderContact() {
+            const c = data.contact || {};
+            let html = panelHeader('Contact');
+            html += textareaField('Description', c.description, 'contact.description', { rows: 3 });
+            html += textField('Phone', c.phone, 'contact.phone');
+            html += textField('Calendly URL', c.calendlyUrl, 'contact.calendlyUrl');
+            // Emails as string list
+            html += '<div class="field"><label>Emails</label>';
+            html += '<div class="string-list" id="emailList">';
+            (c.emails || []).forEach((email, i) => {
+                html += `<div class="string-list-item">
             <input type="email" value="${esc(email)}" data-key="contact.emails.${i}">
             <button class="btn btn-danger btn-sm" onclick="removeEmail(${i})">✕</button>
         </div>`;
-    });
-    html += '</div>';
-    html += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addEmail()">+ Email</button>`;
-    html += '</div>';
-    return html;
-}
+            });
+            html += '</div>';
+            html += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addEmail()">+ Email</button>`;
+            html += '</div>';
+            return html;
+        }
 
-function renderSocialLinks() {
-    const links = data.socialLinks || [];
-    let html = panelHeader('Social Links', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('socialLinks', {platform:'',icon:'',url:''})">+ Link</button>`);
-    html += '<div class="array-list">';
-    links.forEach((l, i) => {
-        html += `<div class="array-item" data-index="${i}">
+        function renderSocialLinks() {
+            const links = data.socialLinks || [];
+            let html = panelHeader('Social Links', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('socialLinks', {platform:'',icon:'',url:''})">+ Link</button>`);
+            html += '<div class="array-list">';
+            links.forEach((l, i) => {
+                html += `<div class="array-item" data-index="${i}">
             <div class="array-item-header" onclick="toggleCollapse(this)">
                 <span class="array-item-title">${l.platform || 'New Link'}</span>
                 <div class="array-item-actions">
@@ -650,21 +1011,21 @@ function renderSocialLinks() {
             </div>
             <div class="array-item-body">
                 ${textField('Platform', l.platform, `socialLinks.${i}.platform`)}
-                ${textField('Icon Class', l.icon, `socialLinks.${i}.icon`, {help: 'FontAwesome class e.g. fab fa-github'})}
+                ${textField('Icon Class', l.icon, `socialLinks.${i}.icon`, { help: 'FontAwesome class e.g. fab fa-github' })}
                 ${textField('URL', l.url, `socialLinks.${i}.url`)}
             </div>
         </div>`;
-    });
-    html += '</div>';
-    return html;
-}
+            });
+            html += '</div>';
+            return html;
+        }
 
-function renderEducation() {
-    const items = data.education || [];
-    let html = panelHeader('Education', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('education', {institution:'',location:'',grade:'',period:'',degree:''})">+ Entry</button>`);
-    html += '<div class="array-list">';
-    items.forEach((e, i) => {
-        html += `<div class="array-item" data-index="${i}">
+        function renderEducation() {
+            const items = data.education || [];
+            let html = panelHeader('Education', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('education', {institution:'',location:'',grade:'',period:'',degree:''})">+ Entry</button>`);
+            html += '<div class="array-list">';
+            items.forEach((e, i) => {
+                html += `<div class="array-item" data-index="${i}">
             <div class="array-item-header" onclick="toggleCollapse(this)">
                 <span class="array-item-title">${e.institution || 'New Entry'}</span>
                 <div class="array-item-actions">
@@ -682,38 +1043,38 @@ function renderEducation() {
                 ${textField('Grade', e.grade, `education.${i}.grade`)}
             </div>
         </div>`;
-    });
-    html += '</div>';
-    return html;
-}
+            });
+            html += '</div>';
+            return html;
+        }
 
-function renderResearchInterests() {
-    const r = data.researchInterests || {};
-    let html = panelHeader('Research Interests');
-    html += textField('Section Title', r.title, 'researchInterests.title');
-    html += textareaField('Research Statement', r.statement, 'researchInterests.statement', {rows: 4, help: 'Your research focus statement'});
-    // Areas as string list
-    html += '<div class="field"><label>Research Areas</label>';
-    html += '<div class="string-list" id="areasList">';
-    (r.areas || []).forEach((a, i) => {
-        html += `<div class="string-list-item">
+        function renderResearchInterests() {
+            const r = data.researchInterests || {};
+            let html = panelHeader('Research Interests');
+            html += textField('Section Title', r.title, 'researchInterests.title');
+            html += textareaField('Research Statement', r.statement, 'researchInterests.statement', { rows: 4, help: 'Your research focus statement' });
+            // Areas as string list
+            html += '<div class="field"><label>Research Areas</label>';
+            html += '<div class="string-list" id="areasList">';
+            (r.areas || []).forEach((a, i) => {
+                html += `<div class="string-list-item">
             <input type="text" value="${esc(a)}" data-key="researchInterests.areas.${i}">
             <button class="btn btn-danger btn-sm" onclick="removeStringItem('researchInterests', 'areas', ${i})">✕</button>
         </div>`;
-    });
-    html += '</div>';
-    html += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addStringItem('researchInterests', 'areas')">+ Area</button>`;
-    html += '</div>';
-    html += textareaField('Future Goals', r.futureGoals, 'researchInterests.futureGoals', {rows: 2});
-    return html;
-}
+            });
+            html += '</div>';
+            html += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addStringItem('researchInterests', 'areas')">+ Area</button>`;
+            html += '</div>';
+            html += textareaField('Future Goals', r.futureGoals, 'researchInterests.futureGoals', { rows: 2 });
+            return html;
+        }
 
-function renderResearch() {
-    const items = data.research || [];
-    let html = panelHeader('Publications', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('research', {date:'',publication:'',title:'',description:'',tldr:'',url:'',type:'published',yourRole:'',impactArea:''})">+ Publication</button>`);
-    html += '<div class="array-list">';
-    items.forEach((r, i) => {
-        html += `<div class="array-item" data-index="${i}">
+        function renderResearch() {
+            const items = data.research || [];
+            let html = panelHeader('Publications', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('research', {date:'',publication:'',title:'',description:'',tldr:'',url:'',type:'published',yourRole:'',impactArea:''})">+ Publication</button>`);
+            html += '<div class="array-list">';
+            items.forEach((r, i) => {
+                html += `<div class="array-item" data-index="${i}">
             <div class="array-item-header" onclick="toggleCollapse(this)">
                 <span class="array-item-title">${r.title || 'New Publication'}</span>
                 <div class="array-item-actions">
@@ -727,7 +1088,7 @@ function renderResearch() {
                     ${textField('Date', r.date, `research.${i}.date`)}
                     ${textField('Publication / Venue', r.publication, `research.${i}.publication`)}
                 </div>
-                ${textareaField('Description', r.description, `research.${i}.description`, {rows: 3})}
+                ${textareaField('Description', r.description, `research.${i}.description`, { rows: 3 })}
                 ${textField('TLDR', r.tldr, `research.${i}.tldr`)}
                 ${textField('URL', r.url, `research.${i}.url`)}
                 <div class="field-row">
@@ -737,17 +1098,17 @@ function renderResearch() {
                 ${textField('Impact Area', r.impactArea, `research.${i}.impactArea`)}
             </div>
         </div>`;
-    });
-    html += '</div>';
-    return html;
-}
+            });
+            html += '</div>';
+            return html;
+        }
 
-function renderCertifications() {
-    const items = data.certifications || [];
-    let html = panelHeader('Certifications', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('certifications', {name:'',date:''})">+ Certification</button>`);
-    html += '<div class="array-list">';
-    items.forEach((c, i) => {
-        html += `<div class="array-item" data-index="${i}">
+        function renderCertifications() {
+            const items = data.certifications || [];
+            let html = panelHeader('Certifications', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('certifications', {name:'',date:''})">+ Certification</button>`);
+            html += '<div class="array-list">';
+            items.forEach((c, i) => {
+                html += `<div class="array-item" data-index="${i}">
             <div class="array-item-header" onclick="toggleCollapse(this)">
                 <span class="array-item-title">${c.name || 'New Cert'}</span>
                 <div class="array-item-actions">
@@ -762,27 +1123,27 @@ function renderCertifications() {
                 </div>
             </div>
         </div>`;
-    });
-    html += '</div>';
-    return html;
-}
+            });
+            html += '</div>';
+            return html;
+        }
 
-function renderExperience() {
-    const items = data.experience || [];
-    let html = panelHeader('Experience', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('experience', {period:'',title:'',company:'',location:'',responsibilities:[]})">+ Position</button>`);
-    html += '<div class="array-list">';
-    items.forEach((e, i) => {
-        let respHtml = '<div class="field"><label>Responsibilities</label><div class="string-list" id="resp-' + i + '">';
-        (e.responsibilities || []).forEach((r, j) => {
-            respHtml += `<div class="string-list-item">
+        function renderExperience() {
+            const items = data.experience || [];
+            let html = panelHeader('Experience', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('experience', {period:'',title:'',company:'',location:'',responsibilities:[]})">+ Position</button>`);
+            html += '<div class="array-list">';
+            items.forEach((e, i) => {
+                let respHtml = '<div class="field"><label>Responsibilities</label><div class="string-list" id="resp-' + i + '">';
+                (e.responsibilities || []).forEach((r, j) => {
+                    respHtml += `<div class="string-list-item">
                 <input type="text" value="${esc(r)}" data-key="experience.${i}.responsibilities.${j}">
                 <button class="btn btn-danger btn-sm" onclick="removeNestedString('experience', ${i}, 'responsibilities', ${j})">✕</button>
             </div>`;
-        });
-        respHtml += '</div>';
-        respHtml += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addNestedString('experience', ${i}, 'responsibilities')">+ Responsibility</button></div>`;
+                });
+                respHtml += '</div>';
+                respHtml += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addNestedString('experience', ${i}, 'responsibilities')">+ Responsibility</button></div>`;
 
-        html += `<div class="array-item" data-index="${i}">
+                html += `<div class="array-item" data-index="${i}">
             <div class="array-item-header" onclick="toggleCollapse(this)">
                 <span class="array-item-title">${e.title || 'New Position'} — ${e.company || ''}</span>
                 <div class="array-item-actions">
@@ -800,17 +1161,17 @@ function renderExperience() {
                 ${respHtml}
             </div>
         </div>`;
-    });
-    html += '</div>';
-    return html;
-}
+            });
+            html += '</div>';
+            return html;
+        }
 
-function renderSkills() {
-    const items = data.skills || [];
-    let html = panelHeader('Skills / Arsenal', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('skills', {category:'',icon:'',items:''})">+ Category</button>`);
-    html += '<div class="array-list">';
-    items.forEach((s, i) => {
-        html += `<div class="array-item" data-index="${i}">
+        function renderSkills() {
+            const items = data.skills || [];
+            let html = panelHeader('Skills / Arsenal', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('skills', {category:'',icon:'',items:''})">+ Category</button>`);
+            html += '<div class="array-list">';
+            items.forEach((s, i) => {
+                html += `<div class="array-item" data-index="${i}">
             <div class="array-item-header" onclick="toggleCollapse(this)">
                 <span class="array-item-title">${s.category || 'New Category'}</span>
                 <div class="array-item-actions">
@@ -820,21 +1181,21 @@ function renderSkills() {
             </div>
             <div class="array-item-body">
                 ${textField('Category Name', s.category, `skills.${i}.category`)}
-                ${textField('Icon Class', s.icon, `skills.${i}.icon`, {help: 'FontAwesome class'})}
-                ${textareaField('Items', s.items, `skills.${i}.items`, {rows: 2, help: 'Comma-separated skills'})}
+                ${textField('Icon Class', s.icon, `skills.${i}.icon`, { help: 'FontAwesome class' })}
+                ${textareaField('Items', s.items, `skills.${i}.items`, { rows: 2, help: 'Comma-separated skills' })}
             </div>
         </div>`;
-    });
-    html += '</div>';
-    return html;
-}
+            });
+            html += '</div>';
+            return html;
+        }
 
-function renderProjects() {
-    const items = data.projects || [];
-    let html = panelHeader('Projects', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('projects', {title:'',description:'',technologies:[],githubUrl:'',liveUrl:''})">+ Project</button>`);
-    html += '<div class="array-list">';
-    items.forEach((p, i) => {
-        html += `<div class="array-item" data-index="${i}">
+        function renderProjects() {
+            const items = data.projects || [];
+            let html = panelHeader('Projects', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('projects', {title:'',description:'',technologies:[],githubUrl:'',liveUrl:''})">+ Project</button>`);
+            html += '<div class="array-list">';
+            items.forEach((p, i) => {
+                html += `<div class="array-item" data-index="${i}">
             <div class="array-item-header" onclick="toggleCollapse(this)">
                 <span class="array-item-title">${p.title || 'New Project'}</span>
                 <div class="array-item-actions">
@@ -844,40 +1205,40 @@ function renderProjects() {
             </div>
             <div class="array-item-body">
                 ${textField('Title', p.title, `projects.${i}.title`)}
-                ${textareaField('Description', p.description, `projects.${i}.description`, {rows: 2})}
-                ${textField('Technologies', (p.technologies || []).join(', '), `projects.${i}.technologies`, {help: 'Comma-separated'})}
+                ${textareaField('Description', p.description, `projects.${i}.description`, { rows: 2 })}
+                ${textField('Technologies', (p.technologies || []).join(', '), `projects.${i}.technologies`, { help: 'Comma-separated' })}
                 <div class="field-row">
                     ${textField('GitHub URL', p.githubUrl, `projects.${i}.githubUrl`)}
                     ${textField('Live URL', p.liveUrl, `projects.${i}.liveUrl`)}
                 </div>
             </div>
         </div>`;
-    });
-    html += '</div>';
-    return html;
-}
+            });
+            html += '</div>';
+            return html;
+        }
 
-function renderCyberArena() {
-    const ca = data.cyberArena || {};
-    let html = panelHeader('Cyber Arena', `<button class="btn btn-primary btn-sm" onclick="addCyberPlatform()">+ Platform</button>`);
-    html += textareaField('Intro', ca.intro, 'cyberArena.intro', {rows: 2});
-    html += '<div class="array-list" style="margin-top:1rem">';
-    (ca.platforms || []).forEach((p, i) => {
-        let highlightsHtml = '<div class="field"><label>Highlights</label><div class="string-list" id="ca-hl-' + i + '">';
-        (p.highlights || []).forEach((h, j) => {
-            highlightsHtml += `<div class="string-list-item">
+        function renderCyberArena() {
+            const ca = data.cyberArena || {};
+            let html = panelHeader('Cyber Arena', `<button class="btn btn-primary btn-sm" onclick="addCyberPlatform()">+ Platform</button>`);
+            html += textareaField('Intro', ca.intro, 'cyberArena.intro', { rows: 2 });
+            html += '<div class="array-list" style="margin-top:1rem">';
+            (ca.platforms || []).forEach((p, i) => {
+                let highlightsHtml = '<div class="field"><label>Highlights</label><div class="string-list" id="ca-hl-' + i + '">';
+                (p.highlights || []).forEach((h, j) => {
+                    highlightsHtml += `<div class="string-list-item">
                 <input type="text" value="${esc(h)}" data-key="cyberArena.platforms.${i}.highlights.${j}">
                 <button class="btn btn-danger btn-sm" onclick="removeNestedString('cyberArena.platforms', ${i}, 'highlights', ${j})">✕</button>
             </div>`;
-        });
-        highlightsHtml += '</div>';
-        highlightsHtml += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addNestedString('cyberArena.platforms', ${i}, 'highlights')">+ Highlight</button></div>`;
+                });
+                highlightsHtml += '</div>';
+                highlightsHtml += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addNestedString('cyberArena.platforms', ${i}, 'highlights')">+ Highlight</button></div>`;
 
-        html += `<div class="array-item" data-index="${i}">
+                html += `<div class="array-item" data-index="${i}">
             <div class="array-item-header" onclick="toggleCollapse(this)">
                 <span class="array-item-title">${p.name || 'New Platform'}</span>
                 <div class="array-item-actions">
-                    ${moveButtons(i, (ca.platforms||[]).length, 'cyberArena.platforms')}
+                    ${moveButtons(i, (ca.platforms || []).length, 'cyberArena.platforms')}
                     <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeCyberPlatform(${i})">✕</button>
                 </div>
             </div>
@@ -891,17 +1252,17 @@ function renderCyberArena() {
                 </div>
             </div>
         </div>`;
-    });
-    html += '</div>';
-    return html;
-}
+            });
+            html += '</div>';
+            return html;
+        }
 
-function renderBlogs() {
-    const items = data.blogs || [];
-    let html = panelHeader('Blogs & Writeups', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('blogs', {date:'',title:'',url:''})">+ Blog</button>`);
-    html += '<div class="array-list">';
-    items.forEach((b, i) => {
-        html += `<div class="array-item" data-index="${i}">
+        function renderBlogs() {
+            const items = data.blogs || [];
+            let html = panelHeader('Blogs & Writeups', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('blogs', {date:'',title:'',url:''})">+ Blog</button>`);
+            html += '<div class="array-list">';
+            items.forEach((b, i) => {
+                html += `<div class="array-item" data-index="${i}">
             <div class="array-item-header" onclick="toggleCollapse(this)">
                 <span class="array-item-title">${b.title || 'New Blog'}</span>
                 <div class="array-item-actions">
@@ -917,46 +1278,46 @@ function renderBlogs() {
                 </div>
             </div>
         </div>`;
-    });
-    html += '</div>';
-    return html;
-}
+            });
+            html += '</div>';
+            return html;
+        }
 
-function renderAchievements() {
-    const a = data.achievements || {};
-    let html = panelHeader('Achievements');
-    // Academic
-    html += renderStringArraySection('Academic', 'achievements', 'academic', a.academic || []);
-    html += '<hr style="border: none; border-top: 1px solid var(--border); margin: 1.2rem 0;">';
-    // Competitions
-    html += renderStringArraySection('Competitions', 'achievements', 'competitions', a.competitions || []);
-    html += '<hr style="border: none; border-top: 1px solid var(--border); margin: 1.2rem 0;">';
-    // Leadership
-    html += renderStringArraySection('Leadership', 'achievements', 'leadership', a.leadership || []);
-    return html;
-}
+        function renderAchievements() {
+            const a = data.achievements || {};
+            let html = panelHeader('Achievements');
+            // Academic
+            html += renderStringArraySection('Academic', 'achievements', 'academic', a.academic || []);
+            html += '<hr style="border: none; border-top: 1px solid var(--border); margin: 1.2rem 0;">';
+            // Competitions
+            html += renderStringArraySection('Competitions', 'achievements', 'competitions', a.competitions || []);
+            html += '<hr style="border: none; border-top: 1px solid var(--border); margin: 1.2rem 0;">';
+            // Leadership
+            html += renderStringArraySection('Leadership', 'achievements', 'leadership', a.leadership || []);
+            return html;
+        }
 
-function renderStringArraySection(label, parent, key, items) {
-    let html = `<div class="field"><label>${label}</label>`;
-    html += `<div class="string-list" id="${parent}-${key}">`;
-    items.forEach((item, i) => {
-        html += `<div class="string-list-item">
+        function renderStringArraySection(label, parent, key, items) {
+            let html = `<div class="field"><label>${label}</label>`;
+            html += `<div class="string-list" id="${parent}-${key}">`;
+            items.forEach((item, i) => {
+                html += `<div class="string-list-item">
             <input type="text" value="${esc(item)}" data-key="${parent}.${key}.${i}">
             <button class="btn btn-danger btn-sm" onclick="removeStringItem('${parent}', '${key}', ${i})">✕</button>
         </div>`;
-    });
-    html += '</div>';
-    html += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addStringItem('${parent}', '${key}')">+ ${label}</button>`;
-    html += '</div>';
-    return html;
-}
+            });
+            html += '</div>';
+            html += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addStringItem('${parent}', '${key}')">+ ${label}</button>`;
+            html += '</div>';
+            return html;
+        }
 
-function renderVolunteering() {
-    const items = data.volunteering || [];
-    let html = panelHeader('Volunteering', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('volunteering', {organization:'',role:'',period:'',description:'',impact:''})">+ Entry</button>`);
-    html += '<div class="array-list">';
-    items.forEach((v, i) => {
-        html += `<div class="array-item" data-index="${i}">
+        function renderVolunteering() {
+            const items = data.volunteering || [];
+            let html = panelHeader('Volunteering', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('volunteering', {organization:'',role:'',period:'',description:'',impact:''})">+ Entry</button>`);
+            html += '<div class="array-list">';
+            items.forEach((v, i) => {
+                html += `<div class="array-item" data-index="${i}">
             <div class="array-item-header" onclick="toggleCollapse(this)">
                 <span class="array-item-title">${v.organization || 'New Entry'}</span>
                 <div class="array-item-actions">
@@ -970,351 +1331,355 @@ function renderVolunteering() {
                     ${textField('Role', v.role, `volunteering.${i}.role`)}
                     ${textField('Period', v.period, `volunteering.${i}.period`)}
                 </div>
-                ${textareaField('Description', v.description, `volunteering.${i}.description`, {rows: 2})}
+                ${textareaField('Description', v.description, `volunteering.${i}.description`, { rows: 2 })}
                 ${textField('Impact', v.impact, `volunteering.${i}.impact`)}
             </div>
         </div>`;
-    });
-    html += '</div>';
-    return html;
-}
-
-function renderScratchpad() {
-    const sp = data.scratchpad || {};
-    let html = panelHeader('Scratchpad', `<button class="btn btn-primary btn-sm" onclick="addScratchpadItem()">+ Experiment</button>`);
-    html += textareaField('Intro', sp.intro, 'scratchpad.intro', {rows: 2});
-    html += '<div class="array-list" style="margin-top:1rem">';
-    (sp.items || []).forEach((item, i) => {
-        html += `<div class="array-item" data-index="${i}">
-            <div class="array-item-header" onclick="toggleCollapse(this)">
-                <span class="array-item-title">${item.title || 'New Experiment'}</span>
-                <div class="array-item-actions">
-                    ${moveButtons(i, (sp.items||[]).length, 'scratchpad.items')}
-                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeScratchpadItem(${i})">✕</button>
-                </div>
-            </div>
-            <div class="array-item-body">
-                ${textField('Title', item.title, `scratchpad.items.${i}.title`)}
-                <div class="field-row">
-                    ${selectField('Status', item.status, `scratchpad.items.${i}.status`, ['exploring', 'paused', 'abandoned', 'completed'])}
-                    ${textField('Date', item.date, `scratchpad.items.${i}.date`)}
-                </div>
-                ${textareaField('Description', item.description, `scratchpad.items.${i}.description`, {rows: 2})}
-                ${textareaField('Lesson Learned', item.lesson, `scratchpad.items.${i}.lesson`, {rows: 2})}
-                ${textField('Tags', (item.tags || []).join(', '), `scratchpad.items.${i}.tags`, {help: 'Comma-separated'})}
-            </div>
-        </div>`;
-    });
-    html += '</div>';
-    return html;
-}
-
-function renderFooter() {
-    const f = data.footer || {};
-    return panelHeader('Footer') +
-        textField('Footer Text', f.text, 'footer.text', {help: 'HTML allowed'}) +
-        textField('Copyright', f.copyright, 'footer.copyright');
-}
-
-// ═══ MOVE BUTTONS ═══
-function moveButtons(i, len, section) {
-    let btns = '';
-    if (i > 0) btns += `<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); moveItem('${section}', ${i}, -1)" title="Move up">↑</button>`;
-    if (i < len - 1) btns += `<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); moveItem('${section}', ${i}, 1)" title="Move down">↓</button>`;
-    return btns;
-}
-
-// ═══ DATA MANIPULATION (CRUD) ═══
-
-function setNestedValue(obj, path, value) {
-    const keys = path.split('.');
-    let cur = obj;
-    for (let i = 0; i < keys.length - 1; i++) {
-        const k = isNaN(keys[i]) ? keys[i] : parseInt(keys[i]);
-        if (cur[k] === undefined) cur[k] = isNaN(keys[i+1]) ? {} : [];
-        cur = cur[k];
-    }
-    const lastKey = isNaN(keys[keys.length-1]) ? keys[keys.length-1] : parseInt(keys[keys.length-1]);
-    cur[lastKey] = value;
-}
-
-function getNestedValue(obj, path) {
-    const keys = path.split('.');
-    let cur = obj;
-    for (const k of keys) {
-        const key = isNaN(k) ? k : parseInt(k);
-        if (cur === undefined) return undefined;
-        cur = cur[key];
-    }
-    return cur;
-}
-
-function getNestedArray(path) {
-    return getNestedValue(data, path);
-}
-
-// Attach input change handler
-function attachHandlers(panel) {
-    panel.addEventListener('input', e => {
-        const el = e.target;
-        const key = el.dataset.key;
-        if (!key) return;
-        let val = el.value;
-        // Handle special comma-separated arrays
-        if (key.match(/\btechnologies$/) || key.match(/\btags$/)) {
-            val = val.split(',').map(s => s.trim()).filter(Boolean);
-        }
-        setNestedValue(data, key, val);
-        markDirty();
-    });
-    panel.addEventListener('change', e => {
-        const el = e.target;
-        const key = el.dataset.key;
-        if (!key) return;
-        setNestedValue(data, key, el.value);
-        markDirty();
-    });
-}
-
-// Toggle collapse
-function toggleCollapse(header) {
-    header.parentElement.classList.toggle('collapsed');
-}
-
-// ─── Generic array operations ───
-function addArrayItem(section, template) {
-    if (!data[section]) data[section] = [];
-    data[section].push(JSON.parse(JSON.stringify(template)));
-    markDirty();
-    renderPanel(section);
-}
-
-function removeArrayItem(section, index) {
-    if (!data[section]) return;
-    data[section].splice(index, 1);
-    markDirty();
-    renderPanel(section);
-}
-
-function moveItem(sectionPath, index, direction) {
-    const arr = getNestedArray(sectionPath);
-    if (!arr) return;
-    const newIndex = index + direction;
-    if (newIndex < 0 || newIndex >= arr.length) return;
-    [arr[index], arr[newIndex]] = [arr[newIndex], arr[index]];
-    markDirty();
-    // Find the active panel
-    const activeLink = document.querySelector('#sidebar a.active');
-    if (activeLink) renderPanel(activeLink.dataset.panel);
-}
-
-// ─── About paragraphs ───
-function addAboutParagraph() {
-    if (!data.about) data.about = { paragraphs: [] };
-    if (!data.about.paragraphs) data.about.paragraphs = [];
-    data.about.paragraphs.push('');
-    markDirty();
-    renderPanel('about');
-}
-function removeAboutParagraph(i) {
-    data.about.paragraphs.splice(i, 1);
-    markDirty();
-    renderPanel('about');
-}
-
-// ─── Emails ───
-function addEmail() {
-    if (!data.contact) data.contact = {};
-    if (!data.contact.emails) data.contact.emails = [];
-    data.contact.emails.push('');
-    markDirty();
-    renderPanel('contact');
-}
-function removeEmail(i) {
-    data.contact.emails.splice(i, 1);
-    markDirty();
-    renderPanel('contact');
-}
-
-// ─── String items in nested objects ───
-function addStringItem(parent, key) {
-    if (!data[parent]) data[parent] = {};
-    if (!data[parent][key]) data[parent][key] = [];
-    data[parent][key].push('');
-    markDirty();
-    // Find panel
-    const activeLink = document.querySelector('#sidebar a.active');
-    if (activeLink) renderPanel(activeLink.dataset.panel);
-}
-function removeStringItem(parent, key, index) {
-    data[parent][key].splice(index, 1);
-    markDirty();
-    const activeLink = document.querySelector('#sidebar a.active');
-    if (activeLink) renderPanel(activeLink.dataset.panel);
-}
-
-// ─── Nested strings (e.g., experience[i].responsibilities[j]) ───
-function addNestedString(sectionPath, index, field) {
-    const arr = getNestedArray(sectionPath);
-    if (!arr || !arr[index]) return;
-    if (!arr[index][field]) arr[index][field] = [];
-    arr[index][field].push('');
-    markDirty();
-    const activeLink = document.querySelector('#sidebar a.active');
-    if (activeLink) renderPanel(activeLink.dataset.panel);
-}
-function removeNestedString(sectionPath, index, field, itemIndex) {
-    const arr = getNestedArray(sectionPath);
-    if (!arr || !arr[index] || !arr[index][field]) return;
-    arr[index][field].splice(itemIndex, 1);
-    markDirty();
-    const activeLink = document.querySelector('#sidebar a.active');
-    if (activeLink) renderPanel(activeLink.dataset.panel);
-}
-
-// ─── Cyber Arena platforms ───
-function addCyberPlatform() {
-    if (!data.cyberArena) data.cyberArena = { intro: '', platforms: [] };
-    if (!data.cyberArena.platforms) data.cyberArena.platforms = [];
-    data.cyberArena.platforms.push({ name: '', icon: '', highlights: [], linkText: '', url: '' });
-    markDirty();
-    renderPanel('cyberArena');
-}
-function removeCyberPlatform(i) {
-    data.cyberArena.platforms.splice(i, 1);
-    markDirty();
-    renderPanel('cyberArena');
-}
-
-// ─── Scratchpad items ───
-function addScratchpadItem() {
-    if (!data.scratchpad) data.scratchpad = { intro: '', items: [] };
-    if (!data.scratchpad.items) data.scratchpad.items = [];
-    data.scratchpad.items.push({ title: '', status: 'exploring', date: '', description: '', lesson: '', tags: [] });
-    markDirty();
-    renderPanel('scratchpad');
-}
-function removeScratchpadItem(i) {
-    data.scratchpad.items.splice(i, 1);
-    markDirty();
-    renderPanel('scratchpad');
-}
-
-// ═══ SAVE / EXPORT ═══
-
-function getJSON() {
-    return JSON.stringify(data, null, 2);
-}
-
-function downloadJSON() {
-    const blob = new Blob([getJSON()], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'portfolio-data.json';
-    a.click();
-    URL.revokeObjectURL(url);
-    toast('Downloaded portfolio-data.json', 'success');
-}
-
-function previewJSON() {
-    document.getElementById('previewArea').value = getJSON();
-    document.getElementById('previewModal').classList.add('show');
-}
-function closePreview() {
-    document.getElementById('previewModal').classList.remove('show');
-}
-function copyJSON() {
-    navigator.clipboard.writeText(getJSON()).then(() => toast('Copied to clipboard', 'success'));
-}
-
-// ═══ GITHUB API ═══
-
-function showGitHubModal() {
-    // Restore saved values
-    const saved = JSON.parse(localStorage.getItem('admin-gh') || '{}');
-    if (saved.repo) document.getElementById('gh-repo').value = saved.repo;
-    if (saved.branch) document.getElementById('gh-branch').value = saved.branch;
-    document.getElementById('githubModal').classList.add('show');
-}
-function closeGitHubModal() {
-    document.getElementById('githubModal').classList.remove('show');
-}
-
-async function pushToGitHub() {
-    const token   = document.getElementById('gh-token').value.trim();
-    const repo    = document.getElementById('gh-repo').value.trim();
-    const branch  = document.getElementById('gh-branch').value.trim();
-    const message = document.getElementById('gh-message').value.trim();
-
-    if (!token || !repo || !branch || !message) {
-        toast('Fill all fields', 'error');
-        return;
-    }
-
-    // Save non-sensitive settings
-    localStorage.setItem('admin-gh', JSON.stringify({ repo, branch }));
-
-    const btn = document.getElementById('gh-push-btn');
-    btn.textContent = 'Pushing...';
-    btn.disabled = true;
-
-    try {
-        const filePath = DATA_PATH;
-        const apiBase  = `https://api.github.com/repos/${repo}/contents/${filePath}`;
-        const headers  = {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json',
-            'Accept': 'application/vnd.github.v3+json'
-        };
-
-        // Get current file SHA
-        const getResp = await fetch(`${apiBase}?ref=${branch}`, { headers });
-        let sha = '';
-        if (getResp.ok) {
-            const fileData = await getResp.json();
-            sha = fileData.sha;
+            });
+            html += '</div>';
+            return html;
         }
 
-        // Create/Update file
-        const content = btoa(unescape(encodeURIComponent(getJSON())));
-        const body = {
-            message,
-            content,
-            branch,
-        };
-        if (sha) body.sha = sha;
+        function renderScratchpad() {
+            const sp = data.scratchpad || {};
+            let html = panelHeader('Scratchpad');
+            html += `<div class="field-row">
+        ${textField('Link URL (Blog Page)', sp.url, 'scratchpad.url')}
+    </div>`;
+            return html;
+        }
 
-        const putResp = await fetch(apiBase, {
-            method: 'PUT',
-            headers,
-            body: JSON.stringify(body)
+        function renderFooter() {
+            const f = data.footer || {};
+            return panelHeader('Footer') +
+                textField('Footer Text', f.text, 'footer.text', { help: 'HTML allowed' }) +
+                textField('Copyright', f.copyright, 'footer.copyright');
+        }
+
+        // ═══ MOVE BUTTONS ═══
+        function moveButtons(i, len, section) {
+            let btns = '';
+            if (i > 0) btns += `<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); moveItem('${section}', ${i}, -1)" title="Move up">↑</button>`;
+            if (i < len - 1) btns += `<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); moveItem('${section}', ${i}, 1)" title="Move down">↓</button>`;
+            return btns;
+        }
+
+        // ═══ DATA MANIPULATION (CRUD) ═══
+
+        function setNestedValue(obj, path, value) {
+            const keys = path.split('.');
+            let cur = obj;
+            for (let i = 0; i < keys.length - 1; i++) {
+                const k = isNaN(keys[i]) ? keys[i] : parseInt(keys[i]);
+                if (cur[k] === undefined) cur[k] = isNaN(keys[i + 1]) ? {} : [];
+                cur = cur[k];
+            }
+            const lastKey = isNaN(keys[keys.length - 1]) ? keys[keys.length - 1] : parseInt(keys[keys.length - 1]);
+            cur[lastKey] = value;
+        }
+
+        function getNestedValue(obj, path) {
+            const keys = path.split('.');
+            let cur = obj;
+            for (const k of keys) {
+                const key = isNaN(k) ? k : parseInt(k);
+                if (cur === undefined) return undefined;
+                cur = cur[key];
+            }
+            return cur;
+        }
+
+        function getNestedArray(path) {
+            return getNestedValue(data, path);
+        }
+
+        // Attach input change handler
+        function attachHandlers(panel) {
+            panel.addEventListener('input', e => {
+                const el = e.target;
+                const key = el.dataset.key;
+                if (!key) return;
+                let val = el.value;
+                // Handle special comma-separated arrays
+                if (key.match(/\btechnologies$/) || key.match(/\btags$/)) {
+                    val = val.split(',').map(s => s.trim()).filter(Boolean);
+                }
+                setNestedValue(data, key, val);
+                markDirty();
+            });
+            panel.addEventListener('change', e => {
+                const el = e.target;
+                const key = el.dataset.key;
+                if (!key) return;
+                setNestedValue(data, key, el.value);
+                markDirty();
+            });
+        }
+
+        // Toggle collapse
+        function toggleCollapse(header) {
+            header.parentElement.classList.toggle('collapsed');
+        }
+
+        // ─── Generic array operations ───
+        function addArrayItem(section, template) {
+            if (!data[section]) data[section] = [];
+            data[section].push(JSON.parse(JSON.stringify(template)));
+            markDirty();
+            renderPanel(section);
+        }
+
+        function removeArrayItem(section, index) {
+            if (!data[section]) return;
+            data[section].splice(index, 1);
+            markDirty();
+            renderPanel(section);
+        }
+
+        function moveItem(sectionPath, index, direction) {
+            const arr = getNestedArray(sectionPath);
+            if (!arr) return;
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= arr.length) return;
+            [arr[index], arr[newIndex]] = [arr[newIndex], arr[index]];
+            markDirty();
+            // Find the active panel
+            const activeLink = document.querySelector('#sidebar a.active');
+            if (activeLink) renderPanel(activeLink.dataset.panel);
+        }
+
+        // ─── About paragraphs ───
+        function addAboutParagraph() {
+            if (!data.about) data.about = { paragraphs: [] };
+            if (!data.about.paragraphs) data.about.paragraphs = [];
+            data.about.paragraphs.push('');
+            markDirty();
+            renderPanel('about');
+        }
+        function removeAboutParagraph(i) {
+            data.about.paragraphs.splice(i, 1);
+            markDirty();
+            renderPanel('about');
+        }
+
+        // ─── Emails ───
+        function addEmail() {
+            if (!data.contact) data.contact = {};
+            if (!data.contact.emails) data.contact.emails = [];
+            data.contact.emails.push('');
+            markDirty();
+            renderPanel('contact');
+        }
+        function removeEmail(i) {
+            data.contact.emails.splice(i, 1);
+            markDirty();
+            renderPanel('contact');
+        }
+
+        // ─── String items in nested objects ───
+        function addStringItem(parent, key) {
+            if (!data[parent]) data[parent] = {};
+            if (!data[parent][key]) data[parent][key] = [];
+            data[parent][key].push('');
+            markDirty();
+            // Find panel
+            const activeLink = document.querySelector('#sidebar a.active');
+            if (activeLink) renderPanel(activeLink.dataset.panel);
+        }
+        function removeStringItem(parent, key, index) {
+            data[parent][key].splice(index, 1);
+            markDirty();
+            const activeLink = document.querySelector('#sidebar a.active');
+            if (activeLink) renderPanel(activeLink.dataset.panel);
+        }
+
+        // ─── Nested strings (e.g., experience[i].responsibilities[j]) ───
+        function addNestedString(sectionPath, index, field) {
+            const arr = getNestedArray(sectionPath);
+            if (!arr || !arr[index]) return;
+            if (!arr[index][field]) arr[index][field] = [];
+            arr[index][field].push('');
+            markDirty();
+            const activeLink = document.querySelector('#sidebar a.active');
+            if (activeLink) renderPanel(activeLink.dataset.panel);
+        }
+        function removeNestedString(sectionPath, index, field, itemIndex) {
+            const arr = getNestedArray(sectionPath);
+            if (!arr || !arr[index] || !arr[index][field]) return;
+            arr[index][field].splice(itemIndex, 1);
+            markDirty();
+            const activeLink = document.querySelector('#sidebar a.active');
+            if (activeLink) renderPanel(activeLink.dataset.panel);
+        }
+
+        // ─── Cyber Arena platforms ───
+        function addCyberPlatform() {
+            if (!data.cyberArena) data.cyberArena = { intro: '', platforms: [] };
+            if (!data.cyberArena.platforms) data.cyberArena.platforms = [];
+            data.cyberArena.platforms.push({ name: '', icon: '', highlights: [], linkText: '', url: '' });
+            markDirty();
+            renderPanel('cyberArena');
+        }
+        function removeCyberPlatform(i) {
+            data.cyberArena.platforms.splice(i, 1);
+            markDirty();
+            renderPanel('cyberArena');
+        }
+
+        // ─── Scratchpad items ───
+        function addScratchpadItem() {
+            if (!data.scratchpad) data.scratchpad = { intro: '', items: [] };
+            if (!data.scratchpad.items) data.scratchpad.items = [];
+            data.scratchpad.items.push({ title: '', status: 'exploring', date: '', description: '', lesson: '', tags: [] });
+            markDirty();
+            renderPanel('scratchpad');
+        }
+        function removeScratchpadItem(i) {
+            data.scratchpad.items.splice(i, 1);
+            markDirty();
+            renderPanel('scratchpad');
+        }
+
+        // ═══ SAVE / EXPORT ═══
+
+        function getJSON() {
+            return JSON.stringify(data, null, 2);
+        }
+
+        function downloadJSON() {
+            const blob = new Blob([getJSON()], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'portfolio-data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            toast('Downloaded portfolio-data.json', 'success');
+        }
+
+        let previewWindow = null;
+        function previewSite() {
+            const jsonString = getJSON();
+            sessionStorage.setItem('portfolio-preview-data', jsonString);
+            sessionStorage.setItem('portfolio-session-active', 'true');
+            
+            const panel = document.getElementById('previewPanel');
+            const iframe = document.getElementById('livePreviewIframe');
+            
+            if (!panel.classList.contains('open')) {
+                panel.classList.add('open');
+                iframe.src = 'index.html?preview=1';
+            } else {
+                if (iframe.contentWindow) {
+                    iframe.contentWindow.postMessage({ type: 'livePreviewUpdate', data: JSON.parse(jsonString) }, '*');
+                }
+            }
+        }
+
+        function closeLivePreview() {
+            document.getElementById('previewPanel').classList.remove('open');
+            document.getElementById('livePreviewIframe').src = '';
+        }
+
+        function previewJSON() {
+            document.getElementById('previewArea').value = getJSON();
+            document.getElementById('previewModal').classList.add('show');
+        }
+        function closePreview() {
+            document.getElementById('previewModal').classList.remove('show');
+        }
+        function copyJSON() {
+            navigator.clipboard.writeText(getJSON()).then(() => toast('Copied to clipboard', 'success'));
+        }
+
+        // ═══ GITHUB API ═══
+
+        function showGitHubModal() {
+            // Restore saved values
+            const saved = JSON.parse(localStorage.getItem('admin-gh') || '{}');
+            if (saved.repo) document.getElementById('gh-repo').value = saved.repo;
+            if (saved.branch) document.getElementById('gh-branch').value = saved.branch;
+            document.getElementById('githubModal').classList.add('show');
+        }
+        function closeGitHubModal() {
+            document.getElementById('githubModal').classList.remove('show');
+        }
+
+        async function pushToGitHub() {
+            const token = document.getElementById('gh-token').value.trim();
+            const repo = document.getElementById('gh-repo').value.trim();
+            const branch = document.getElementById('gh-branch').value.trim();
+            const message = document.getElementById('gh-message').value.trim();
+
+            if (!token || !repo || !branch || !message) {
+                toast('Fill all fields', 'error');
+                return;
+            }
+
+            // Save non-sensitive settings
+            localStorage.setItem('admin-gh', JSON.stringify({ repo, branch }));
+
+            const btn = document.getElementById('gh-push-btn');
+            btn.textContent = 'Pushing...';
+            btn.disabled = true;
+
+            try {
+                const filePath = DATA_PATH;
+                const apiBase = `https://api.github.com/repos/${repo}/contents/${filePath}`;
+                const headers = {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                };
+
+                // Get current file SHA
+                const getResp = await fetch(`${apiBase}?ref=${branch}`, { headers });
+                let sha = '';
+                if (getResp.ok) {
+                    const fileData = await getResp.json();
+                    sha = fileData.sha;
+                }
+
+                // Create/Update file
+                const content = btoa(unescape(encodeURIComponent(getJSON())));
+                const body = {
+                    message,
+                    content,
+                    branch,
+                };
+                if (sha) body.sha = sha;
+
+                const putResp = await fetch(apiBase, {
+                    method: 'PUT',
+                    headers,
+                    body: JSON.stringify(body)
+                });
+
+                if (putResp.ok) {
+                    toast('Pushed to GitHub successfully!', 'success');
+                    markClean();
+                    closeGitHubModal();
+                } else {
+                    const err = await putResp.json();
+                    toast('GitHub error: ' + (err.message || putResp.status), 'error');
+                }
+            } catch (err) {
+                toast('Push failed: ' + err.message, 'error');
+            } finally {
+                btn.textContent = 'Push Commit';
+                btn.disabled = false;
+            }
+        }
+
+        // ─── Warn before leaving with unsaved changes ───
+        window.addEventListener('beforeunload', e => {
+            if (dirty) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
         });
 
-        if (putResp.ok) {
-            toast('Pushed to GitHub successfully!', 'success');
-            markClean();
-            closeGitHubModal();
-        } else {
-            const err = await putResp.json();
-            toast('GitHub error: ' + (err.message || putResp.status), 'error');
-        }
-    } catch (err) {
-        toast('Push failed: ' + err.message, 'error');
-    } finally {
-        btn.textContent = 'Push Commit';
-        btn.disabled = false;
-    }
-}
-
-// ─── Warn before leaving with unsaved changes ───
-window.addEventListener('beforeunload', e => {
-    if (dirty) {
-        e.preventDefault();
-        e.returnValue = '';
-    }
-});
-
-</script>
+    </script>
 </body>
+
 </html>

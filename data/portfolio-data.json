@@ -8,17 +8,51 @@
     "favicon": "./images/AsokaKrsna.ico",
     "resumeLink": "Resume.pdf"
   },
+  "nerd": {
+    "loader": {
+      "title": "DURJOY M.",
+      "subtitle": "Fetching portfolio..."
+    },
+    "sidebarRotatingTexts": [
+      "Cybersecurity is a mindset, not a product.",
+      "\"The important thing is not to stop questioning. Curiosity has its own reason for existing.\" - Albert Einstein",
+      "Where others see function, I see attack vectors waiting to be secured.",
+      "Research is creating new knowledge and new ways to ask better security questions."
+    ],
+    "terminal": {
+      "host": "durjoy.dev",
+      "branch": "main",
+      "welcome": "Welcome. Type 'help' for available commands.",
+      "aboutVariants": [
+        "Cybersecurity researcher. Nerd. Breaker of things.\\nCurrently at {currentOrg}.\\n{seekingText}.\\nProbably reversing something right now.",
+        "Status: caffeinated and curious.\\nLocation: somewhere in the packets.\\nMission: make the internet less broken.\\nSide quest: {seekingText}.",
+        "Researcher by profession. Hacker by passion.\\nPrimary affiliation: {primaryAffiliation}.\\nCurrent focus: {researchAreas}.\\nCoffee consumption: yes."
+      ],
+      "funFacts": [
+        "His .bashrc is longer than most people's resumes.",
+        "He once named a variable x and felt guilty for three days.",
+        "His Wireshark captures have captured more drama than Netflix.",
+        "He dreams in hex.",
+        "His git log has more entries than his sleep log."
+      ]
+    }
+  },
   "about": {
     "paragraphs": [
-      "Cybersecurity researcher. I break things to understand how to defend them — from AI-driven threats and blockchain security to network intrusion detection. Currently an M.Tech student at <a href='#'>IIT Patna</a> and Junior Research Associate at the Security Lab, building blockchain testbeds and poking at distributed systems.",
-      "3 published papers (IEEE, Springer), multiple CTF wins, and a habit of going down rabbit holes that sometimes turn into research. I'm looking for opportunities to do meaningful security research — the kind that makes systems actually harder to break."
+      "Cybersecurity researcher. I break things to understand how to defend them - from AI-driven threats and blockchain security to network intrusion detection. Currently an M.Tech student at <a href=\"https://www.iitp.ac.in/\" target=\"_blank\" rel=\"noopener noreferrer\">IIT Patna</a> and a Junior Research Associate at the Security Lab, building blockchain testbeds and poking at distributed systems.",
+      "I have 3 published papers (IEEE, Springer), multiple CTF wins, and a habit of going down rabbit holes that sometimes turn into research. I am looking for opportunities to do meaningful security research - the kind that makes systems actually harder to break."
     ]
   },
   "researchInterests": {
     "title": "Research Focus",
     "statement": "My research interests focus on the security of distributed and blockchain systems. I am interested in understanding how these systems behave under realistic adversarial conditions, and in exploring practical ways to evaluate and improve security, trust, and reliability through experimentation and system-level analysis.",
     "areas": [
-      ""
+      "Blockchain Security",
+      "Distributed Systems",
+      "Adversarial Analysis",
+      "AI Security",
+      "Network Security",
+      "Cryptographic Systems"
     ],
     "futureGoals": ""
   },
@@ -33,21 +67,21 @@
     {
       "institution": "KL University (KLEF)",
       "location": "Vaddeswaram, Andhra Pradesh, India",
-      "grade": "CGPA - 9.26 out of 10.00",
+      "grade": "CGPA: 9.26 out of 10.00",
       "period": "2021-25",
-      "degree": "B.Tech CSE (Honours); Specialization in cybersecurity and blockchain technology."
+      "degree": "B.Tech CSE (Honours); specialization in cybersecurity and blockchain technology."
     },
     {
       "institution": "Govt. Shamsur Rahman College",
       "location": "Shariatpur, Dhaka, Bangladesh",
-      "grade": "GPA - 5.00 out of 5.00",
+      "grade": "GPA: 5.00 out of 5.00",
       "period": "2019-21",
       "degree": "Higher Secondary School Certificate; Science major."
     },
     {
       "institution": "Idilpur Pilot High School",
       "location": "Shariatpur, Dhaka, Bangladesh",
-      "grade": "GPA - 5.00 out of 5.00",
+      "grade": "GPA: 5.00 out of 5.00",
       "period": "2017-19",
       "degree": "Secondary School Certificate; Science major."
     }
@@ -59,7 +93,7 @@
       "company": "Security Lab, IIT Patna",
       "location": "[Patna, IN]",
       "responsibilities": [
-        "Working on blockchain Security. Currerntly Building a local blockchain testbed to support security testing and attack simulation."
+        "Working on blockchain security. Currently building a local blockchain testbed to support security testing and attack simulation."
       ]
     },
     {
@@ -69,7 +103,7 @@
       "location": "[Delhi, IN]",
       "responsibilities": [
         "Exploring how nefarious actors exploit AI models for cyber threats beyond conventional uses.",
-        "Working towarda AI adoption in cybersecurity defense mechanisms."
+        "Working toward AI adoption in cybersecurity defense mechanisms."
       ]
     },
     {
@@ -78,9 +112,9 @@
       "company": "SRG Lab, KLEF",
       "location": "[Andhra Pradesh, IN]",
       "responsibilities": [
-        "Working on a project to mitigate voice based authentication risks e.g. record and reply attack or deepfake.",
-        "Exploring LLM fine tuning and training practically.",
-        "Keeping their system and data secure. Additionally performing web development tasks on the basis of need."
+        "Worked on mitigating voice-based authentication risks such as replay attacks and deepfakes.",
+        "Explored LLM fine-tuning and training in practice.",
+        "Helped secure systems and data, and supported web development tasks as needed."
       ]
     },
     {
@@ -89,8 +123,8 @@
       "company": "White Hat Hackers Club, KL University",
       "location": "[Andhra Pradesh, IN]",
       "responsibilities": [
-        "Initiated 6 research projects with 15+ team members, led 3 of them resulting in 2 IEEE-published papers.",
-        "Partnered with 5+ external entities to work collaboratively in research.",
+        "Initiated 6 research projects with 15+ team members and led 3 of them, resulting in 2 IEEE-published papers.",
+        "Partnered with 5+ external entities for collaborative research.",
         "Facilitated 24+ biweekly discussions averaging 100+ participants, with 60% attendance retention."
       ]
     },
@@ -100,9 +134,9 @@
       "company": "White Hat Hackers Club, KL University",
       "location": "[Andhra Pradesh, IN]",
       "responsibilities": [
-        "Coordinated 15+ events with 1500+ participants, achieving 85% satisfaction rate.",
+        "Coordinated 15+ events with 1500+ participants, achieving an 85% satisfaction rate.",
         "Crafted 20+ CTF challenges across 3 difficulty levels, completed by 300+ participants.",
-        "Provided guidelines to students to grow in Cybersecurity. Delivered 15+ technical sessions."
+        "Guided students in cybersecurity growth and delivered 15+ technical sessions."
       ]
     },
     {
@@ -112,7 +146,7 @@
       "location": "[Andhra Pradesh, IN]",
       "responsibilities": [
         "Mentored 100+ undergraduates across 7 core security courses, achieving 80% positive feedback.",
-        "Conducted 20+ study sessions, provided coursework guidiance and assisted in lab."
+        "Conducted 20+ study sessions, provided coursework guidance, and assisted in labs."
       ]
     }
   ],
@@ -120,64 +154,90 @@
     {
       "category": "Research Methodology",
       "icon": "fas fa-microscope",
-      "items": "Literature Review & Analysis, Experimental Design, Quantitative & Qualitative Analysis, Statistical Methods, Research Writing & Documentation, Peer Review Process, Academic Collaboration, Data Collection & Analysis, Technical Report Writing."
+      "items": "Literature review and analysis, experimental design, quantitative and qualitative analysis, statistical methods, research writing and documentation, peer review process, academic collaboration, data collection and analysis, technical report writing."
     },
     {
       "category": "Security Operations",
       "icon": "fas fa-compass",
-      "items": "Incident Response, Threat Hunting, Security Monitoring, Digital Forensics, Log analysis, Malware analysis, SIEM implementation."
+      "items": "Incident response, threat hunting, security monitoring, digital forensics, log analysis, malware analysis, SIEM implementation."
     },
     {
       "category": "Tools & Technologies",
       "icon": "fas fa-tools",
-      "items": "Kali Linux, Metasploit, Wireshark, Burp Suite, Nmap, Splunk, Metasploit, GNS3, Autopsy, Volatility, Snort, Suricata, Sysinternal Toolkit and more."
+      "items": "Kali Linux, Metasploit, Wireshark, Burp Suite, Nmap, Splunk, GNS3, Autopsy, Volatility, Snort, Suricata, Sysinternals Toolkit, and more."
     },
     {
       "category": "Software Development",
       "icon": "fas fa-code",
-      "items": "HTML, CSS, Js, C, Bash, Powershell, React, NodeJS, Django and propficient in ai tools like Cursor. Have built fully functional web applications, androind and ios application using AI."
+      "items": "HTML, CSS, JavaScript, C, Bash, PowerShell, React, Node.js, Django, and AI-assisted development tools such as Cursor. Built fully functional web applications plus Android and iOS apps with AI-assisted workflows."
     }
   ],
   "projects": [
     {
-      "title": "Logalyzer: Autonomus Threat Dedense System.",
-      "description": "n house SIEM solution for real-time log analysis, reducing incident response time by 30% through automatic threat remediation. Enables log collection from geographically isolated endpoints.",
-      "technologies": ["Python", "PHP", "Powershell scripting", "Javascript"],
+      "title": "Logalyzer: Autonomous Threat Defense System",
+      "description": "An in-house SIEM solution for real-time log analysis, reducing incident response time by 30% through automated threat remediation. It also enables log collection from geographically isolated endpoints.",
+      "technologies": [
+        "Python",
+        "PHP",
+        "PowerShell scripting",
+        "JavaScript"
+      ],
       "githubUrl": "https://github.com/AsokaKrsna/SIH2023",
       "liveUrl": "#"
     },
     {
       "title": "WeCrypt",
-      "description": "Researched possible ways recover and decrypt WeChat messages in an forensic environment, developed an tool to discover the database using degredation vulnerability of WeChat achieving 95% success rate across 50+ databases and various scenarios.",
-      "technologies": ["JavaScript", "HTML", "Shell Scripting"],
+      "description": "Researched possible ways to recover and decrypt WeChat messages in a forensic environment, and developed a tool to discover the database using a degradation vulnerability in WeChat, achieving 95% success across 50+ databases and multiple scenarios.",
+      "technologies": [
+        "JavaScript",
+        "HTML",
+        "Shell Scripting"
+      ],
       "githubUrl": "https://github.com/AsokaKrsna/KAVACH_2023",
       "liveUrl": "#"
     },
     {
       "title": "SignatureVault",
-      "description": "Aims to aggregate a wide range of attack patterns across various threat categories, providing a valuable resource for securoty professionals, researchers and enthusiasts. The project is open for collaboration.",
-      "technologies": ["Roff", "C", "C++", "Python", "Yara", "Regex"],
+      "description": "Aggregates a wide range of attack patterns across threat categories, providing a useful resource for security professionals, researchers, and enthusiasts. The project is open for collaboration.",
+      "technologies": [
+        "Roff",
+        "C",
+        "C++",
+        "Python",
+        "YARA",
+        "Regex"
+      ],
       "githubUrl": "https://github.com/AsokaKrsna/SignatureVault",
       "liveUrl": "#"
     },
     {
       "title": "CyberMasteryGuide",
-      "description": "An open source comprehensive guide to master cybersecurity. This is an pathway for the beginners in the field. I found it difficult to start my journey in the endless ocean of cyber and that inspired me to create the curated pathway. The project is publishes under the MIT license on github.",
-      "technologies": ["Markdown"],
+      "description": "An open-source guide to mastering cybersecurity. I found it difficult to start in the endless ocean of cyber, and that inspired me to build a curated pathway for beginners. The project is published under the MIT license on GitHub.",
+      "technologies": [
+        "Markdown"
+      ],
       "githubUrl": "https://github.com/AsokaKrsna/CyberMasteryGuide",
       "liveUrl": "#"
     },
     {
       "title": "Sri Vinayaka Packers Website",
-      "description": "A paid project I have delivered to a local packers and movers company.",
-      "technologies": ["HTML", "CSS", "JavaScript"],
+      "description": "A paid project delivered for a local packers and movers company.",
+      "technologies": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
       "githubUrl": "https://github.com/AsokaKrsna/sri-vinayaka-packers-website",
       "liveUrl": "https://srivinayakapackers.in/"
     },
     {
       "title": "WiSSAP2024",
-      "description": "I have build the website of Winter School on Speech and Audio Processing - 2024 hosted by KL University.",
-      "technologies": ["HTML", "CSS", "JavaScript"],
+      "description": "Built the website for the Winter School on Speech and Audio Processing 2024 hosted by KL University.",
+      "technologies": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
       "githubUrl": "https://github.com/AsokaKrsna/WiSSAP2024",
       "liveUrl": "https://wissap24.kluniversity.in/"
     }
@@ -186,8 +246,8 @@
     {
       "date": "Dec'24",
       "publication": "SpringerNature | ISICDS2024",
-      "title": "Beyond Copy–Pasting—Contextualizing LLMs for Secure Code Generation",
-      "description": "This study evaluates security vulnerabilities in code generated by Large Language Models (LLMs) and co-pilots, emphasizing the need for strategic contextualization in Secure Coding Practices (SCPs). Through qualitative analysis, it assesses risks and proposes actionable strategies to help developers fine-tune LLMs for secure code generation. By integrating proactive security measures, this research aligns accelerated development with robust security practices.",
+      "title": "Beyond Copy-Pasting-Contextualizing LLMs for Secure Code Generation",
+      "description": "This study evaluates security vulnerabilities in code generated by Large Language Models (LLMs) and copilots, emphasizing the need for strategic contextualization in secure coding practices. Through qualitative analysis, it assesses risks and proposes actionable strategies to help developers fine-tune LLMs for secure code generation. By integrating proactive security measures, this research aligns accelerated development with robust security practices.",
       "tldr": "LLM-generated code is riddled with vulnerabilities; strategic prompt contextualization can fix that.",
       "url": "https://link.springer.com/chapter/10.1007/978-981-97-5791-6_15",
       "type": "published",
@@ -198,7 +258,7 @@
       "date": "Jul'24",
       "publication": "ISCS2024 | IEEE Xplore",
       "title": "Beyond Text: Nefarious Actors Harnessing LLMs for Strategic Advantage",
-      "description": "This study explores how malicious actors exploit Large Language Models (LLMs) for cyber threats beyond conventional uses. Through literature review, case studies, and real-world analysis, it examines LLM-driven deception, social engineering, and cybercrimes like phishing, password cracking, and malware propagation, highlighting emerging security challenges.",
+      "description": "This study explores how malicious actors exploit Large Language Models (LLMs) for cyber threats beyond conventional uses. Through literature review, case studies, and real-world analysis, it examines LLM-driven deception, social engineering, and cybercrimes such as phishing, password cracking, and malware propagation, highlighting emerging security challenges.",
       "tldr": "Bad actors are weaponizing LLMs for phishing, malware, and social engineering at scale.",
       "url": "https://ieeexplore.ieee.org/document/10581181",
       "type": "published",
@@ -209,7 +269,7 @@
       "date": "May'23",
       "publication": "ICACCS2023 | IEEE Xplore",
       "title": "Shadow APR-ing for APR Poisoning Detection",
-      "description": "This study addresses ARP spoofing, a longstanding network security threat enabling attacks like MITM and DDoS. It proposes an automated OS-based monitoring technique to detect ARP poisoning in real time, reducing reliance on manual ARP table checks and minimizing detection delays.",
+      "description": "This study addresses ARP spoofing, a longstanding network security threat enabling attacks such as MITM and DDoS. It proposes an automated OS-based monitoring technique to detect ARP poisoning in real time, reducing reliance on manual ARP table checks and minimizing detection delays.",
       "tldr": "Automated OS-level ARP monitoring that catches poisoning attacks in real time without manual table checks.",
       "url": "https://ieeexplore.ieee.org/abstract/document/10112712",
       "type": "published",
@@ -240,13 +300,13 @@
     }
   ],
   "cyberArena": {
-    "intro": "My playground for showcasing cybersecurity challenges, CTF writeups, and practical security exercises I've developed or participated in.",
+    "intro": "My playground for showcasing cybersecurity challenges, CTF writeups, and practical security exercises I have developed or participated in.",
     "platforms": [
       {
         "name": "CTF Competitions",
         "icon": "fas fa-flag",
         "highlights": [
-          "Cracking Since 2023 :)"
+          "Cracking since 2023."
         ],
         "linkText": "View Writeups",
         "url": "#"
@@ -255,20 +315,20 @@
         "name": "TryHackMe",
         "icon": "fas fa-laptop-code",
         "highlights": [
-          "Top 1% in global leaderboard",
-          "400+ days streak, 31k+ points, 200+ rooms completed, 26 badges earned.",
-          "4 learning path completed."
+          "Top 1% in the global leaderboard",
+          "400+ day streak, 31k+ points, 200+ rooms completed, 26 badges earned.",
+          "4 learning paths completed."
         ],
         "linkText": "View Profile",
         "url": "https://tryhackme.com/p/AsokaKrsna"
       },
       {
-        "name": "Letsdefend",
+        "name": "LetsDefend",
         "icon": "fas fa-laptop-code",
         "highlights": [
           "Top 3 in the national leaderboard",
-          "6k+ points, 7k+ sla, 85% success rate on ticket solving.",
-          "5 learning paths completed, 100+ room completed."
+          "6k+ points, 7k+ SLA, 85% success rate on ticket solving.",
+          "5 learning paths completed, 100+ rooms completed."
         ],
         "linkText": "View Profile",
         "url": "https://app.letsdefend.io/user/AsokaKrsna"
@@ -281,15 +341,15 @@
       "date": "Apr'25"
     },
     {
-      "name": "Github Foundations",
+      "name": "GitHub Foundations",
       "date": "Jan'25"
     },
     {
-      "name": "OCI GenAI Professional.",
+      "name": "OCI GenAI Professional",
       "date": "Jul'24"
     },
     {
-      "name": "Oracle certified foundations associate.",
+      "name": "Oracle Certified Foundations Associate",
       "date": "Jun'24"
     },
     {
@@ -298,71 +358,70 @@
     },
     {
       "name": "Fortinet Certified Cybersecurity Associate",
-      "date": "May'2024"
+      "date": "May'24"
     },
     {
       "name": "Juniper Networks Certified Associate, Junos (JNCIA-Junos)",
-      "date": "May' 2023"
+      "date": "May'23"
     },
     {
-      "name": "(ISC)² Certified in Cybersecurity℠ - CC",
-      "date": "Dec' 2023"
+      "name": "ISC2 Certified in Cybersecurity (CC)",
+      "date": "Dec'23"
     }
   ],
   "achievements": {
     "academic": [
-      "ICCR Scholar at IIT Patna – India’s most prestigious fully funded scholarship for international students, awarded for exceptional academic merit, leadership and dedication to cultural exchange.",
-      "SII (Study In India) Scholar - scholarship awarded to 250 students worldwide by the Govt. of India based on the PRAGATII exam conducted by the National Testing Agency of India.",
-      "CGPA 9.26/10.00 in B.Tech CSE (Honours) - Top 5% of graduating class",
-      "Received conference grant to attend Seasides Cybersecurity Conference 2025",
-      "Recognized as LinkedIn's Cybersecurity Community Top Voice (Golden Badge) for contributing to community collaborative articles.",
-      "Nationalist of the Extraordinary Talent Hunt Competition 2019 (Science section) - Awarded by the education minister of the Govt. of Bangladesh.",
-      "Received 'Best meritorious student of the year of the state in science' award consecutively 3 times.",
-      "Perfect GPA 5.00/5.00 in both SSC and HSC examinations"
+      "ICCR Scholar at IIT Patna - India's most prestigious fully funded scholarship for international students, awarded for exceptional academic merit, leadership, and dedication to cultural exchange.",
+      "SII (Study in India) Scholar - scholarship awarded to 250 students worldwide by the Government of India based on the PRAGATII exam conducted by the National Testing Agency of India.",
+      "CGPA 9.26/10.00 in B.Tech CSE (Honours) - Top 5% of graduating class.",
+      "Received a conference grant to attend Seasides Cybersecurity Conference 2025.",
+      "Recognized as LinkedIn's Cybersecurity Community Top Voice (Golden Badge) for contributions to collaborative community articles.",
+      "Nationalist of the Extraordinary Talent Hunt Competition 2019 (Science section) - awarded by the education minister of the Government of Bangladesh.",
+      "Received the 'Best meritorious student of the year of the state in science' award three times in a row.",
+      "Perfect GPA 5.00/5.00 in both SSC and HSC examinations."
     ],
     "competitions": [
-      "Runner Up of Smart India Hackathon 2023 - world's biggest open innovation model and largest hackathon of India.",
-      "Runner up of KAVACH 2023 - India's biggest cybersecurity hackathon.",
-      "Top 1% in TryHackMe global leaderboard (400+ days streak, 31k+ points)",
-      "Top 3 in LetsDefend national leaderboard with 85% ticket solving success rate",
-      "Consecutive three-time winner of state level debate championship"
+      "Runner-up, Smart India Hackathon 2023 - the world's biggest open innovation model and the largest hackathon in India.",
+      "Runner-up, KAVACH 2023 - India's biggest cybersecurity hackathon.",
+      "Top 1% in the TryHackMe global leaderboard (400+ day streak, 31k+ points).",
+      "Top 3 in the LetsDefend national leaderboard with an 85% ticket-solving success rate.",
+      "Three-time consecutive winner of a state-level debate championship."
     ],
     "leadership": [
       "Research Advisor, White Hat Hackers Club, KL University (May'24 - Present)",
       "Head of the Quality Assessment Council, Student Activity Center (SAC), KL University",
       "Head Coordinator, Winter School on Speech and Audio Processing (WiSSAP-2024)",
-      "Co-founder and Head of Cybersecurity Wing - LaShido Tech Society",
+      "Co-founder and Head of Cybersecurity Wing, LaShido Tech Society",
       "Technical Chair, White Hat Hackers Club, KL University (May'23 - May'24)",
       "Co-founder and Vice President, GSRC Science Club - fostering hands-on practice and learning of science and technology for college students",
-      "Received 'Best boy scout of the division' award in 2018 and 'Best rover scout of the division' award in 2020"
+      "Received the 'Best boy scout of the division' award in 2018 and the 'Best rover scout of the division' award in 2020."
     ]
   },
   "volunteering": [
     {
       "organization": "Local Community Education Initiative",
       "role": "Cybersecurity Awareness Volunteer",
-      "period": "2024 – Present",
+      "period": "2024 - Present",
       "description": "Delivering free cybersecurity awareness sessions for underprivileged students, including instruction in Bengali. Developing basic learning materials in the local language to improve accessibility.",
       "impact": "Reached hundreds of students and continuing the initiative to improve digital safety awareness."
     },
     {
       "organization": "Skillmate",
       "role": "Cybersecurity Mentor (Volunteer)",
-      "period": "2025 – Present",
-      "description": "Providing free one-on-one mentorship and introductory sessions in cybersecurity, focused on guiding students through learning paths, fundamentals and practical problem-solving. Sessions are offered voluntarily despite having a paid model to follow",
+      "period": "2025 - Present",
+      "description": "Providing free one-on-one mentorship and introductory sessions in cybersecurity, focused on guiding students through learning paths, fundamentals, and practical problem-solving. Sessions are offered voluntarily despite there being a paid model to follow.",
       "impact": "Making mentorship in cybersecurity accessible to learners."
     },
     {
       "organization": "Gold Heart Foundation",
       "role": "Cybersecurity Mentor (Volunteer)",
-      "period": "2025 – Present",
+      "period": "2025 - Present",
       "description": "Providing free cybersecurity mentorship and guidance to underprivileged students.",
       "impact": "Supporting access to cybersecurity education for underserved learners."
     }
-
   ],
   "contact": {
-    "description": "I'm actively seeking for PhD and relevant opportunities to contribute into building a safer cyberspace for all. Whether you'd like to discuss potential research directions, collaboration opportunities or just want to connect, I'd love to hear from you!",
+    "description": "I am actively seeking PhD and research opportunities that contribute to building a safer cyberspace. Whether you would like to discuss research directions, collaboration opportunities, or simply connect, I would be glad to hear from you.",
     "phone": "+917810976687",
     "emails": [
       "durjoymajumdar02@gmail.com",
@@ -375,6 +434,11 @@
       "platform": "Google Scholar",
       "icon": "fas fa-graduation-cap",
       "url": "https://scholar.google.com/citations?user=c7OEFoIAAAAJ&hl=en"
+    },
+    {
+      "platform": "ORCID",
+      "icon": "fas fa-id-badge",
+      "url": "https://orcid.org/0009-0002-3086-9893"
     },
     {
       "platform": "GitHub",
@@ -408,44 +472,47 @@
     }
   ],
   "scratchpad": {
-    "intro": "Not every experiment works out — and that's fine. Here's a graveyard of half-baked ideas, abandoned rabbit holes, and things I learned the hard way.",
-    "items": [
+    "intro": "A graveyard of ideas that haven't worked out, or things I am just planning for.",
+    "linkText": "Read latest writing",
+    "url": "https://www.linkedin.com/pulse/attribution-error-trap-how-genai-tools-reshaping-secure-majumdar-hxm6c/?trackingId=bpcBAUbbSdiR5DBkz397Wg%3D%3D"
+  },
+  "classic": {
+    "sidebarAffiliations": [
+      "M.Tech, Computer Science (Cybersecurity)",
+      "Indian Institute of Technology Patna"
+    ],
+    "seekingText": "Seeking PhD positions - Fall 2027",
+    "printHeader": "Durjoy Majumdar | Cybersecurity Researcher | IIT Patna",
+    "showCyberArena": false,
+    "showScratchpad": true,
+    "news": [
       {
-        "title": "Custom Packet Sniffer in Rust",
-        "status": "abandoned",
-        "date": "2024",
-        "description": "Tried building a raw packet sniffer entirely in Rust with zero dependencies. Got deep into raw sockets and AF_PACKET but hit platform portability walls.",
-        "lesson": "Sometimes libpcap exists for a reason. Reinventing the wheel taught me a lot about the kernel networking stack though.",
-        "tags": ["rust", "networking", "raw-sockets"]
+        "date": "Nov 2025",
+        "text": "Joined <strong>Security Lab, IIT Patna</strong> as Junior Research Associate, working on blockchain security and building a local blockchain testbed for attack simulation."
       },
       {
-        "title": "ML-based Malware Classifier from Syscalls",
-        "status": "paused",
-        "date": "2024",
-        "description": "Hooked syscalls from sandboxed binaries and tried feeding sequences into an LSTM for behavioral classification. Accuracy plateaued at ~72%.",
-        "lesson": "Feature engineering > model complexity. Syscall n-grams helped more than raw sequences. Might revisit with transformers.",
-        "tags": ["ml", "malware-analysis", "lstm"]
+        "date": "Jul 2025",
+        "text": "Started M.Tech in Computer Science (Cybersecurity) at <strong>IIT Patna</strong> as an ICCR Scholar."
       },
       {
-        "title": "Decentralized CTF Platform on IPFS",
-        "status": "abandoned",
-        "date": "2023",
-        "description": "Wanted to host CTF challenges on IPFS so they'd be censorship-resistant. Turned out challenge isolation and scoring are fundamentally hard without a central server.",
-        "lesson": "Decentralization is cool until you need state management and real-time scoring.",
-        "tags": ["ipfs", "ctf", "web3"]
+        "date": "Apr 2025",
+        "text": "Joined <strong>CRAC Learning</strong> as a Security Researcher intern, exploring AI-driven cybersecurity defense mechanisms."
       },
       {
-        "title": "Browser Extension for Live CVE Alerts",
-        "status": "exploring",
-        "date": "2025",
-        "description": "A browser extension that cross-references the tech stack of the page you're visiting with NVD/CVE databases and shows active vulnerabilities. WIP.",
-        "lesson": "Fingerprinting tech stacks client-side is messier than expected. Wappalyzer's approach is heavier than I thought.",
-        "tags": ["browser-ext", "cve", "security"]
+        "date": "Dec 2024",
+        "text": "Paper on contextualizing LLMs for secure code generation published at <a href=\"https://link.springer.com/chapter/10.1007/978-981-97-5791-6_15\" target=\"_blank\" rel=\"noopener noreferrer\">SpringerNature ISICDS 2024</a>."
+      },
+      {
+        "date": "Jul 2024",
+        "text": "Paper on adversarial exploitation of LLMs published at <a href=\"https://ieeexplore.ieee.org/document/10581181\" target=\"_blank\" rel=\"noopener noreferrer\">IEEE ISCS 2024</a>."
       }
     ]
   },
   "footer": {
-    "text": "Built with ❤️ by Durjoy Majumdar with the help of Claude AI",
-    "copyright": "© 2025 All Rights Reserved"
+    "text": "Built and maintained by Durjoy Majumdar",
+    "nerdText": "Built and maintained by Durjoy Majumdar",
+    "classicText": "Portfolio maintained by Durjoy Majumdar",
+    "copyright": "Copyright 2026 Durjoy Majumdar",
+    "lastUpdated": "May 2026"
   }
 }

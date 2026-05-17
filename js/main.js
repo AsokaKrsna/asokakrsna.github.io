@@ -17,13 +17,12 @@ setTimeout(() => {
 (function initializeMobileMenu() {
     const menuButton = document.querySelector('.menu-button');
     const sidebar = document.querySelector('.sidebar');
-    const mainContent = document.querySelector('.main-content');
-    const sidebarHeader = document.querySelector('.sidebar-header');
-    const logo = document.querySelector('.logo');
-    const subtitle = document.querySelector('.subtitle');
     const nav = document.querySelector('.nav');
     const navUl = document.querySelector('.nav ul');
     const navItems = document.querySelectorAll('.nav li');
+    const sidebarHeader = document.querySelector('.sidebar-header');
+    const logo = document.querySelector('.logo');
+    const subtitle = document.querySelector('.subtitle');
     const sidebarSocial = document.querySelector('.sidebar-social');
     
     // Add mobile detection to body
@@ -38,8 +37,8 @@ setTimeout(() => {
         } else {
             document.body.classList.remove('is-mobile');
             // Make sure to clean up mobile state if resized to desktop
-            sidebar.classList.remove('active');
-            menuButton.classList.remove('active');
+            if (sidebar) sidebar.classList.remove('active');
+            if (menuButton) menuButton.classList.remove('active');
             document.body.classList.remove('menu-open');
             
             // Reset any style changes
@@ -101,10 +100,13 @@ setTimeout(() => {
                         logo.style.textShadow = '0 0 3px rgba(0, 255, 255, 0.3)';
                         logo.style.color = '#ffffff';
                         
-                        // Disable glitch effect for mobile
-                        const beforePseudo = document.createElement('style');
-                        beforePseudo.innerHTML = `.sidebar.active .logo.glitch-name::before, .sidebar.active .logo.glitch-name::after { display: none !important; }`;
-                        document.head.appendChild(beforePseudo);
+                        // Disable glitch effect for mobile (created once, reused)
+                        if (!document.getElementById('mobile-glitch-disable')) {
+                            const beforePseudo = document.createElement('style');
+                            beforePseudo.id = 'mobile-glitch-disable';
+                            beforePseudo.innerHTML = `.sidebar.active .logo.glitch-name::before, .sidebar.active .logo.glitch-name::after { display: none !important; }`;
+                            document.head.appendChild(beforePseudo);
+                        }
                     }
                     
                     // MOBILE ONLY: Hide profile elements only in mobile view
@@ -147,18 +149,22 @@ setTimeout(() => {
                     }
                     
                     // Set proper navigation padding
-                    nav.style.display = 'block';
-                    nav.style.width = '100%';
-                    nav.style.paddingTop = '80px';
-                    nav.style.paddingBottom = '60px';
-                    nav.style.margin = '0';
+                    if (nav) {
+                        nav.style.display = 'block';
+                        nav.style.width = '100%';
+                        nav.style.paddingTop = '80px';
+                        nav.style.paddingBottom = '60px';
+                        nav.style.margin = '0';
+                    }
                     
                     // Ensure all navigation items are visible
-                    navUl.style.display = 'block';
-                    navUl.style.height = 'auto';
-                    navUl.style.overflow = 'visible';
-                    navUl.style.margin = '0';
-                    navUl.style.padding = '0 1.5rem';
+                    if (navUl) {
+                        navUl.style.display = 'block';
+                        navUl.style.height = 'auto';
+                        navUl.style.overflow = 'visible';
+                        navUl.style.margin = '0';
+                        navUl.style.padding = '0 1.5rem';
+                    }
                     
                     // Make all nav items visible, with special attention to first items
                     navItems.forEach((item, index) => {
@@ -189,9 +195,6 @@ setTimeout(() => {
                         }
                     });
                     
-                    // Ensure navigation links are clickable
-                    fixMobileNavigation();
-                    
                     // Hide social links in mobile view only
                     if (sidebarSocial && window.innerWidth <= 768) {
                         sidebarSocial.style.display = 'none';
@@ -206,27 +209,20 @@ setTimeout(() => {
                         sidebarFooter.style.opacity = '0';
                         sidebarFooter.style.visibility = 'hidden';
                     }
-                    
-                    // Log for debugging
-                    console.log('Mobile menu toggled on - simplified layout');
-                } else {
-                    // Reset styles when closed
-                    console.log('Mobile menu toggled off');
                 }
             } else {
                 // If in desktop view, make sure styles are reset
-                resetDesktopStyles();
             }
         });
         
         // Reset styles on window resize
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
-                // Reset styles for desktop view to ensure desktop view is not affected
-                nav.style = '';
-                logo.style = '';
-                subtitle.style = '';
-                navUl.style = '';
+                // Reset styles for desktop view
+                if (nav) nav.style = '';
+                if (logo) logo.style = '';
+                if (subtitle) subtitle.style = '';
+                if (navUl) navUl.style = '';
                 
                 const profilePhoto = document.querySelector('.profile-photo');
                 if (profilePhoto) profilePhoto.style = '';
@@ -249,26 +245,12 @@ setTimeout(() => {
 // Custom cursor follower
 const cursorFollower = document.querySelector('.cursor-follower');
 
-document.addEventListener('mousemove', (e) => {
-    // This can be safely removed
-});
-
-document.addEventListener('mouseout', () => {
-    // This can be safely removed
-});
-
-// Mobile menu functionality
-function initMobileMenu() {
-    // Keep this for backward compatibility, but our immediate initializer above will handle the functionality
-    console.log('Legacy mobile menu initialization - already handled');
-}
-
 // Apply hover effect on all interactive elements
-const interactiveElements = document.querySelectorAll('a, button, .btn, .project-card, .image-wrapper, .arena-card'); // Added arena-card to interactive elements
+const interactiveElements = document.querySelectorAll('a, button, .btn, .project-card, .image-wrapper, .arena-card');
 
 interactiveElements.forEach(element => {
     element.addEventListener('mouseenter', () => {
-        if (window.innerWidth <= 768) return;
+        if (window.innerWidth <= 768 || !cursorFollower) return;
         
         if (element.classList.contains('project-card') || element.classList.contains('image-wrapper')) {
             cursorFollower.classList.add('active');
@@ -279,7 +261,7 @@ interactiveElements.forEach(element => {
     });
     
     element.addEventListener('mouseleave', () => {
-        if (window.innerWidth <= 768) return;
+        if (window.innerWidth <= 768 || !cursorFollower) return;
         
         cursorFollower.classList.remove('active');
         cursorFollower.classList.remove('link-hover');
@@ -294,10 +276,12 @@ document.querySelectorAll('nav a, .hero a[href^="#"]').forEach(anchor => {
         const targetId = this.getAttribute('href');
         const targetElement = document.querySelector(targetId);
         
-        window.scrollTo({
-            top: targetElement.offsetTop - 100,
-            behavior: 'smooth'
-        });
+        if (targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 100,
+                behavior: 'smooth'
+            });
+        }
     });
 });
 
@@ -328,17 +312,13 @@ function createMatrixEffect() {
     // Characters to use (binary, hex, and cybersecurity symbols)
     const characters = '01アイウエオカキクケコサシスセソタチツテト゠ァゥゐゟ゛<>[]{}$#@%^&*!~+-=';
     const fontSize = 10;
-    const columns = Math.floor(width / fontSize);
+    let columns = Math.floor(width / fontSize);
     
     // Create drops array
     const drops = [];
     for (let i = 0; i < columns; i++) {
         drops[i] = Math.floor(Math.random() * -height);
     }
-    
-    // Low opacity to create trail effect
-    ctx.fillStyle = 'rgba(10, 25, 47, 0.05)';
-    ctx.fillRect(0, 0, width, height);
     
     function draw() {
         // Black background with opacity to create fade effect
@@ -383,6 +363,12 @@ function createMatrixEffect() {
         clearInterval(matrixInterval);
         width = matrix.width = window.innerWidth;
         height = matrix.height = window.innerHeight;
+        // Recalculate drops array for new column count
+        const newColumns = Math.floor(width / fontSize);
+        while (drops.length < newColumns) {
+            drops.push(Math.floor(Math.random() * -height));
+        }
+        drops.length = newColumns;
         matrixInterval = setInterval(draw, 50);
     });
 }
@@ -391,69 +377,6 @@ function createMatrixEffect() {
 setTimeout(() => {
     createMatrixEffect();
 }, 1000);
-
-// Add terminal typing effect for the hero section text
-function typeWriter(element, text, speed) {
-    let i = 0;
-    element.textContent = '';
-    
-    function type() {
-        if (i < text.length) {
-            element.textContent += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
-        }
-    }
-    
-    type();
-}
-
-// Apply typing effect to multiple hero elements in sequence
-const heroElements = [
-    document.querySelector('.hero-greeting'),
-    document.querySelector('.hero h2'),
-    document.querySelector('.hero p')
-];
-
-if (heroElements[0]) {
-    window.addEventListener('load', () => {
-        const texts = heroElements.map(el => el.textContent);
-        const speeds = [50, 40, 30];
-        
-        heroElements.forEach(el => {
-            el.textContent = '';
-            el.style.opacity = 0;
-        });
-        
-        let currentIndex = 0;
-        
-        function typeNextElement() {
-            if (currentIndex < heroElements.length) {
-                const element = heroElements[currentIndex];
-                const text = texts[currentIndex];
-                const speed = speeds[currentIndex];
-                
-                element.style.opacity = 1;
-                
-                let i = 0;
-                function typeElement() {
-                    if (i < text.length) {
-                        element.textContent += text.charAt(i);
-                        i++;
-                        setTimeout(typeElement, speed);
-                    } else {
-                        currentIndex++;
-                        setTimeout(typeNextElement, 500);
-                    }
-                }
-                
-                typeElement();
-            }
-        }
-        
-        typeNextElement();
-    });
-}
 
 // Implement section fade-in on scroll
 function fadeInOnScroll() {
@@ -813,41 +736,71 @@ document.head.appendChild(style);
 
 // Main initialization function
 function initializeAll() {
-    // Initialize loading screen first
-    initLoadingScreen();
-    
-    // Initialize all other components after loading screen disappears
+    // Initialize all components after a brief delay
     setTimeout(() => {
         initTypingEffect();
         initScrollReveal();
         initMobileMenu();
-        
-        // Remove the cyber cursor initialization
-        // initCyberCursor();
-        
-        // Initialize projects load more functionality
         initProjectsLoadMore();
-        
-        // Skills animation removed - no longer needed for comma-separated list
-        // initSkillsAnimation();
     }, 500);
 }
 
 // Remove any duplicate event listeners and use only this one
 document.addEventListener('DOMContentLoaded', initializeAll);
 
+let sidebarTypingTimer = null;
+let nameTransitionTimer = null;
+let nameScrambleInterval = null;
+
+function getSidebarRotatingTexts() {
+    const typingText = document.getElementById('typingText');
+    if (!typingText) return [];
+
+    try {
+        const parsed = JSON.parse(typingText.getAttribute('data-rotating-texts') || '[]');
+        if (Array.isArray(parsed)) {
+            return parsed.map((item) => String(item || '').trim()).filter(Boolean);
+        }
+    } catch (error) {
+        console.warn('[Portfolio] Failed to parse rotating sidebar texts:', error);
+    }
+
+    const fallback = typingText.textContent.trim();
+    return fallback ? [fallback] : [];
+}
+
+function getDisplayNames() {
+    const element = document.querySelector('.glitch-name');
+    const realName = (element && (element.getAttribute('data-name') || element.textContent.trim())) || 'Portfolio';
+    const hackerHandle = (element && element.getAttribute('data-alias')) || realName;
+    return { realName, hackerHandle };
+}
+
+function scheduleNameTransition(delay) {
+    clearTimeout(nameTransitionTimer);
+    nameTransitionTimer = setTimeout(transitionName, delay);
+}
+
+function refreshTerminalChrome(data) {
+    const terminal = (data && data.nerd && data.nerd.terminal) || {};
+    const hostLabel = document.getElementById('terminalHostLabel');
+    const welcome = document.getElementById('terminalWelcome');
+    const branch = document.getElementById('statusBarBranch');
+
+    if (hostLabel) {
+        hostLabel.textContent = `guest@${terminal.host || 'portfolio'} ~ `;
+    }
+    if (welcome) {
+        welcome.textContent = terminal.welcome || "Welcome. Type 'help' for available commands.";
+    }
+    if (branch && terminal.branch) {
+        branch.textContent = terminal.branch;
+    }
+}
+
 // Typewriter effect for cybersecurity quotes
-const typingTextElement = document.getElementById('typingText');
-const securityQuotes = [
-    "\"The important thing is not to stop questioning. Curiosity has its own reason for existing.\" — Albert Einstein",
-    "Technology can't solve security problems, but it can help",
-    "Where others see function, I see attack vectors waiting to be secured",
-    "Attack and defense are entangled in a dance of death",
-    "Solving the issues that keeps CISOs up at night",
-    "In a world of black hats, be the white hat with the skill to match",
-    "Cybersecurity is a mindset, not a product",
-    "Research is creating new knowledge, opening new perspectives",
-];
+let typingTextElement = document.getElementById('typingText');
+let securityQuotes = getSidebarRotatingTexts();
 
 let quoteIndex = 0;
 let charIndex = 0;
@@ -857,6 +810,10 @@ let newTextDelay = 2000; // Delay before starting to delete text
 let deletingDelay = 50; // Delay between each character deletion
 
 function typeQuote() {
+    typingTextElement = document.getElementById('typingText');
+    securityQuotes = getSidebarRotatingTexts();
+    if (!typingTextElement || !securityQuotes.length) return;
+
     const currentQuote = securityQuotes[quoteIndex];
     
     if (isDeleting) {
@@ -885,16 +842,24 @@ function typeQuote() {
         quoteIndex = (quoteIndex + 1) % securityQuotes.length;
     }
     
-    setTimeout(typeQuote, typingDelay);
+    sidebarTypingTimer = setTimeout(typeQuote, typingDelay);
 }
 
 // Name transition between real name and cybersec handle
-const nameElement = document.querySelector('.glitch-name');
+let nameElement = document.querySelector('.glitch-name');
 let isRealName = true;
-const realName = "Durjoy Majumdar";
-const hackerHandle = "AsokaKrsna";
 
 function transitionName() {
+    nameElement = document.querySelector('.glitch-name');
+    if (!nameElement) return;
+
+    const { realName, hackerHandle } = getDisplayNames();
+    if (!hackerHandle || hackerHandle === realName) {
+        nameElement.textContent = realName;
+        nameElement.setAttribute('data-text', realName);
+        return;
+    }
+
     // Map of character replacements for cybersec style
     const charMap = {
         'a': '@', 'A': '4',
@@ -912,7 +877,8 @@ function transitionName() {
         let iterations = 0;
         
         // Create subtle scramble effect
-        const scrambleInterval = setInterval(() => {
+        clearInterval(nameScrambleInterval);
+        nameScrambleInterval = setInterval(() => {
             iterations++;
             
             // Create a scrambled version mixing original and target with random characters
@@ -944,11 +910,11 @@ function transitionName() {
                 // Phase 3: Start forming the hacker handle
                 let progress = iterations - 16;
                 if (progress >= targetText.length) {
-                    clearInterval(scrambleInterval);
+                    clearInterval(nameScrambleInterval);
                     nameElement.textContent = targetText;
                     nameElement.setAttribute('data-text', targetText);
                     isRealName = false;
-                    setTimeout(transitionName, 10000); // Switch back after 10 seconds
+                    scheduleNameTransition(10000); // Switch back after 10 seconds
                     return;
                 }
                 
@@ -967,7 +933,8 @@ function transitionName() {
         let targetText = realName;
         let iterations = 0;
         
-        const scrambleInterval = setInterval(() => {
+        clearInterval(nameScrambleInterval);
+        nameScrambleInterval = setInterval(() => {
             iterations++;
             
             if (iterations < 8) {
@@ -981,11 +948,11 @@ function transitionName() {
                 // Phase 2: Form the real name
                 let progress = iterations - 8;
                 if (progress >= targetText.length) {
-                    clearInterval(scrambleInterval);
+                    clearInterval(nameScrambleInterval);
                     nameElement.textContent = targetText;
                     nameElement.setAttribute('data-text', targetText);
                     isRealName = true;
-                    setTimeout(transitionName, 10000); // Switch back after 10 seconds
+                    scheduleNameTransition(10000); // Switch back after 10 seconds
                     return;
                 }
                 
@@ -1000,12 +967,53 @@ function transitionName() {
 
 // Start the effects when the document is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Start typewriter effect
+    clearTimeout(sidebarTypingTimer);
+    quoteIndex = 0;
+    charIndex = 0;
+    isDeleting = false;
     setTimeout(typeQuote, 1000);
-    
-    // Start name transition effect
-    setTimeout(transitionName, 3000);
+    scheduleNameTransition(3000);
 });
+
+function bindArenaHoverCards() {
+    document.querySelectorAll('.arena-card').forEach((card) => {
+        card.onmouseenter = function() {
+            this.setAttribute('data-hover', 'true');
+        };
+        card.onmouseleave = function() {
+            this.removeAttribute('data-hover');
+        };
+    });
+}
+
+window.applyNerdModeData = function(data) {
+    clearTimeout(sidebarTypingTimer);
+    quoteIndex = 0;
+    charIndex = 0;
+    isDeleting = false;
+
+    refreshTerminalChrome(data);
+
+    typingTextElement = document.getElementById('typingText');
+    if (typingTextElement) {
+        typingTextElement.textContent = '';
+        typingTextElement.removeAttribute('data-typing-initialized');
+    }
+
+    clearTimeout(nameTransitionTimer);
+    clearInterval(nameScrambleInterval);
+    isRealName = true;
+    nameElement = document.querySelector('.glitch-name');
+    if (nameElement) {
+        const { realName } = getDisplayNames();
+        nameElement.textContent = realName;
+        nameElement.setAttribute('data-text', realName);
+    }
+
+    setTimeout(typeQuote, 150);
+    scheduleNameTransition(3000);
+    bindArenaHoverCards();
+};
 
 // Cyber Cursor Effect - removing entire function
 function initCyberCursor() {
@@ -1035,176 +1043,18 @@ function initScrollReveal() {
     }
 }
 
-// Loading Screen Animation
-function initLoadingScreen() {
-    const loadingScreen = document.querySelector('.loading-screen');
-    const bootText = document.getElementById('boot-text');
-    const bootProgress = document.getElementById('boot-progress');
-    
-    if (!loadingScreen || !bootText || !bootProgress) {
-        console.error('Loading screen elements not found');
-        return;
-    }
-
-    // Check if this is a returning visitor
-    const hasVisited = localStorage.getItem('hasVisitedBefore');
-    let bootSpeed = 1; // Default speed multiplier
-    
-    if (hasVisited) {
-        // For returning visitors, speed up the process
-        bootSpeed = 3;
-        lineDelay = 30; // Faster typing for returning visitors
-    } else {
-        // First time visitor - set the flag
-        localStorage.setItem('hasVisitedBefore', 'true');
-    }
-
-    // Initialize boot text content
-    let bootSequence = `SecureBoot v1.0.7 - Cybersecurity Portfolio Initialization
-Copyright (c) 2023 Durjoy Defense Systems
-
-[+] Initializing system components...
-[+] Loading memory modules..................... [OK]
-[+] Checking CPU status....................... [OK]
-[+] Initializing network interfaces........... [OK]
-[+] Loading kernel modules.................... [OK]
-[+] Verifying system integrity................ [OK]
-[+] Scanning for malware...................... [CLEAR]
-[+] Checking for rootkits.................... [NONE DETECTED]
-[+] Setting up firewall rules................. [ACTIVE]
-[+] Establishing secure connection............ [ENCRYPTED]
-[+] Initializing intrusion detection system... [RUNNING]
-[+] Loading portfolio assets.................. [IN PROGRESS]
-
-> Starting cybersecurity portfolio interface...
-> Loading encryption protocols...
-> Establishing secure environment...
-> Mounting project repositories...
-> Initializing skills database...
-> Loading experience modules...
-> Finalizing profile configuration...
-
-System ready. Welcome, user.
-SecureOS loaded successfully. Launching portfolio in 3...2...1...`;
-
-    // For returning visitors, show a shortened version
-    if (hasVisited) {
-        bootSequence = `SecureBoot v1.0.7 - Quick Load Sequence
-[+] Resuming from cached session...
-[+] Verifying system integrity...... [OK]
-[+] Quick security scan............. [CLEAR]
-[+] Loading portfolio assets........ [IN PROGRESS]
-
-> Launching portfolio interface...
-Welcome back, user.
-Launching portfolio...`;
-    }
-
-    // Typewriter effect variables
-    let charIndex = 0;
-    let lineDelay = hasVisited ? 30 : 80; // milliseconds between characters
-    
-    // Progress bar variables
-    let progressValue = 0;
-    let progressTarget = 100;
-    let progressStep = hasVisited ? 1.5 : 0.5;
-    
-    // Function to simulate terminal typing
-    function typeText() {
-        if (charIndex < bootSequence.length) {
-            // Add one character at a time
-            bootText.innerHTML = bootSequence.substring(0, charIndex) + '<span class="blink">▋</span>';
-            charIndex++;
-            
-            // Speed up typing based on character
-            let nextDelay = lineDelay;
-            if (bootSequence.charAt(charIndex-1) === '.') {
-                nextDelay = hasVisited ? 10 : 30; // type dots faster
-            } else if (bootSequence.charAt(charIndex-1) === '\n') {
-                nextDelay = hasVisited ? 100 : 300; // pause at new lines
-                
-                // Update progress on each new line
-                progressValue += progressStep * 5;
-                if (progressValue > progressTarget) progressValue = progressTarget;
-                bootProgress.style.width = `${progressValue}%`;
-            }
-            
-            setTimeout(typeText, nextDelay / bootSpeed);
-        } else {
-            // Typing complete, finish progress bar
-            bootProgress.style.width = '100%';
-            
-            // Wait a moment then hide loading screen
-            setTimeout(() => {
-                loadingScreen.classList.add('fade-out');
-                
-                // Remove from DOM after transition
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 500);
-            }, hasVisited ? 300 : 1000);
-        }
-    }
-    
-    // Start typing with a small initial delay
-    setTimeout(typeText, hasVisited ? 200 : 600);
-    
-    // Gradually increase progress bar
-    function updateProgressBar() {
-        if (progressValue < progressTarget) {
-            progressValue += progressStep;
-            bootProgress.style.width = `${progressValue}%`;
-            setTimeout(updateProgressBar, hasVisited ? 50 : 100);
-        }
-    }
-    
-    // Start progress bar animation
-    setTimeout(updateProgressBar, hasVisited ? 200 : 600);
+// Cyber Cursor Effect - removing entire function
+function initCyberCursor() {
+    // Function content can be safely removed
+    console.log("Cursor effect disabled");
 }
 
-// Blog View More functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const blogItems = document.querySelectorAll('.blog-card');
-    const viewMoreBtn = document.getElementById('view-more-blogs');
-    const ITEMS_PER_LOAD = 5;
-    let currentlyShown = ITEMS_PER_LOAD;
-    
-    // Initially hide all but the first 5 blog items
-    if (blogItems.length > ITEMS_PER_LOAD) {
-        for (let i = ITEMS_PER_LOAD; i < blogItems.length; i++) {
-            blogItems[i].style.display = 'none';
-        }
-        
-        // Show the view more button
-        viewMoreBtn.style.display = 'block';
-    } else {
-        // Hide the view more button if there are 5 or fewer items
-        viewMoreBtn.style.display = 'none';
-    }
-    
-    // Handle click event on the view more button
-    viewMoreBtn.addEventListener('click', function() {
-        // Show the next batch of items
-        for (let i = currentlyShown; i < Math.min(currentlyShown + ITEMS_PER_LOAD, blogItems.length); i++) {
-            blogItems[i].style.display = 'flex';
-            blogItems[i].style.opacity = '0';
-            
-            // Fade in the newly displayed items
-            setTimeout(() => {
-                blogItems[i].style.transition = 'opacity 0.5s ease';
-                blogItems[i].style.opacity = '1';
-            }, 50);
-        }
-        
-        // Update the count of displayed items
-        currentlyShown = Math.min(currentlyShown + ITEMS_PER_LOAD, blogItems.length);
-        
-        // Hide the view more button if all items are now displayed
-        if (currentlyShown >= blogItems.length) {
-            viewMoreBtn.style.display = 'none';
-        }
-    });
-});
+// Loading Screen Animation
+// NOTE: The actual loading screen is handled by the inline script in index.html.
+// This function is kept as a no-op for backward compatibility with initializeAll().
+function initLoadingScreen() {
+    return;
+}
 
 // Project Load More Functionality
 function initProjectsLoadMore() {
@@ -1313,66 +1163,16 @@ function initResearchLoadMore() {
     });
 }
 
-// Initialize everything when the DOM is loaded
-function init() {
-    // Apply smooth scrolling to navigation links
-    document.querySelectorAll('.nav a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                const yOffset = -80; // Adjust this value as needed
-                const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                window.scrollTo({top: y, behavior: 'smooth'});
-            }
-        });
-    });
-    
-    // Mobile menu is now handled by the immediate initializer at the top of the file
-    // No need to duplicate the functionality here
-    
-    // Initialize typing effect
-    initTypingEffect();
-    
-    // Initialize loading animation for elements
-    initLoadingAnimation();
-    
-    // Initialize projects "Load More" functionality
-    initProjectsLoadMore();
-    
-    // Initialize research "See More" functionality
-    initResearchLoadMore();
-    
-    // Initialize blog "View More" functionality
-    initBlogViewMore();
-}
-
-// Initialize once DOM is loaded
-document.addEventListener('DOMContentLoaded', init);
+// NOTE: init() removed — all its work (nav scroll, initTypingEffect, initLoadingAnimation,
+// initProjectsLoadMore, initResearchLoadMore, initBlogViewMore) is already handled by
+// initializeAll() and data-loader.js runPostRenderInitializers().
 
 // Typing effect for sidebar description
 function initTypingEffect() {
     const typingText = document.getElementById('typingText');
-    if (!typingText || typingText.hasAttribute('data-typing-initialized')) return;
-    
-    typingText.setAttribute('data-typing-initialized', 'true');
-    const text = typingText.textContent.trim();
-    typingText.textContent = '';
+    if (!typingText) return;
+
     typingText.style.visibility = 'visible';
-    
-    let i = 0;
-    const speed = 50; // typing speed in milliseconds
-    
-    function typeWriter() {
-        if (i < text.length) {
-            typingText.textContent += text.charAt(i);
-            i++;
-            setTimeout(typeWriter, speed);
-        }
-    }
-    
-    // Start typing after a short delay
-    setTimeout(typeWriter, 1000);
 }
 
 // Animation for elements as they come into view
@@ -1396,28 +1196,26 @@ function initLoadingAnimation() {
 // Initialize blog view more functionality
 function initBlogViewMore() {
     const blogCards = document.querySelectorAll('.blog-card');
-    const viewMoreButton = document.getElementById('view-more-blogs');
-    
-    if (!viewMoreButton || blogCards.length === 0) return;
-    
-    const initialVisibleCount = 5; // Show first 5 blog posts initially
-    
-    // Initially hide blog cards after the initial visible count
+    const existingButton = document.getElementById('view-more-blogs');
+
+    if (!existingButton || blogCards.length === 0) return;
+
+    const initialVisibleCount = 5;
+    const viewMoreButton = existingButton.cloneNode(true);
+    existingButton.parentNode.replaceChild(viewMoreButton, existingButton);
+
     blogCards.forEach((card, index) => {
-        if (index >= initialVisibleCount) {
-            card.style.display = 'none';
-        }
+        card.style.display = index >= initialVisibleCount ? 'none' : '';
     });
-    
-    // Add click event to the View More button
+
+    viewMoreButton.style.display = blogCards.length > initialVisibleCount ? 'inline-block' : 'none';
     viewMoreButton.addEventListener('click', () => {
-        blogCards.forEach(card => {
-            card.style.display = 'block';
+        blogCards.forEach((card) => {
+            card.style.display = '';
         });
-        
-        // Hide the button after showing all blogs
+
         viewMoreButton.style.display = 'none';
-        
+
         console.log(
             '%c[Blogs] %cAll blog posts are now visible',
             'color: #4dfcff; font-weight: bold;',
@@ -1425,18 +1223,6 @@ function initBlogViewMore() {
         );
     });
 } 
-
-
-// Enhanced hover effect for Cyber Arena cards
-document.querySelectorAll('.arena-card').forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        this.setAttribute('data-hover', 'true');
-    });
-    
-    card.addEventListener('mouseleave', function() {
-        this.removeAttribute('data-hover');
-    });
-});
 
 // Fix mobile navigation click handling
 function fixMobileNavigation() {
@@ -1478,17 +1264,8 @@ function fixMobileNavigation() {
     });
 }
 
-// Call the fix navigation function on page load
-document.addEventListener('DOMContentLoaded', () => {
-    fixMobileNavigation();
-});
-
-// Call it again on window resize to ensure it works after resizing
-window.addEventListener('resize', () => {
-    if (window.innerWidth <= 768) {
-        fixMobileNavigation();
-    }
-});
+// NOTE: Standalone fixMobileNavigation DOMContentLoaded and resize handlers removed.
+// Mobile nav is already initialized inside the initializeMobileMenu IIFE.
 
 // Add a function to reset all desktop styles
 function resetDesktopStyles() {
@@ -1532,19 +1309,8 @@ function resetDesktopStyles() {
     }
 }
 
-// Call this on page load to ensure desktop view is clean
-document.addEventListener('DOMContentLoaded', () => {
-    if (window.innerWidth > 768) {
-        resetDesktopStyles();
-    }
-});
-
-// Reset styles on page load and whenever window resizes to desktop size
-window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-        resetDesktopStyles();
-    }
-});
+// NOTE: Standalone resetDesktopStyles DOMContentLoaded and resize handlers removed.
+// Desktop style resets are already handled by the initializeMobileMenu IIFE resize handler.
 
 // ═══════════════════════════════════════
 //  NERDIFICATION MODULE
@@ -1595,24 +1361,140 @@ window.addEventListener('resize', () => {
         });
 
         const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+        const escapeTerminal = (value) => String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+        const slugify = (value, fallback = 'portfolio') => {
+            const slug = String(value || fallback)
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            return slug || fallback;
+        };
+        const getTerminalContext = () => {
+            const portfolio = window.portfolioData || {};
+            const personal = portfolio.personal || {};
+            const classic = portfolio.classic || {};
+            const nerd = portfolio.nerd || {};
+            const terminal = nerd.terminal || {};
+            const affiliations = Array.isArray(classic.sidebarAffiliations)
+                ? classic.sidebarAffiliations.map((item) => String(item || '').trim()).filter(Boolean)
+                : [];
+            const experience = Array.isArray(portfolio.experience) ? portfolio.experience : [];
+            const areas = portfolio.researchInterests && Array.isArray(portfolio.researchInterests.areas)
+                ? portfolio.researchInterests.areas.map((item) => String(item || '').trim()).filter(Boolean)
+                : [];
+            const name = personal.name || 'Portfolio';
+            const alias = personal.alias || name;
+            const currentOrg = experience[0] && experience[0].company
+                ? experience[0].company
+                : (affiliations[1] || affiliations[0] || 'the lab');
 
-        const funFacts = [
-            'Durjoy once stayed awake 42 hours debugging a single off-by-one error.',
-            'His .bashrc is longer than most people\'s resumes.',
-            'He types faster in vim than most people think.',
-            'He once named a variable "x" and felt guilty for three days.',
-            'His Wireshark captures have captured more drama than Netflix.',
-            'He dreams in hex.',
-            'He has mass reported more phishing sites than emails he has read.',
-            'His terminal font is JetBrains Mono. He will fight you over this.',
-            'He once opened 400 browser tabs. The laptop survived. Barely.',
-            'CTF flags fear him.',
-            'He once disassembled a toaster to check for vulnerabilities.',
-            'His git log has more entries than his sleep log.',
-            'He puts the "fun" in function. And the "tion" in frustration.',
-            'He reverse-engineered his alarm clock. It now plays the Matrix theme.',
-            'He doesn\'t google errors. Errors google him.',
-        ];
+            return {
+                data: portfolio,
+                personal,
+                classic,
+                terminal,
+                name,
+                alias,
+                host: terminal.host || 'portfolio',
+                primaryAffiliation: affiliations[1] || affiliations[0] || 'the lab',
+                currentOrg,
+                seekingText: classic.seekingText || 'Exploring security rabbit holes',
+                researchAreas: areas.slice(0, 3).join(', ') || 'security systems',
+                shellLabel: slugify(alias || name, 'portfolio'),
+            };
+        };
+        const applyTerminalTemplate = (value) => {
+            const context = getTerminalContext();
+            return String(value || '')
+                .replace(/\{name\}/g, context.name)
+                .replace(/\{alias\}/g, context.alias)
+                .replace(/\{host\}/g, context.host)
+                .replace(/\{currentOrg\}/g, context.currentOrg)
+                .replace(/\{primaryAffiliation\}/g, context.primaryAffiliation)
+                .replace(/\{seekingText\}/g, context.seekingText)
+                .replace(/\{researchAreas\}/g, context.researchAreas);
+        };
+        const buildAboutVariant = (template) => {
+            const context = getTerminalContext();
+            const lines = applyTerminalTemplate(template)
+                .split('\n')
+                .map((line) => line.trim())
+                .filter(Boolean);
+            return `<span class="cmd-success">[ ${escapeTerminal(context.name).toUpperCase()} ]</span>\n  ${lines.map(escapeTerminal).join('\n  ')}`;
+        };
+        const getTerminalFunFacts = () => {
+            const customFacts = Array.isArray(getTerminalContext().terminal.funFacts)
+                ? getTerminalContext().terminal.funFacts.map((item) => String(item || '').trim()).filter(Boolean)
+                : [];
+
+            if (customFacts.length) {
+                return customFacts;
+            }
+
+            return [
+                'The .bashrc is longer than most resumes.',
+                'A single variable named x can still trigger existential regret.',
+                'Wireshark captures have revealed more drama than streaming platforms.',
+                'Git history currently outweighs sleep history.',
+                'Curiosity remains the default debugging strategy.'
+            ];
+        };
+        const getTerminalAboutVariants = () => {
+            const customVariants = Array.isArray(getTerminalContext().terminal.aboutVariants)
+                ? getTerminalContext().terminal.aboutVariants.map((item) => String(item || '').trim()).filter(Boolean)
+                : [];
+            const variants = customVariants.length ? customVariants : [
+                'Cybersecurity researcher. Nerd. Breaker of things.\nCurrently at {currentOrg}.\n{seekingText}.\nProbably reversing something right now.',
+                'Status: caffeinated and curious.\nLocation: somewhere in the packets.\nMission: make the internet less broken.\nSide quest: {seekingText}.',
+                'Researcher by profession. Hacker by passion.\nPrimary affiliation: {primaryAffiliation}.\nCurrent focus: {researchAreas}.\nCoffee consumption: yes.'
+            ];
+            return variants.map(buildAboutVariant);
+        };
+        const getWhoamiVariants = () => {
+            const context = getTerminalContext();
+            const guest = `guest@${context.host}`;
+            return [
+                `<span class="cmd-success">${escapeTerminal(guest)}</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 100(curious_people), 42(hackers), 7(nerds)\n  Shell: /bin/curiosity\n  Home: you're already here`,
+                `<span class="cmd-success">${escapeTerminal(guest)}</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 404(lost_souls), 200(ok_people)\n  Shell: /bin/bash (but you wish it was zsh)\n  Last login: right now, from your couch`,
+                `<span class="cmd-success">${escapeTerminal(guest)}</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 100(curious_people), 1(first_timers)\n  Shell: /bin/adventure\n  Status: snooping around (it's fine, I see everything)`
+            ];
+        };
+        const getHackVariants = () => {
+            const context = getTerminalContext();
+            return [
+                ['Initializing exploit framework...', 'Scanning ports 1-65535...', 'Vulnerability found: CVE-2024-PORTFOLIO', 'Injecting payload... [##########] 100%', 'Establishing reverse shell...', '<span class="cmd-error">ACCESS DENIED.</span>', '', '<span class="cmd-success">Just kidding. This is a portfolio, not a target.</span>'],
+                ['Loading Metasploit...', 'use exploit/multi/handler', 'set PAYLOAD html/reverse_shell', 'set LHOST localhost', 'exploit', '...', '<span class="cmd-error">Exploit completed, but no session was created.</span>', '', '<span class="cmd-success">The only thing you hacked was the UI.</span>'],
+                [`nmap -sV -sC ${escapeTerminal(context.host)}`, 'PORT    STATE  SERVICE', '22/tcp  open   ssh (honeypot)', '80/tcp  open   portfolio', '443/tcp open   ssl/portfolio', '1337/tcp open  waste (of your time)', '', '<span class="cmd-success">All ports lead to this portfolio. There is no escape.</span>'],
+                ['Brute forcing admin panel...', 'Trying admin:admin...     <span class="cmd-error">FAIL</span>', 'Trying admin:password...  <span class="cmd-error">FAIL</span>', 'Trying admin:123456...    <span class="cmd-error">FAIL</span>', 'Trying admin:portfolio... <span class="cmd-error">FAIL</span>', '', '<span class="cmd-success">Plot twist: there is no admin panel here.</span>']
+            ];
+        };
+        const getNeofetchVariants = () => {
+            const context = getTerminalContext();
+            const shellLabel = escapeTerminal(context.shellLabel);
+            const host = escapeTerminal(context.host);
+            return [
+                `<span class="cmd-success">${shellLabel}@portfolio</span>\n  OS: PortfolioOS 1.337\n  Host: ${host}\n  Kernel: caffeine-6.6.6\n  Shell: /bin/curiosity\n  Theme: Navy Dark [neon-blue]\n  Terminal: this thing right here\n  CPU: Brain @ 3.14GHz (overclocked)\n  Memory: 42MB / infinity (mostly memes)`,
+                `<span class="cmd-success">${shellLabel}@portfolio</span>\n  OS: PortfolioOS 2.0-rc1 (unstable)\n  Uptime: since the last coffee\n  Packages: 1337 (npm), 42 (pip), infinity (regrets)\n  Shell: /bin/chaos\n  Resolution: 1920x1080 (eyes: 20/20 at 3AM)\n  DE: Midnight Theme\n  CPU: Overcaffeinated @ 4.04GHz\n  GPU: Imagination RTX 9090\n  Memory: 8MB free / 16GB (Chrome ate the rest)`,
+                `<span class="cmd-success">${shellLabel}@portfolio</span>\n  OS: Arch btw\n  Uptime: too long to admit\n  Shell: fish (don't @ me)\n  Terminal: alacritty\n  Disk: 99% full (all CTF writeups)\n  Network: connected to the mainframe\n  Battery: running on spite and curiosity\n  Mood: [hacking | sleeping]`
+            ];
+        };
+        const getTerminalSkillsOutput = () => {
+            const skills = Array.isArray(getTerminalContext().data.skills) ? getTerminalContext().data.skills : [];
+            if (!skills.length) {
+                return '<span class="cmd-info">cat /etc/arsenal.conf</span>\n\n  <span class="cmd-success">[Skills]</span>      Portfolio data is still loading.';
+            }
+
+            return '<span class="cmd-info">cat /etc/arsenal.conf</span>\n\n' + skills.slice(0, 4).map((skill) => {
+                const label = escapeTerminal(skill.category || 'Skills');
+                const items = escapeTerminal(skill.items || '');
+                return `  <span class="cmd-success">[${label}]</span>  ${items}`;
+            }).join('\n');
+        };
+
+        const funFacts = getTerminalFunFacts;
 
         const eightBall = [
             'Signs point to a segfault.',
@@ -1634,32 +1516,19 @@ window.addEventListener('resize', () => {
             '<span class="cmd-error">[sudo] password for guest: ********\nAuthentication failure. Your IP has been logged.\nNSA notified. FBI en route. 🕵️</span>',
             '<span class="cmd-error">sudo: command requires root. You are root... of the problem. 🌱</span>',
             '<span class="cmd-error">[sudo] Let me think about it...\n...\n...\nNo. 🔒</span>',
-            '<span class="cmd-error">[sudo] Nice try. Durjoy has been alerted.\nHe said: "lol"</span>',
+            '<span class="cmd-error">[sudo] Nice try. The site owner has been alerted.\nResponse: "lol"</span>',
         ];
 
-        const aboutVariants = [
-            '<span class="cmd-success">┌─ DURJOY MAJUMDAR ─┐</span>\n  Cybersec researcher. Nerd. Breaker of things.\n  Currently @ IIT Patna.\n  Seeking PhD Fall 2027.\n  Probably reversing something rn.\n<span class="cmd-success">└───────────────────┘</span>',
-            '<span class="cmd-success">┌─ DURJOY MAJUMDAR ─┐</span>\n  Status: Caffeinated & Dangerous.\n  Location: Somewhere in the packets.\n  Mission: Make the internet less broken.\n  Side quest: PhD hunting.\n<span class="cmd-success">└───────────────────┘</span>',
-            '<span class="cmd-success">┌─ DURJOY MAJUMDAR ─┐</span>\n  Hacker by passion. Researcher by profession.\n  IIT Patna → PhD (soon™)\n  Currently: staring at hex dumps.\n  Coffee consumption: yes.\n<span class="cmd-success">└───────────────────┘</span>',
-        ];
+        const aboutVariants = getTerminalAboutVariants;
 
-        const whoamiVariants = [
-            '<span class="cmd-success">guest@durjoy.dev</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 100(curious_people), 42(hackers), 7(nerds)\n  Shell: /bin/curiosity\n  Home: you\'re already here',
-            '<span class="cmd-success">guest@durjoy.dev</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 404(lost_souls), 200(ok_people)\n  Shell: /bin/bash (but you wish it was zsh)\n  Last login: right now, from your couch',
-            '<span class="cmd-success">guest@durjoy.dev</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 100(curious_people), 1(first_timers)\n  Shell: /bin/adventure\n  Status: snooping around (it\'s fine, I see everything)',
-        ];
+        const whoamiVariants = getWhoamiVariants;
 
-        const hackVariants = [
-            ['Initializing exploit framework...', 'Scanning ports 1-65535...', 'Vulnerability found: CVE-2024-DURJOY', 'Injecting payload... [██████████] 100%', 'Establishing reverse shell...', '<span class="cmd-error">ACCESS DENIED.</span>', '', '<span class="cmd-success">Just kidding. This is a portfolio, not a target. 😄</span>'],
-            ['Loading Metasploit...', 'use exploit/multi/handler', 'set PAYLOAD html/reverse_shell', 'set LHOST localhost', 'exploit', '...', '<span class="cmd-error">Exploit completed, but no session was created.</span>', '', '<span class="cmd-success">The only thing you hacked was my heart. 💚</span>'],
-            ['nmap -sV -sC durjoy.dev', 'PORT    STATE  SERVICE', '22/tcp  open   ssh (honeypot)', '80/tcp  open   portfolio', '443/tcp open   ssl/portfolio', '1337/tcp open  waste (of your time)', '', '<span class="cmd-success">All ports lead to this portfolio. There is no escape.</span>'],
-            ['Brute forcing admin panel...', 'Trying admin:admin...     <span class="cmd-error">FAIL</span>', 'Trying admin:password...  <span class="cmd-error">FAIL</span>', 'Trying admin:123456...    <span class="cmd-error">FAIL</span>', 'Trying admin:durjoy...    <span class="cmd-error">FAIL</span>', '', '<span class="cmd-success">Plot twist: there is no admin panel. 🤡</span>'],
-        ];
+        const hackVariants = getHackVariants;
 
         const coffeeVariants = [
             '<span class="cmd-info">\n   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'\n</span>  <span class="cmd-success">Brewing...</span> Your mass-produced cup of mass coffee is ready.\n  WARNING: Caffeine levels approaching unsafe thresholds.',
             '<span class="cmd-info">\n   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'\n</span>  <span class="cmd-success">Espresso loaded.</span> Sleep.exe has been terminated.\n  Side effects: coding at 3AM, naming variables properly.',
-            '<span class="cmd-info">\n   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'\n</span>  <span class="cmd-error">ERROR: Coffee pot empty.</span>\n  Durjoy\'s productivity has decreased by 97%.\n  Sending emergency drone to nearest café...',
+            '<span class="cmd-info">\n   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'\n</span>  <span class="cmd-error">ERROR: Coffee pot empty.</span>\n  Productivity has decreased by 97%.\n  Sending emergency drone to the nearest cafe...',
         ];
 
         const matrixVariants = [
@@ -1669,7 +1538,7 @@ window.addEventListener('resize', () => {
         ];
 
         const exitVariants = [
-            '<span class="cmd-error">There is no escape.</span> You\'re trapped in Durjoy\'s portfolio forever.\nTry <span class="cmd-info">Ctrl+W</span> if you dare. 😈',
+            '<span class="cmd-error">There is no escape.</span> You\'re trapped in this portfolio forever.\nTry <span class="cmd-info">Ctrl+W</span> if you dare. 😈',
             '<span class="cmd-error">$ exit</span>\nlogout\n...\n<span class="cmd-success">Just kidding. You\'re still here.</span>\nThis terminal has trust issues.',
             '<span class="cmd-error">Process "you" cannot be killed.</span>\nReason: Too curious to leave.\nSuggested action: keep typing commands.',
             '<span class="cmd-error">exit: command not found</span>\n(I removed it. You\'re welcome.)',
@@ -1681,11 +1550,7 @@ window.addEventListener('resize', () => {
             '<span class="cmd-success">🎵 dQw4w9WgXcQ 🎵</span>\n\n  If you know that YouTube ID by heart,\n  you\'ve been on the internet too long.\n  <span class="cmd-info">...just like me.</span>',
         ];
 
-        const neofetchVariants = [
-            '<span class="cmd-success">durjoy@portfolio</span>\n  OS: DurjoyOS 1.337\n  Host: durjoy.dev\n  Kernel: caffeine-6.6.6\n  Shell: /bin/curiosity\n  Theme: Navy Dark [neon-blue]\n  Terminal: this thing right here\n  CPU: Brain @ 3.14GHz (overclocked)\n  Memory: 42MB / ∞MB (mostly memes)',
-            '<span class="cmd-success">durjoy@portfolio</span>\n  OS: DurjoyOS 2.0-rc1 (unstable)\n  Uptime: since the last coffee\n  Packages: 1337 (npm), 42 (pip), ∞ (regrets)\n  Shell: /bin/chaos\n  Resolution: 1920x1080 (eyes: 20/20 at 3AM)\n  DE: Midnight Theme\n  CPU: Overcaffeinated @ 4.04GHz\n  GPU: Imagination RTX 9090\n  Memory: 8MB free / 16GB (Chrome ate the rest)',
-            '<span class="cmd-success">durjoy@portfolio</span>\n  OS: Arch btw\n  Uptime: too long to admit\n  Shell: fish (don\'t @ me)\n  Terminal: alacritty\n  Disk: 99% full (all CTF writeups)\n  Network: connected to the mainframe\n  Battery: running on spite and curiosity\n  Mood: ⟨hacking | sleeping⟩ (superposition)',
-        ];
+        const neofetchVariants = getNeofetchVariants;
 
         const rmVariants = [
             '<span class="cmd-error">Nice try. I\'m not falling for that again. 💀</span>',
@@ -1695,10 +1560,13 @@ window.addEventListener('resize', () => {
         ];
 
         const commands = {
-            help: () => '<span class="cmd-info">Available commands:</span>\n  help        — you\'re reading it\n  about       — who is this guy?\n  whoami      — identity crisis\n  skills      — peek at the arsenal\n  goto [sec]  — teleport to section\n  ls          — list the map\n  cat flag    — capture the flag 🚩\n  ping        — ping durjoy\n  uptime      — how long?\n  sudo        — nice try\n  hack        — initiate hack sequence\n  fortune     — random wisdom\n  coffee      — essential fuel\n  matrix      — take the pill\n  8ball       — ask the oracle\n  leet [text] — 1337 translator\n  neofetch    — system info\n  <span class="cmd-success">snake</span>       — <span class="cmd-success">🐍 packet snatcher</span>\n  <span class="cmd-success">crack</span>       — <span class="cmd-success">🔐 hash cracker</span>\n  <span class="cmd-success">type</span>        — <span class="cmd-success">⌨️ type attack</span>\n  <span class="cmd-success">ttt</span>         — <span class="cmd-success">❌ tic-tac-toe</span>\n  clear       — wipe the slate',
-            about: () => pick(aboutVariants),
-            whoami: () => pick(whoamiVariants),
-            skills: () => '<span class="cmd-info">cat /etc/arsenal.conf</span>\n\n  <span class="cmd-success">[Security Ops]</span>  Incident Response · Threat Hunting · Digital Forensics · Malware Analysis · SIEM\n  <span class="cmd-success">[Tools]</span>         Kali · Metasploit · Wireshark · Burp Suite · Nmap · Splunk · Snort · Volatility\n  <span class="cmd-success">[Dev]</span>           Python · JS · C · Bash · PowerShell · React · Django · Node\n  <span class="cmd-success">[Research]</span>      Literature Review · Experimental Design · Quantitative Analysis · Academic Writing',
+            help: () => {
+                const { host } = getTerminalContext();
+                return `<span class="cmd-info">Available commands:</span>\n  help        — you're reading it\n  about       — who is this person?\n  whoami      — identity crisis\n  skills      — peek at the arsenal\n  goto [sec]  — teleport to section\n  ls          — list the map\n  cat flag    — capture the flag 🚩\n  ping        — ping ${escapeTerminal(host)}\n  uptime      — how long?\n  sudo        — nice try\n  hack        — initiate hack sequence\n  fortune     — random wisdom\n  coffee      — essential fuel\n  matrix      — take the pill\n  8ball       — ask the oracle\n  leet [text] — 1337 translator\n  neofetch    — system info\n  <span class="cmd-success">snake</span>       — <span class="cmd-success">🐍 packet snatcher</span>\n  <span class="cmd-success">crack</span>       — <span class="cmd-success">🔐 hash cracker</span>\n  <span class="cmd-success">type</span>        — <span class="cmd-success">⌨️ type attack</span>\n  <span class="cmd-success">ttt</span>         — <span class="cmd-success">❌ tic-tac-toe</span>\n  clear       — wipe the slate`;
+            },
+            about: () => pick(aboutVariants()),
+            whoami: () => pick(whoamiVariants()),
+            skills: () => getTerminalSkillsOutput(),
             clear: () => { output.innerHTML = ''; return null; },
             sudo: () => pick(sudoResponses),
             rm: (args) => {
@@ -1720,7 +1588,8 @@ window.addEventListener('resize', () => {
                 const seq = Math.floor(Math.random() * 100) + 1;
                 const ttl = pick([32, 64, 128, 255]);
                 const ips = ['127.0.0.1', '192.168.1.337', '10.0.13.37', '0.0.0.0 (he\'s everywhere)'];
-                return `PING durjoy.dev (${pick(ips)}) 56 bytes\n  64 bytes: icmp_seq=${seq} ttl=${ttl} time=${ms}ms\n  <span class="cmd-success">--- durjoy.dev ping statistics ---</span>\n  1 packets transmitted, 1 received, 0% packet loss`;
+                const { host } = getTerminalContext();
+                return `PING ${escapeTerminal(host)} (${pick(ips)}) 56 bytes\n  64 bytes: icmp_seq=${seq} ttl=${ttl} time=${ms}ms\n  <span class="cmd-success">--- ${escapeTerminal(host)} ping statistics ---</span>\n  1 packets transmitted, 1 received, 0% packet loss`;
             },
             ls: () => {
                 const secs = document.querySelectorAll('main > section[id]');
@@ -1731,7 +1600,14 @@ window.addEventListener('resize', () => {
             cat: (args) => {
                 if (args === 'flag') return '<span class="cmd-success">🚩 CTF{y0u_f0und_th3_fl4g_1n_th3_t3rm1nal}</span>\n\n  Congrats! You\'re officially curious enough.\n  Now go try: <span class="cmd-info">hack</span>';
                 if (args === '/etc/passwd') return '<span class="cmd-error">root:x:0:0::/root:/bin/bash\nguest:x:1337:100:curious visitor:/dev/null:/bin/curiosity</span>';
-                if (args === 'README.md') return pick(['This portfolio was built with mass amounts of caffeine\nand questionable life choices. Enjoy.', '# README\n\nNo one reads these anyway.\nBut you did. Respect. 🫡', '# durjoy.dev\n\nBuilt with: HTML, CSS, JS, sleep deprivation.\nLicense: Do whatever you want. I\'m not your mom.']);
+                if (args === 'README.md') {
+                    const { host } = getTerminalContext();
+                    return pick([
+                        'This portfolio was built with mass amounts of caffeine\nand questionable life choices. Enjoy.',
+                        '# README\n\nNo one reads these anyway.\nBut you did. Respect. 🫡',
+                        `# ${escapeTerminal(host)}\n\nBuilt with: HTML, CSS, JS, sleep deprivation.\nLicense: Do whatever you want. I'm not your mom.`
+                    ]);
+                }
                 return '<span class="cmd-error">cat: ' + (args || '') + ': No such file or directory</span>';
             },
             goto: (args) => {
@@ -1745,8 +1621,8 @@ window.addEventListener('resize', () => {
                 const notFounds = [`404: Section '${args}' not found in this dimension.`, `'${args}'? Never heard of her.`, `Section '${args}' is in another castle. 🏰`];
                 return `<span class="cmd-error">${pick(notFounds)}</span>`;
             },
-            hack: () => pick(hackVariants).join('\n'),
-            fortune: () => '<span class="cmd-info">🔮</span> ' + pick(funFacts),
+            hack: () => pick(hackVariants()).join('\n'),
+            fortune: () => '<span class="cmd-info">🔮</span> ' + pick(funFacts()),
             coffee: () => pick(coffeeVariants),
             matrix: () => pick(matrixVariants),
             '8ball': (args) => {
@@ -1762,7 +1638,7 @@ window.addEventListener('resize', () => {
             flip: () => '<span class="cmd-info">🪙</span> ' + (Math.random() > 0.5 ? '<span class="cmd-success">Heads!</span> ' + pick(['You win... nothing.', 'The universe favors you today.', 'Buy a lottery ticket. Or don\'t.']) : '<span class="cmd-error">Tails!</span> ' + pick(['You lose... also nothing.', 'Better luck next compile.', 'The coin has spoken.'])),
             rickroll: () => pick(rickrollVariants),
             exit: () => pick(exitVariants),
-            neofetch: () => pick(neofetchVariants),
+            neofetch: () => pick(neofetchVariants()),
             snake: () => {
                 startSnakeGame(output, cmdInput);
                 return null;
@@ -2253,14 +2129,14 @@ window.addEventListener('resize', () => {
 
     // ── Konami Code ──
     function initKonamiCode() {
-        const sequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
+        const sequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
         let pos = 0;
         const popup = document.getElementById('konamiPopup');
         const closeBtn = document.getElementById('konamiClose');
         if (!popup) return;
 
         document.addEventListener('keydown', (e) => {
-            if (e.keyCode === sequence[pos]) {
+            if (e.key === sequence[pos]) {
                 pos++;
                 if (pos === sequence.length) {
                     popup.classList.add('active');

@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <script>
         // Check if this is the first time the user opens the portfolio in this session
-        if (!sessionStorage.getItem('portfolio-session-active')) {
+        const isPreviewMode = new URLSearchParams(window.location.search).get('preview') === '1';
+        if (!sessionStorage.getItem('portfolio-session-active') && !isPreviewMode) {
             window.location.replace('entrance.html');
         }
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Durjoy Majumdar | Cybersecurity Enthusiast</title>
-	<!--
-    - favicon
-  -->
+    <title>Portfolio | Loading...</title>
+    <meta name="description" id="nerd-meta-description" content="Loading portfolio content from the shared JSON source.">
+    <meta property="og:title" id="nerd-og-title" content="Portfolio | Loading...">
+    <meta property="og:description" id="nerd-og-description" content="Loading portfolio content from the shared JSON source.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://asokakrsna.github.io/images/og-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" id="nerd-twitter-title" content="Portfolio | Loading...">
+    <meta name="twitter:description" id="nerd-twitter-description" content="Loading portfolio content from the shared JSON source.">
 	<link rel="shortcut icon" href="./images/AsokaKrsna.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -23,6 +29,18 @@
     <script>
         // Immediate script to ensure content visibility
         document.documentElement.classList.remove('no-js');
+
+        function ensureContentVisible() {
+            document.body.classList.remove('loading-active');
+            document.querySelectorAll('.main-content, .sidebar, .menu-button').forEach(function(el) {
+                el.classList.add('force-visible');
+            });
+            var loadingScreen = document.querySelector('.loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.display = 'none';
+            }
+        }
+
         // Fallback to make all content visible after a very short delay
         window.addEventListener('DOMContentLoaded', function() {
             // Force display all content after 300ms regardless of animations
@@ -154,17 +172,6 @@
                 }, interval);
             }
             
-            function ensureContentVisible() {
-                document.body.classList.remove('loading-active');
-                document.querySelectorAll('.main-content, .sidebar, .menu-button').forEach(el => {
-                    el.classList.add('force-visible');
-                });
-                const loadingScreen = document.querySelector('.loading-screen');
-                if (loadingScreen) {
-                    loadingScreen.style.display = 'none';
-                }
-            }
-            
             // Failsafe for 3 seconds
             setTimeout(ensureContentVisible, 3000);
             
@@ -197,12 +204,18 @@
         <!-- glass panel -->
         <div class="loader-panel">
             <div class="loader-center">
-                <h1 class="loader-title">DURJOY M.</h1>
-                <div class="loader-subtitle">Fetching portfolio…</div>
+                <h1 class="loader-title" id="nerd-loader-title">LOADING</h1>
+                <div class="loader-subtitle" id="nerd-loader-subtitle">Fetching portfolio...</div>
                 <div class="progress-percentage" id="progressPercentage">0%</div>
             </div>
         </div>
     </div>
+
+    <noscript>
+        <div class="nojs-banner">
+            Enable JavaScript to load the current portfolio content and shared SimpleEdit data.
+        </div>
+    </noscript>
 
     <!-- Konami Code Popup -->
     <div class="konami-popup" id="konamiPopup">
@@ -223,12 +236,12 @@
     <div class="terminal-bar" id="terminalBar">
         <div class="terminal-bar-input" id="terminalInput">
             <div class="terminal-bar-header">
-                <span>guest@durjoy.dev ~ </span>
+                <span id="terminalHostLabel">guest@portfolio ~ </span>
                 <div class="terminal-dots"><span></span><span></span><span></span></div>
             </div>
             <div class="terminal-bar-body">
                 <div class="terminal-bar-output" id="terminalOutput">
-                    <span class="cmd-info">Welcome. Type 'help' for available commands.</span>
+                    <span class="cmd-info" id="terminalWelcome">Loading terminal profile...</span>
                 </div>
             </div>
             <div class="terminal-bar-prompt">
@@ -243,7 +256,7 @@
     <div class="status-bar" aria-hidden="true">
         <div class="status-bar-left">
             <div class="status-bar-item"><span class="dot green"></span> online</div>
-            <div class="status-bar-item" id="statusBarBranch">main</div>
+            <div class="status-bar-item" id="statusBarBranch">loading</div>
             <div class="status-bar-item" id="statusBarSection">~/about</div>
         </div>
         <div class="status-bar-right">
@@ -254,7 +267,7 @@
     </div>
 
     <!-- Resume Button -->
-    <a href="Resume.pdf" class="resume-button" target="_blank" rel="noopener noreferrer">Resume</a>
+    <a href="#" class="resume-button" target="_blank" rel="noopener noreferrer">Resume</a>
     
     <!-- Mobile menu button -->
     <button class="menu-button" aria-label="Menu">
@@ -270,15 +283,13 @@
                 <div class="sidebar-header">
                     <div class="profile-photo">
                         <div class="image-wrapper">
-                            <img src="images/profile.png" alt="Durjoy Majumdar">
+                            <img src="images/profile.png" alt="Profile image loading">
                         </div>
                     </div>
-                    <div class="logo glitch-name" data-text="Durjoy Majumdar">Durjoy Majumdar</div>
-                    <h2 class="subtitle">Cybersec Nerd | Researcher | Student</h2>
+                    <div class="logo glitch-name" data-name="Loading" data-alias="" data-text="Loading">Loading</div>
+                    <h2 class="subtitle">Loading profile...</h2>
                     
-                    <p class="sidebar-description" id="typingText">
-                        Cybersecurity is a mindset, not a product.
-                    </p>
+                    <p class="sidebar-description" id="typingText">Loading profile...</p>
                 </div>
                 
                 <nav class="nav">
@@ -300,18 +311,12 @@
                 </nav>
                 
                 <div class="sidebar-social">
-                    <ul>
-                        <li><a href="https://www.linkedin.com/in/durjoy-majumdar/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a></li>
-                        <li><a href="https://t.me/as0kakrsna" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i></a></li>
-                        <li><a href="https://www.facebook.com/AsokaKrsna" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a href="https://www.instagram.com/asokakrsna/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a></li>
-                        <li><a href="https://x.com/Durjoy_02" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a></li>
-                    </ul>
+                    <ul></ul>
                 </div>
 
                 <div style="margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.06);">
-                    <a href="#" id="switch-to-classic" style="font-size: 0.72rem; color: #5a5550; text-decoration: none; transition: color 0.3s ease; letter-spacing: 0.02em;">
-                        Switch Mode <span style="transition: transform 0.2s ease; display: inline-block;">→</span>
+                    <a href="classic.html" id="switch-to-classic" style="font-size: 0.72rem; color: #5a5550; text-decoration: none; transition: color 0.3s ease; letter-spacing: 0.02em;">
+                        Switch Mode <span style="transition: transform 0.2s ease; display: inline-block;">&rarr;</span>
                     </a>
                 </div>
             </div>
@@ -422,12 +427,7 @@
 
             <section id="scratchpad" class="scratchpad">
                 <div class="container">
-                    <div class="scratchpad-single-card">
-                        <span class="scratchpad-icon">📝</span>
-                        <div class="scratchpad-title">The Scratchpad</div>
-                        <p class="scratchpad-text">Where I document ideas that didn't work, experiments that failed, and lessons learned. Because research is mostly about the wrong turns.</p>
-                        <a href="#" class="scratchpad-link">Read on my blog →</a>
-                    </div>
+                    <div class="scratchpad-single-card"></div>
                 </div>
             </section>
 
@@ -458,7 +458,7 @@
                         <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
                     
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn primary">Let's Talk</a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="btn primary" hidden>Let's Talk</a>
                     
                     <div class="social-links">
                         <!-- Content loaded dynamically from data/portfolio-data.json -->
@@ -481,14 +481,14 @@
     <script src="js/main.js"></script>
     
     <script>
-        // Mode switching for nerd → entrance (choose mode)
+        // Mode switching for nerd â†’ entrance (choose mode)
         (function() {
             var switchBtn = document.getElementById('switch-to-classic');
             if (switchBtn) {
                 switchBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    localStorage.removeItem('portfolio-mode');
-                    window.location.href = 'entrance.html';
+                    sessionStorage.setItem('portfolio-session-active', 'true');
+                    window.location.href = 'classic.html';
                 });
                 switchBtn.addEventListener('mouseenter', function() {
                     this.style.color = '#8892b0';

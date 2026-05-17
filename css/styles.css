@@ -152,6 +152,15 @@ ul {
     padding: 0 4rem 0 2rem;
 }
 
+/* Constrain text blocks for optimal reading measure (~65 chars per line) */
+.container > p,
+.container > .about-text,
+.container > .about-content .about-text,
+.experience-description li,
+.arena-intro {
+    max-width: 65ch;
+}
+
 /* Container for both sidebar and main content */
 .wrapper {
     display: flex;
@@ -558,13 +567,7 @@ ul {
     background-color: rgba(0, 216, 255, 0.2);
 }
 
-.btn::before {
 
-}
-
-.btn:hover::before {
-
-}
 
 /* Add glitch effect for small buttons */
 .btn.small::before {
@@ -1674,6 +1677,22 @@ footer {
     transform: translateY(0);
 }
 
+.no-js .loading-screen {
+    display: none;
+}
+
+.nojs-banner {
+    position: sticky;
+    top: 0;
+    z-index: 1200;
+    padding: 0.85rem 1rem;
+    background: rgba(10, 25, 47, 0.96);
+    border-bottom: 1px solid rgba(100, 255, 218, 0.18);
+    color: var(--text-color);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
 /* Ensure body doesn't scroll when mobile menu is open */
 body.menu-open {
     overflow: visible; /* Changed to fix content overflow */
@@ -1730,22 +1749,12 @@ body.menu-open {
     max-width: 100%;
 }
 
-/* Force visibility for all sections and main content */
+/* Force visibility for all sections and main content
+   (Fade-in defaults consolidated above at line ~1656) */
 section, .main-content, .about-content, .skills-content, 
 .experience-content, .projects-grid, .contact-content {
     visibility: visible !important;
     opacity: 1 !important;
-    transition: none !important;
-}
-
-/* Fade-in animation */
-.section-title, .about-content, .skills-content, 
-.experience-item, .project-card, .contact p, 
-.contact .btn {
-    opacity: 1; /* Make elements visible by default */
-    transform: translateY(0); /* No initial transform */
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    will-change: opacity, transform;
 }
 
 /* Loading Screen Styles */
@@ -2092,19 +2101,11 @@ body:not(.loading-active) .menu-button {
     }
 }
 
-/* Light theme styles for the modified blog section */
-
-/* Add blog-cta styling */
+/* Blog CTA styling */
 .blog-cta {
     display: flex;
     justify-content: center;
     margin-top: 2rem;
-}
-
-/* Ensure the small button styling works well */
-.btn.small {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
 }
 
 /* Certifications timeline styling */
@@ -2120,7 +2121,6 @@ body:not(.loading-active) .menu-button {
     border-radius: 8px;
     padding: 1.4rem 1.6rem;
     transition: border-color 0.3s ease;
-    max-width: 480px;
 }
 
 .scratchpad-single-card:hover {
@@ -2159,6 +2159,48 @@ body:not(.loading-active) .menu-button {
 
 .scratchpad-single-card .scratchpad-link:hover {
     color: var(--neon-purple);
+}
+
+.scratchpad-items {
+    display: grid;
+    gap: 0.85rem;
+    margin: 1rem 0 1.1rem;
+}
+
+.scratchpad-item {
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(100, 255, 218, 0.08);
+}
+
+.scratchpad-item:first-child {
+    padding-top: 0;
+    border-top: none;
+}
+
+.scratchpad-item-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.35rem;
+}
+
+.scratchpad-item-meta,
+.scratchpad-status,
+.scratchpad-lesson,
+.scratchpad-tags {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--slate);
+}
+
+.scratchpad-lesson {
+    margin-top: 0.4rem;
+    line-height: 1.6;
+}
+
+.scratchpad-tags {
+    margin-top: 0.35rem;
 }
 
 /* ── End Scratchpad ── */
@@ -2656,6 +2698,15 @@ body:not(.loading-active) .menu-button {
     counter-reset: research-counter;
 }
 
+.research-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--neon-blue);
+    margin-bottom: 0.75rem;
+}
+
 .research-item {
     position: relative;
     counter-increment: research-counter;
@@ -2722,6 +2773,13 @@ body:not(.loading-active) .menu-button {
     padding-left: 0.6rem;
     border-left: 2px solid var(--neon-blue);
     line-height: 1.5;
+}
+
+.research-future {
+    margin-top: 0.85rem;
+    font-size: 0.82rem;
+    color: var(--slate);
+    line-height: 1.6;
 }
 
 .research-link {
