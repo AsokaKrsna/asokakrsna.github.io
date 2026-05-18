@@ -2,11 +2,23 @@
 <html lang="en" class="no-js">
 <head>
     <meta charset="UTF-8">
+    <script>
+        // Check if this is the first time the user opens the portfolio in this session
+        const isPreviewMode = new URLSearchParams(window.location.search).get('preview') === '1';
+        if (!sessionStorage.getItem('portfolio-session-active') && !isPreviewMode) {
+            window.location.replace('entrance.html');
+        }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Durjoy Majumdar | Cybersecurity Enthusiast</title>
-	<!--
-    - favicon
-  -->
+    <title>Portfolio | Loading...</title>
+    <meta name="description" id="nerd-meta-description" content="Loading portfolio content from the shared JSON source.">
+    <meta property="og:title" id="nerd-og-title" content="Portfolio | Loading...">
+    <meta property="og:description" id="nerd-og-description" content="Loading portfolio content from the shared JSON source.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://asokakrsna.github.io/images/og-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" id="nerd-twitter-title" content="Portfolio | Loading...">
+    <meta name="twitter:description" id="nerd-twitter-description" content="Loading portfolio content from the shared JSON source.">
 	<link rel="shortcut icon" href="./images/AsokaKrsna.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -17,6 +29,18 @@
     <script>
         // Immediate script to ensure content visibility
         document.documentElement.classList.remove('no-js');
+
+        function ensureContentVisible() {
+            document.body.classList.remove('loading-active');
+            document.querySelectorAll('.main-content, .sidebar, .menu-button').forEach(function(el) {
+                el.classList.add('force-visible');
+            });
+            var loadingScreen = document.querySelector('.loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.display = 'none';
+            }
+        }
+
         // Fallback to make all content visible after a very short delay
         window.addEventListener('DOMContentLoaded', function() {
             // Force display all content after 300ms regardless of animations
@@ -28,27 +52,6 @@
                     el.style.transform = "translateY(0)";
                 });
             }, 300);
-            
-            // Direct theme toggle initialization
-            const themeSwitch = document.getElementById('theme-switch');
-            if (themeSwitch) {
-                themeSwitch.addEventListener('click', function() {
-                    if (this.checked) {
-                        document.body.setAttribute('data-theme', 'light');
-                        localStorage.setItem('theme', 'light');
-                    } else {
-                        document.body.removeAttribute('data-theme');
-                        localStorage.setItem('theme', 'dark');
-                    }
-                });
-                
-                // Set initial state
-                const savedTheme = localStorage.getItem('theme');
-                if (savedTheme === 'light') {
-                    themeSwitch.checked = true;
-                    document.body.setAttribute('data-theme', 'light');
-                }
-            }
             
             // Hex Stream Progress Bar Loading
             function handleLoadingScreen() {
@@ -169,17 +172,6 @@
                 }, interval);
             }
             
-            function ensureContentVisible() {
-                document.body.classList.remove('loading-active');
-                document.querySelectorAll('.main-content, .sidebar, .menu-button').forEach(el => {
-                    el.classList.add('force-visible');
-                });
-                const loadingScreen = document.querySelector('.loading-screen');
-                if (loadingScreen) {
-                    loadingScreen.style.display = 'none';
-                }
-            }
-            
             // Failsafe for 3 seconds
             setTimeout(ensureContentVisible, 3000);
             
@@ -212,15 +204,70 @@
         <!-- glass panel -->
         <div class="loader-panel">
             <div class="loader-center">
-                <h1 class="loader-title">DURJOY M.</h1>
-                <div class="loader-subtitle">Fetching portfolio…</div>
+                <h1 class="loader-title" id="nerd-loader-title">LOADING</h1>
+                <div class="loader-subtitle" id="nerd-loader-subtitle">Fetching portfolio...</div>
                 <div class="progress-percentage" id="progressPercentage">0%</div>
             </div>
         </div>
     </div>
 
+    <noscript>
+        <div class="nojs-banner">
+            Enable JavaScript to load the current portfolio content and shared SimpleEdit data.
+        </div>
+    </noscript>
+
+    <!-- Konami Code Popup -->
+    <div class="konami-popup" id="konamiPopup">
+        <button class="konami-close" id="konamiClose">&times;</button>
+        <div class="konami-ascii">
+ ██╗  ██╗ █████╗  ██████╗██╗  ██╗███████╗██████╗ 
+ ██║  ██║██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗
+ ███████║███████║██║     █████╔╝ █████╗  ██████╔╝
+ ██╔══██║██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗
+ ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║
+ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+        </div>
+        <div class="konami-msg">You found the secret. Root access granted.</div>
+        <div class="konami-sub">↑↑↓↓←→←→BA</div>
+    </div>
+
+    <!-- Terminal Command Bar -->
+    <div class="terminal-bar" id="terminalBar">
+        <div class="terminal-bar-input" id="terminalInput">
+            <div class="terminal-bar-header">
+                <span id="terminalHostLabel">guest@portfolio ~ </span>
+                <div class="terminal-dots"><span></span><span></span><span></span></div>
+            </div>
+            <div class="terminal-bar-body">
+                <div class="terminal-bar-output" id="terminalOutput">
+                    <span class="cmd-info" id="terminalWelcome">Loading terminal profile...</span>
+                </div>
+            </div>
+            <div class="terminal-bar-prompt">
+                <span>$</span>
+                <input type="text" id="terminalCmdInput" placeholder="type a command..." autocomplete="off" spellcheck="false">
+            </div>
+        </div>
+        <button class="terminal-bar-toggle" id="terminalToggle" aria-label="Toggle terminal">>_</button>
+    </div>
+
+    <!-- Status Bar Footer -->
+    <div class="status-bar" aria-hidden="true">
+        <div class="status-bar-left">
+            <div class="status-bar-item"><span class="dot green"></span> online</div>
+            <div class="status-bar-item" id="statusBarBranch">loading</div>
+            <div class="status-bar-item" id="statusBarSection">~/about</div>
+        </div>
+        <div class="status-bar-right">
+            <div class="status-bar-item" id="statusBarScroll">0%</div>
+            <div class="status-bar-item" id="statusBarTime"></div>
+            <div class="status-bar-item">UTF-8</div>
+        </div>
+    </div>
+
     <!-- Resume Button -->
-    <a href="Resume.pdf" class="resume-button" target="_blank" rel="noopener noreferrer">Resume</a>
+    <a href="#" class="resume-button" target="_blank" rel="noopener noreferrer">Resume</a>
     
     <!-- Mobile menu button -->
     <button class="menu-button" aria-label="Menu">
@@ -236,15 +283,13 @@
                 <div class="sidebar-header">
                     <div class="profile-photo">
                         <div class="image-wrapper">
-                            <img src="images/profile.png" alt="Durjoy Majumdar">
+                            <img src="images/profile.png" alt="Profile image loading">
                         </div>
                     </div>
-                    <div class="logo glitch-name" data-text="Durjoy Majumdar">Durjoy Majumdar</div>
-                    <h2 class="subtitle">Cybersec Nerd | Researcher | Student</h2>
+                    <div class="logo glitch-name" data-name="Loading" data-alias="" data-text="Loading">Loading</div>
+                    <h2 class="subtitle">Loading profile...</h2>
                     
-                    <p class="sidebar-description" id="typingText">
-                        Cybersecurity is a mindset, not a product.
-                    </p>
+                    <p class="sidebar-description" id="typingText">Loading profile...</p>
                 </div>
                 
                 <nav class="nav">
@@ -252,36 +297,27 @@
                         <li><a href="#about">ABOUT</a></li>
                         <li><a href="#education">EDUCATION</a></li>
                         <li><a href="#experience">EXPERIENCE</a></li>
-                        <li><a href="#research-interests">RESEARCH INTERESTS</a></li>
                         <li><a href="#research">RESEARCH</a></li>
-                        <li><a href="#skills">SKILLS</a></li>
                         <li><a href="#projects">PROJECTS</a></li>
-                        <li><a href="#blogs">BLOGS</a></li>
-                        <li><a href="#cyber-arena">CYBER ARENA</a></li>
+                        <li><a href="#skills">ARSENAL</a></li>
                         <li><a href="#certifications">GLOBAL CERTIFICATIONS</a></li>
+                        <li><a href="#cyber-arena">CYBER ARENA</a></li>
+                        <li><a href="#blogs">WRITEUPS & BLOGS</a></li>
+                        <li><a href="#scratchpad">SCRATCHPAD</a></li>
                         <li><a href="#achievements">ACHIEVEMENTS</a></li>
                         <li><a href="#volunteering">VOLUNTEERING</a></li>
-                        <li><a href="#contact">CONTACT</a></li>
+                        <li><a href="#contact">PING ME</a></li>
                     </ul>
                 </nav>
                 
                 <div class="sidebar-social">
-                    <ul>
-                        <li><a href="https://www.linkedin.com/in/durjoy-majumdar/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a></li>
-                        <li><a href="https://t.me/as0kakrsna" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i></a></li>
-                        <li><a href="https://www.facebook.com/AsokaKrsna" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a href="https://www.instagram.com/asokakrsna/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a></li>
-                        <li><a href="https://x.com/Durjoy_02" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a></li>
-                    </ul>
+                    <ul></ul>
                 </div>
 
-                <div class="theme-toggle">
-                    <input type="checkbox" id="theme-switch" class="theme-switch">
-                    <label for="theme-switch" class="switch-label">
-                        <i class="fas fa-sun"></i>
-                        <i class="fas fa-moon"></i>
-                        <span class="slider"></span>
-                    </label>
+                <div style="margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.06);">
+                    <a href="classic.html" id="switch-to-classic" style="font-size: 0.72rem; color: #5a5550; text-decoration: none; transition: color 0.3s ease; letter-spacing: 0.02em;">
+                        Switch Mode <span style="transition: transform 0.2s ease; display: inline-block;">&rarr;</span>
+                    </a>
                 </div>
             </div>
         </aside>
@@ -317,29 +353,17 @@
                 </div>
             </section>
 
-            <section id="research-interests" class="research-interests">
-                <div class="container">
-                    <!-- Content loaded dynamically from data/portfolio-data.json -->
-                </div>
-            </section>
-
             <section id="research" class="research">
                 <div class="container">
-                    <h2 class="section-title">Research Publications</h2>
+                    <h2 class="section-title">Research</h2>
+                    <div class="research-statement-wrapper">
+                        <!-- Research interests statement loaded dynamically -->
+                    </div>
                     <div class="research-content">
                         <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
                     <div class="section-cta research-cta">
                         <button id="load-more-research" class="btn small secondary">See More</button>
-                    </div>
-                </div>
-            </section>
-
-            <section id="skills" class="skills">
-                <div class="container">
-                    <h2 class="section-title">Skills</h2>
-                    <div class="skills-content">
-                        <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
                 </div>
             </section>
@@ -356,14 +380,20 @@
                 </div>
             </section>
 
-            <section id="blogs" class="blogs">
+            <section id="skills" class="skills">
                 <div class="container">
-                    <h2 class="section-title">Blogs</h2>
-                    <div class="blogs-grid">
+                    <h2 class="section-title">Arsenal</h2>
+                    <div class="skills-content">
                         <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
-                    <div class="section-cta blog-cta">
-                        <button id="view-more-blogs" class="btn small secondary">View More</button>
+                </div>
+            </section>
+
+            <section id="certifications" class="certifications">
+                <div class="container">
+                    <h2 class="section-title">Global Certifications</h2>
+                    <div class="certifications-timeline">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
                 </div>
             </section>
@@ -383,12 +413,21 @@
                 </div>
             </section>
 
-            <section id="certifications" class="certifications">
+            <section id="blogs" class="blogs">
                 <div class="container">
-                    <h2 class="section-title">Global Certifications</h2>
-                    <div class="certifications-timeline">
+                    <h2 class="section-title">Writeups & Blogs</h2>
+                    <div class="blogs-grid">
                         <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
+                    <div class="section-cta blog-cta">
+                        <button id="view-more-blogs" class="btn small secondary">View More</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="scratchpad" class="scratchpad">
+                <div class="container">
+                    <div class="scratchpad-single-card"></div>
                 </div>
             </section>
 
@@ -412,14 +451,14 @@
 
             <section id="contact" class="contact">
                 <div class="container">
-                    <h2 class="section-title">Contact</h2>
+                    <h2 class="section-title">Ping Me</h2>
                     <p><!-- Content loaded dynamically from data/portfolio-data.json --></p>
                     
                     <div class="contact-info">
                         <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
                     
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn primary">Let's Talk</a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="btn primary" hidden>Let's Talk</a>
                     
                     <div class="social-links">
                         <!-- Content loaded dynamically from data/portfolio-data.json -->
@@ -441,140 +480,24 @@
     <script src="js/data-loader.js"></script>
     <script src="js/main.js"></script>
     
-    <!-- Additional script to ensure content visibility in both themes -->
     <script>
-        // Reset styles for dark theme
-        function resetDarkThemeStyles() {
-            // Reset Skills section
-            var skillsElements = document.querySelectorAll('.skills-list, .skills-category h3');
-            skillsElements.forEach(function(el) {
-                el.style.color = '';
-                el.style.visibility = '';
-                el.style.fontWeight = '';
-            });
-            
-            // Reset Cyber Arena section
-            var arenaElements = document.querySelectorAll('.arena-list li, .arena-title, .arena-link, .arena-intro');
-            arenaElements.forEach(function(el) {
-                el.style.color = '';
-                el.style.visibility = '';
-                el.style.fontWeight = '';
-            });
-            
-            // Reset Education section
-            var educationElements = document.querySelectorAll('.education-header h3, .education-location, .education-date, .education-item p');
-            educationElements.forEach(function(el) {
-                el.style.color = '';
-                el.style.visibility = '';
-                el.style.fontWeight = '';
-            });
-        }
-
-        // Apply styles for light theme
-        function applyLightThemeStyles() {
-            // Fix for Skills section
-            var skillsLists = document.querySelectorAll('.skills-list');
-            skillsLists.forEach(function(list) {
-                list.style.color = '#333333';
-                list.style.visibility = 'visible';
-            });
-            
-            var skillsHeadings = document.querySelectorAll('.skills-category h3');
-            skillsHeadings.forEach(function(heading) {
-                heading.style.color = '#222222';
-                heading.style.visibility = 'visible';
-            });
-
-            // Fix for Cyber Arena section
-            var arenaLists = document.querySelectorAll('.arena-list li');
-            arenaLists.forEach(function(item) {
-                item.style.color = '#333333';
-                item.style.visibility = 'visible';
-            });
-            
-            var arenaTitles = document.querySelectorAll('.arena-title');
-            arenaTitles.forEach(function(title) {
-                title.style.color = '#222222';
-                title.style.visibility = 'visible';
-            });
-            
-            var arenaLinks = document.querySelectorAll('.arena-link');
-            arenaLinks.forEach(function(link) {
-                link.style.color = '#007bff';
-                link.style.visibility = 'visible';
-            });
-            
-            var arenaIntro = document.querySelector('.arena-intro');
-            if (arenaIntro) {
-                arenaIntro.style.color = '#333333';
-                arenaIntro.style.visibility = 'visible';
+        // Mode switching for nerd â†’ entrance (choose mode)
+        (function() {
+            var switchBtn = document.getElementById('switch-to-classic');
+            if (switchBtn) {
+                switchBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    sessionStorage.setItem('portfolio-session-active', 'true');
+                    window.location.href = 'classic.html';
+                });
+                switchBtn.addEventListener('mouseenter', function() {
+                    this.style.color = '#8892b0';
+                });
+                switchBtn.addEventListener('mouseleave', function() {
+                    this.style.color = '#5a5550';
+                });
             }
-            
-            // Fix for Education section
-            var educationHeaders = document.querySelectorAll('.education-header h3');
-            educationHeaders.forEach(function(header) {
-                header.style.color = '#222222';
-                header.style.fontWeight = '600';
-                header.style.visibility = 'visible';
-            });
-            
-            var educationLocations = document.querySelectorAll('.education-location');
-            educationLocations.forEach(function(location) {
-                location.style.color = '#333333';
-                location.style.visibility = 'visible';
-            });
-            
-            var educationDates = document.querySelectorAll('.education-date');
-            educationDates.forEach(function(date) {
-                date.style.color = '#007bff';
-                date.style.visibility = 'visible';
-            });
-            
-            var educationDescriptions = document.querySelectorAll('.education-item p');
-            educationDescriptions.forEach(function(desc) {
-                desc.style.color = '#333333';
-                desc.style.visibility = 'visible';
-            });
-        }
-
-        // When DOM is loaded, check theme and apply appropriate styles
-        document.addEventListener('DOMContentLoaded', function() {
-            if (document.body.hasAttribute('data-theme') && document.body.getAttribute('data-theme') === 'light') {
-                setTimeout(function() {
-                    applyLightThemeStyles();
-                }, 500);
-            } else {
-                // Ensure dark theme has proper styles
-                setTimeout(function() {
-                    resetDarkThemeStyles();
-                }, 500);
-            }
-        });
-
-        // Listen for theme changes
-        const themeObserver = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.attributeName === 'data-theme') {
-                    if (document.body.hasAttribute('data-theme') && document.body.getAttribute('data-theme') === 'light') {
-                        applyLightThemeStyles();
-                    } else {
-                        resetDarkThemeStyles();
-                    }
-                }
-            });
-        });
-        
-        // Start observing the document body for theme changes
-        themeObserver.observe(document.body, { attributes: true });
-
-        // Fallback check after 2 seconds
-        setTimeout(function() {
-            if (document.body.hasAttribute('data-theme') && document.body.getAttribute('data-theme') === 'light') {
-                applyLightThemeStyles();
-            } else {
-                resetDarkThemeStyles();
-            }
-        }, 2000);
+        })();
     </script>
 </body>
 </html> 

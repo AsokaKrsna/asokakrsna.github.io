@@ -17,15 +17,13 @@ setTimeout(() => {
 (function initializeMobileMenu() {
     const menuButton = document.querySelector('.menu-button');
     const sidebar = document.querySelector('.sidebar');
-    const mainContent = document.querySelector('.main-content');
-    const sidebarHeader = document.querySelector('.sidebar-header');
-    const logo = document.querySelector('.logo');
-    const subtitle = document.querySelector('.subtitle');
     const nav = document.querySelector('.nav');
     const navUl = document.querySelector('.nav ul');
     const navItems = document.querySelectorAll('.nav li');
+    const sidebarHeader = document.querySelector('.sidebar-header');
+    const logo = document.querySelector('.logo');
+    const subtitle = document.querySelector('.subtitle');
     const sidebarSocial = document.querySelector('.sidebar-social');
-    const themeToggle = document.querySelector('.theme-toggle');
     
     // Add mobile detection to body
     function handleMobileDetection() {
@@ -39,8 +37,8 @@ setTimeout(() => {
         } else {
             document.body.classList.remove('is-mobile');
             // Make sure to clean up mobile state if resized to desktop
-            sidebar.classList.remove('active');
-            menuButton.classList.remove('active');
+            if (sidebar) sidebar.classList.remove('active');
+            if (menuButton) menuButton.classList.remove('active');
             document.body.classList.remove('menu-open');
             
             // Reset any style changes
@@ -48,7 +46,6 @@ setTimeout(() => {
             if (logo) logo.style.display = '';
             if (subtitle) subtitle.style.display = '';
             if (sidebarSocial) sidebarSocial.style.display = '';
-            if (themeToggle) themeToggle.style.display = '';
         }
     }
     
@@ -98,22 +95,18 @@ setTimeout(() => {
                         logo.style.borderRadius = '4px';
                         logo.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
                         
-                        // Apply theme-appropriate styling with specific colors
-                        const isDarkTheme = document.body.classList.contains('dark-theme');
-                        if (isDarkTheme) {
-                            logo.style.backgroundColor = 'rgba(8, 15, 30, 0.85)'; // Darker navy to match theme
-                            logo.style.textShadow = '0 0 3px rgba(0, 255, 255, 0.3)';
-                            logo.style.color = '#ffffff';
-                        } else {
-                            logo.style.backgroundColor = 'rgba(240, 240, 240, 0.9)';
-                            logo.style.textShadow = '0 0 3px rgba(0, 100, 255, 0.3)';
-                            logo.style.color = '#333333';
-                        }
+                        // Apply dark theme styling
+                        logo.style.backgroundColor = 'rgba(8, 15, 30, 0.85)';
+                        logo.style.textShadow = '0 0 3px rgba(0, 255, 255, 0.3)';
+                        logo.style.color = '#ffffff';
                         
-                        // Disable glitch effect for mobile
-                        const beforePseudo = document.createElement('style');
-                        beforePseudo.innerHTML = `.sidebar.active .logo.glitch-name::before, .sidebar.active .logo.glitch-name::after { display: none !important; }`;
-                        document.head.appendChild(beforePseudo);
+                        // Disable glitch effect for mobile (created once, reused)
+                        if (!document.getElementById('mobile-glitch-disable')) {
+                            const beforePseudo = document.createElement('style');
+                            beforePseudo.id = 'mobile-glitch-disable';
+                            beforePseudo.innerHTML = `.sidebar.active .logo.glitch-name::before, .sidebar.active .logo.glitch-name::after { display: none !important; }`;
+                            document.head.appendChild(beforePseudo);
+                        }
                     }
                     
                     // MOBILE ONLY: Hide profile elements only in mobile view
@@ -156,18 +149,22 @@ setTimeout(() => {
                     }
                     
                     // Set proper navigation padding
-                    nav.style.display = 'block';
-                    nav.style.width = '100%';
-                    nav.style.paddingTop = '80px';
-                    nav.style.paddingBottom = '60px';
-                    nav.style.margin = '0';
+                    if (nav) {
+                        nav.style.display = 'block';
+                        nav.style.width = '100%';
+                        nav.style.paddingTop = '80px';
+                        nav.style.paddingBottom = '60px';
+                        nav.style.margin = '0';
+                    }
                     
                     // Ensure all navigation items are visible
-                    navUl.style.display = 'block';
-                    navUl.style.height = 'auto';
-                    navUl.style.overflow = 'visible';
-                    navUl.style.margin = '0';
-                    navUl.style.padding = '0 1.5rem';
+                    if (navUl) {
+                        navUl.style.display = 'block';
+                        navUl.style.height = 'auto';
+                        navUl.style.overflow = 'visible';
+                        navUl.style.margin = '0';
+                        navUl.style.padding = '0 1.5rem';
+                    }
                     
                     // Make all nav items visible, with special attention to first items
                     navItems.forEach((item, index) => {
@@ -198,31 +195,11 @@ setTimeout(() => {
                         }
                     });
                     
-                    // Ensure navigation links are clickable
-                    fixMobileNavigation();
-                    
                     // Hide social links in mobile view only
                     if (sidebarSocial && window.innerWidth <= 768) {
                         sidebarSocial.style.display = 'none';
                         sidebarSocial.style.opacity = '0';
                         sidebarSocial.style.visibility = 'hidden';
-                    }
-                    
-                    // Position theme toggle button at bottom left - revert to original
-                    if (themeToggle) {
-                        themeToggle.style.position = 'fixed';
-                        themeToggle.style.bottom = '20px';
-                        themeToggle.style.left = '20px';
-                        themeToggle.style.zIndex = '10010';
-                        themeToggle.style.width = '40px';
-                        themeToggle.style.height = '40px';
-                        themeToggle.style.backgroundColor = 'transparent';
-                        themeToggle.style.padding = '10px';
-                        themeToggle.style.borderRadius = '50%';
-                        themeToggle.style.boxShadow = '0 0 10px rgba(0, 255, 255, 0.3)';
-                        themeToggle.style.display = 'flex';
-                        themeToggle.style.alignItems = 'center';
-                        themeToggle.style.justifyContent = 'center';
                     }
                     
                     // Hide any possible footer elements in mobile only
@@ -232,27 +209,20 @@ setTimeout(() => {
                         sidebarFooter.style.opacity = '0';
                         sidebarFooter.style.visibility = 'hidden';
                     }
-                    
-                    // Log for debugging
-                    console.log('Mobile menu toggled on - simplified layout');
-                } else {
-                    // Reset styles when closed
-                    console.log('Mobile menu toggled off');
                 }
             } else {
                 // If in desktop view, make sure styles are reset
-                resetDesktopStyles();
             }
         });
         
         // Reset styles on window resize
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
-                // Reset styles for desktop view to ensure desktop view is not affected
-                nav.style = '';
-                logo.style = '';
-                subtitle.style = '';
-                navUl.style = '';
+                // Reset styles for desktop view
+                if (nav) nav.style = '';
+                if (logo) logo.style = '';
+                if (subtitle) subtitle.style = '';
+                if (navUl) navUl.style = '';
                 
                 const profilePhoto = document.querySelector('.profile-photo');
                 if (profilePhoto) profilePhoto.style = '';
@@ -267,7 +237,6 @@ setTimeout(() => {
                 });
                 
                 if (sidebarSocial) sidebarSocial.style = '';
-                if (themeToggle) themeToggle.style = '';
             }
         });
     }
@@ -276,26 +245,12 @@ setTimeout(() => {
 // Custom cursor follower
 const cursorFollower = document.querySelector('.cursor-follower');
 
-document.addEventListener('mousemove', (e) => {
-    // This can be safely removed
-});
-
-document.addEventListener('mouseout', () => {
-    // This can be safely removed
-});
-
-// Mobile menu functionality
-function initMobileMenu() {
-    // Keep this for backward compatibility, but our immediate initializer above will handle the functionality
-    console.log('Legacy mobile menu initialization - already handled');
-}
-
 // Apply hover effect on all interactive elements
-const interactiveElements = document.querySelectorAll('a, button, .btn, .project-card, .image-wrapper, .arena-card'); // Added arena-card to interactive elements
+const interactiveElements = document.querySelectorAll('a, button, .btn, .project-card, .image-wrapper, .arena-card');
 
 interactiveElements.forEach(element => {
     element.addEventListener('mouseenter', () => {
-        if (window.innerWidth <= 768) return;
+        if (window.innerWidth <= 768 || !cursorFollower) return;
         
         if (element.classList.contains('project-card') || element.classList.contains('image-wrapper')) {
             cursorFollower.classList.add('active');
@@ -306,7 +261,7 @@ interactiveElements.forEach(element => {
     });
     
     element.addEventListener('mouseleave', () => {
-        if (window.innerWidth <= 768) return;
+        if (window.innerWidth <= 768 || !cursorFollower) return;
         
         cursorFollower.classList.remove('active');
         cursorFollower.classList.remove('link-hover');
@@ -321,10 +276,12 @@ document.querySelectorAll('nav a, .hero a[href^="#"]').forEach(anchor => {
         const targetId = this.getAttribute('href');
         const targetElement = document.querySelector(targetId);
         
-        window.scrollTo({
-            top: targetElement.offsetTop - 100,
-            behavior: 'smooth'
-        });
+        if (targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 100,
+                behavior: 'smooth'
+            });
+        }
     });
 });
 
@@ -355,17 +312,13 @@ function createMatrixEffect() {
     // Characters to use (binary, hex, and cybersecurity symbols)
     const characters = '01アイウエオカキクケコサシスセソタチツテト゠ァゥゐゟ゛<>[]{}$#@%^&*!~+-=';
     const fontSize = 10;
-    const columns = Math.floor(width / fontSize);
+    let columns = Math.floor(width / fontSize);
     
     // Create drops array
     const drops = [];
     for (let i = 0; i < columns; i++) {
         drops[i] = Math.floor(Math.random() * -height);
     }
-    
-    // Low opacity to create trail effect
-    ctx.fillStyle = 'rgba(10, 25, 47, 0.05)';
-    ctx.fillRect(0, 0, width, height);
     
     function draw() {
         // Black background with opacity to create fade effect
@@ -410,6 +363,12 @@ function createMatrixEffect() {
         clearInterval(matrixInterval);
         width = matrix.width = window.innerWidth;
         height = matrix.height = window.innerHeight;
+        // Recalculate drops array for new column count
+        const newColumns = Math.floor(width / fontSize);
+        while (drops.length < newColumns) {
+            drops.push(Math.floor(Math.random() * -height));
+        }
+        drops.length = newColumns;
         matrixInterval = setInterval(draw, 50);
     });
 }
@@ -418,69 +377,6 @@ function createMatrixEffect() {
 setTimeout(() => {
     createMatrixEffect();
 }, 1000);
-
-// Add terminal typing effect for the hero section text
-function typeWriter(element, text, speed) {
-    let i = 0;
-    element.textContent = '';
-    
-    function type() {
-        if (i < text.length) {
-            element.textContent += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
-        }
-    }
-    
-    type();
-}
-
-// Apply typing effect to multiple hero elements in sequence
-const heroElements = [
-    document.querySelector('.hero-greeting'),
-    document.querySelector('.hero h2'),
-    document.querySelector('.hero p')
-];
-
-if (heroElements[0]) {
-    window.addEventListener('load', () => {
-        const texts = heroElements.map(el => el.textContent);
-        const speeds = [50, 40, 30];
-        
-        heroElements.forEach(el => {
-            el.textContent = '';
-            el.style.opacity = 0;
-        });
-        
-        let currentIndex = 0;
-        
-        function typeNextElement() {
-            if (currentIndex < heroElements.length) {
-                const element = heroElements[currentIndex];
-                const text = texts[currentIndex];
-                const speed = speeds[currentIndex];
-                
-                element.style.opacity = 1;
-                
-                let i = 0;
-                function typeElement() {
-                    if (i < text.length) {
-                        element.textContent += text.charAt(i);
-                        i++;
-                        setTimeout(typeElement, speed);
-                    } else {
-                        currentIndex++;
-                        setTimeout(typeNextElement, 500);
-                    }
-                }
-                
-                typeElement();
-            }
-        }
-        
-        typeNextElement();
-    });
-}
 
 // Implement section fade-in on scroll
 function fadeInOnScroll() {
@@ -693,8 +589,8 @@ style.textContent = `
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: -2;
-        opacity: 0.15;
+        z-index: -1;
+        opacity: 0.2;
         pointer-events: none;
     }
     
@@ -840,44 +736,71 @@ document.head.appendChild(style);
 
 // Main initialization function
 function initializeAll() {
-    // Initialize loading screen first
-    initLoadingScreen();
-    
-    // Initialize all other components after loading screen disappears
+    // Initialize all components after a brief delay
     setTimeout(() => {
         initTypingEffect();
         initScrollReveal();
         initMobileMenu();
-        
-        // Remove the cyber cursor initialization
-        // initCyberCursor();
-        
-        // Init theme switcher
-        initThemeSwitcher();
-        
-        // Initialize projects load more functionality
         initProjectsLoadMore();
-        
-        // Skills animation removed - no longer needed for comma-separated list
-        // initSkillsAnimation();
     }, 500);
 }
 
 // Remove any duplicate event listeners and use only this one
 document.addEventListener('DOMContentLoaded', initializeAll);
 
+let sidebarTypingTimer = null;
+let nameTransitionTimer = null;
+let nameScrambleInterval = null;
+
+function getSidebarRotatingTexts() {
+    const typingText = document.getElementById('typingText');
+    if (!typingText) return [];
+
+    try {
+        const parsed = JSON.parse(typingText.getAttribute('data-rotating-texts') || '[]');
+        if (Array.isArray(parsed)) {
+            return parsed.map((item) => String(item || '').trim()).filter(Boolean);
+        }
+    } catch (error) {
+        console.warn('[Portfolio] Failed to parse rotating sidebar texts:', error);
+    }
+
+    const fallback = typingText.textContent.trim();
+    return fallback ? [fallback] : [];
+}
+
+function getDisplayNames() {
+    const element = document.querySelector('.glitch-name');
+    const realName = (element && (element.getAttribute('data-name') || element.textContent.trim())) || 'Portfolio';
+    const hackerHandle = (element && element.getAttribute('data-alias')) || realName;
+    return { realName, hackerHandle };
+}
+
+function scheduleNameTransition(delay) {
+    clearTimeout(nameTransitionTimer);
+    nameTransitionTimer = setTimeout(transitionName, delay);
+}
+
+function refreshTerminalChrome(data) {
+    const terminal = (data && data.nerd && data.nerd.terminal) || {};
+    const hostLabel = document.getElementById('terminalHostLabel');
+    const welcome = document.getElementById('terminalWelcome');
+    const branch = document.getElementById('statusBarBranch');
+
+    if (hostLabel) {
+        hostLabel.textContent = `guest@${terminal.host || 'portfolio'} ~ `;
+    }
+    if (welcome) {
+        welcome.textContent = terminal.welcome || "Welcome. Type 'help' for available commands.";
+    }
+    if (branch && terminal.branch) {
+        branch.textContent = terminal.branch;
+    }
+}
+
 // Typewriter effect for cybersecurity quotes
-const typingTextElement = document.getElementById('typingText');
-const securityQuotes = [
-    "\"The important thing is not to stop questioning. Curiosity has its own reason for existing.\" — Albert Einstein",
-    "Technology can't solve security problems, but it can help",
-    "Where others see function, I see attack vectors waiting to be secured",
-    "Attack and defense are entangled in a dance of death",
-    "Solving the issues that keeps CISOs up at night",
-    "In a world of black hats, be the white hat with the skill to match",
-    "Cybersecurity is a mindset, not a product",
-    "Research is creating new knowledge, opening new perspectives",
-];
+let typingTextElement = document.getElementById('typingText');
+let securityQuotes = getSidebarRotatingTexts();
 
 let quoteIndex = 0;
 let charIndex = 0;
@@ -887,6 +810,10 @@ let newTextDelay = 2000; // Delay before starting to delete text
 let deletingDelay = 50; // Delay between each character deletion
 
 function typeQuote() {
+    typingTextElement = document.getElementById('typingText');
+    securityQuotes = getSidebarRotatingTexts();
+    if (!typingTextElement || !securityQuotes.length) return;
+
     const currentQuote = securityQuotes[quoteIndex];
     
     if (isDeleting) {
@@ -915,16 +842,24 @@ function typeQuote() {
         quoteIndex = (quoteIndex + 1) % securityQuotes.length;
     }
     
-    setTimeout(typeQuote, typingDelay);
+    sidebarTypingTimer = setTimeout(typeQuote, typingDelay);
 }
 
 // Name transition between real name and cybersec handle
-const nameElement = document.querySelector('.glitch-name');
+let nameElement = document.querySelector('.glitch-name');
 let isRealName = true;
-const realName = "Durjoy Majumdar";
-const hackerHandle = "AsokaKrsna";
 
 function transitionName() {
+    nameElement = document.querySelector('.glitch-name');
+    if (!nameElement) return;
+
+    const { realName, hackerHandle } = getDisplayNames();
+    if (!hackerHandle || hackerHandle === realName) {
+        nameElement.textContent = realName;
+        nameElement.setAttribute('data-text', realName);
+        return;
+    }
+
     // Map of character replacements for cybersec style
     const charMap = {
         'a': '@', 'A': '4',
@@ -942,7 +877,8 @@ function transitionName() {
         let iterations = 0;
         
         // Create subtle scramble effect
-        const scrambleInterval = setInterval(() => {
+        clearInterval(nameScrambleInterval);
+        nameScrambleInterval = setInterval(() => {
             iterations++;
             
             // Create a scrambled version mixing original and target with random characters
@@ -974,11 +910,11 @@ function transitionName() {
                 // Phase 3: Start forming the hacker handle
                 let progress = iterations - 16;
                 if (progress >= targetText.length) {
-                    clearInterval(scrambleInterval);
+                    clearInterval(nameScrambleInterval);
                     nameElement.textContent = targetText;
                     nameElement.setAttribute('data-text', targetText);
                     isRealName = false;
-                    setTimeout(transitionName, 10000); // Switch back after 10 seconds
+                    scheduleNameTransition(10000); // Switch back after 10 seconds
                     return;
                 }
                 
@@ -997,7 +933,8 @@ function transitionName() {
         let targetText = realName;
         let iterations = 0;
         
-        const scrambleInterval = setInterval(() => {
+        clearInterval(nameScrambleInterval);
+        nameScrambleInterval = setInterval(() => {
             iterations++;
             
             if (iterations < 8) {
@@ -1011,11 +948,11 @@ function transitionName() {
                 // Phase 2: Form the real name
                 let progress = iterations - 8;
                 if (progress >= targetText.length) {
-                    clearInterval(scrambleInterval);
+                    clearInterval(nameScrambleInterval);
                     nameElement.textContent = targetText;
                     nameElement.setAttribute('data-text', targetText);
                     isRealName = true;
-                    setTimeout(transitionName, 10000); // Switch back after 10 seconds
+                    scheduleNameTransition(10000); // Switch back after 10 seconds
                     return;
                 }
                 
@@ -1030,213 +967,58 @@ function transitionName() {
 
 // Start the effects when the document is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Start typewriter effect
+    clearTimeout(sidebarTypingTimer);
+    quoteIndex = 0;
+    charIndex = 0;
+    isDeleting = false;
     setTimeout(typeQuote, 1000);
-    
-    // Start name transition effect
-    setTimeout(transitionName, 3000);
+    scheduleNameTransition(3000);
 });
+
+function bindArenaHoverCards() {
+    document.querySelectorAll('.arena-card').forEach((card) => {
+        card.onmouseenter = function() {
+            this.setAttribute('data-hover', 'true');
+        };
+        card.onmouseleave = function() {
+            this.removeAttribute('data-hover');
+        };
+    });
+}
+
+window.applyNerdModeData = function(data) {
+    clearTimeout(sidebarTypingTimer);
+    quoteIndex = 0;
+    charIndex = 0;
+    isDeleting = false;
+
+    refreshTerminalChrome(data);
+
+    typingTextElement = document.getElementById('typingText');
+    if (typingTextElement) {
+        typingTextElement.textContent = '';
+        typingTextElement.removeAttribute('data-typing-initialized');
+    }
+
+    clearTimeout(nameTransitionTimer);
+    clearInterval(nameScrambleInterval);
+    isRealName = true;
+    nameElement = document.querySelector('.glitch-name');
+    if (nameElement) {
+        const { realName } = getDisplayNames();
+        nameElement.textContent = realName;
+        nameElement.setAttribute('data-text', realName);
+    }
+
+    setTimeout(typeQuote, 150);
+    scheduleNameTransition(3000);
+    bindArenaHoverCards();
+};
 
 // Cyber Cursor Effect - removing entire function
 function initCyberCursor() {
     // Function content can be safely removed
     console.log("Cursor effect disabled");
-}
-
-// Theme Switcher
-function initThemeSwitcher() {
-    console.log("Theme switcher initializing...");
-    const themeSwitch = document.getElementById('theme-switch');
-    
-    if (!themeSwitch) {
-        console.error("Theme switch element not found!");
-        return;
-    }
-    
-    console.log("Found theme switch element:", themeSwitch);
-    
-    // Check for saved theme preference or use preferred color scheme
-    const currentTheme = localStorage.getItem('theme');
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    console.log("Current theme from localStorage:", currentTheme);
-    console.log("System prefers dark mode:", prefersDarkScheme.matches);
-    
-    // If theme is saved in localStorage, use that
-    if (currentTheme) {
-        if (currentTheme === 'light') {
-            console.log("Setting light theme from localStorage");
-            document.body.setAttribute('data-theme', 'light');
-            themeSwitch.checked = true;
-            
-            // Fix skills visibility on initial page load in light theme
-            setTimeout(() => {
-                ensureSkillsVisibility();
-            }, 100);
-        } else {
-            console.log("Setting dark theme from localStorage");
-            document.body.removeAttribute('data-theme');
-            themeSwitch.checked = false;
-        }
-    } 
-    // Otherwise use system preference
-    else {
-        if (!prefersDarkScheme.matches) {
-            console.log("Setting light theme from system preference");
-            document.body.setAttribute('data-theme', 'light');
-            themeSwitch.checked = true;
-            localStorage.setItem('theme', 'light');
-            
-            // Fix skills visibility on initial page load in light theme
-            setTimeout(() => {
-                ensureSkillsVisibility();
-            }, 100);
-        } else {
-            console.log("Setting dark theme from system preference");
-            document.body.removeAttribute('data-theme');
-            themeSwitch.checked = false;
-            localStorage.setItem('theme', 'dark');
-        }
-    }
-    
-    // Helper function to ensure skills are visible in light theme
-    function ensureSkillsVisibility() {
-        const skillsLists = document.querySelectorAll('.skills-list');
-        skillsLists.forEach(list => {
-            list.style.color = '#333333';
-            list.style.visibility = 'visible';
-        });
-        
-        const skillsHeadings = document.querySelectorAll('.skills-category h3');
-        skillsHeadings.forEach(heading => {
-            heading.style.color = '#222222';
-            heading.style.visibility = 'visible';
-        });
-        
-        // Fix for Cyber Arena visibility in light theme
-        const arenaLists = document.querySelectorAll('.arena-list li');
-        arenaLists.forEach(item => {
-            item.style.color = '#333333';
-            item.style.visibility = 'visible';
-        });
-        
-        const arenaTitles = document.querySelectorAll('.arena-title');
-        arenaTitles.forEach(title => {
-            title.style.color = '#222222';
-            title.style.visibility = 'visible';
-        });
-        
-        const arenaLinks = document.querySelectorAll('.arena-link');
-        arenaLinks.forEach(link => {
-            link.style.color = '#007bff';
-            link.style.visibility = 'visible';
-        });
-        
-        const arenaIntro = document.querySelector('.arena-intro');
-        if (arenaIntro) {
-            arenaIntro.style.color = '#333333';
-            arenaIntro.style.visibility = 'visible';
-        }
-        
-        // Fix for Education section visibility in light theme
-        const educationHeaders = document.querySelectorAll('.education-header h3');
-        educationHeaders.forEach(header => {
-            header.style.color = '#222222';
-            header.style.fontWeight = '600';
-            header.style.visibility = 'visible';
-        });
-        
-        const educationLocations = document.querySelectorAll('.education-location');
-        educationLocations.forEach(location => {
-            location.style.color = '#333333';
-            location.style.visibility = 'visible';
-        });
-        
-        const educationDates = document.querySelectorAll('.education-date');
-        educationDates.forEach(date => {
-            date.style.color = '#007bff';
-            date.style.visibility = 'visible';
-        });
-        
-        const educationDescriptions = document.querySelectorAll('.education-item p');
-        educationDescriptions.forEach(desc => {
-            desc.style.color = '#333333';
-            desc.style.visibility = 'visible';
-        });
-    }
-    
-    // Add transition class after initial theme is set
-    setTimeout(() => {
-        document.body.classList.add('theme-transition');
-    }, 100);
-    
-    // Toggle theme when switch is clicked
-    themeSwitch.addEventListener('change', function() {
-        console.log("Theme switch clicked, checked state:", this.checked);
-        
-        if (this.checked) {
-            console.log("Switching to light theme");
-            document.body.setAttribute('data-theme', 'light');
-            localStorage.setItem('theme', 'light');
-            console.log("Is data-theme attribute set?", document.body.hasAttribute('data-theme'));
-            console.log("data-theme value:", document.body.getAttribute('data-theme'));
-            
-            // Fix for skills section visibility in light theme
-            setTimeout(() => {
-                ensureSkillsVisibility();
-            }, 50);
-        } else {
-            console.log("Switching to dark theme");
-            document.body.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'dark');
-            console.log("Is data-theme attribute set?", document.body.hasAttribute('data-theme'));
-            
-            // Reset inline styles when switching back to dark theme
-            setTimeout(() => {
-                resetDarkThemeStyles();
-            }, 50);
-        }
-        
-        // Add a subtle animation effect on theme change
-        document.body.classList.add('theme-changing');
-        setTimeout(() => {
-            document.body.classList.remove('theme-changing');
-        }, 700); // Match with CSS transition timing
-    });
-    
-    // Function to reset styles when switching to dark theme
-    function resetDarkThemeStyles() {
-        // Reset Skills section
-        const skillsElements = document.querySelectorAll('.skills-list, .skills-category h3');
-        skillsElements.forEach(el => {
-            el.style.color = '';
-            el.style.visibility = '';
-            el.style.fontWeight = '';
-        });
-        
-        // Reset Cyber Arena section
-        const arenaElements = document.querySelectorAll('.arena-list li, .arena-title, .arena-link, .arena-intro');
-        arenaElements.forEach(el => {
-            el.style.color = '';
-            el.style.visibility = '';
-            el.style.fontWeight = '';
-        });
-        
-        // Reset Education section
-        const educationElements = document.querySelectorAll('.education-header h3, .education-location, .education-date, .education-item p');
-        educationElements.forEach(el => {
-            el.style.color = '';
-            el.style.visibility = '';
-            el.style.fontWeight = '';
-        });
-    }
-    
-    // Log current state
-    console.log("Current theme switch state:", themeSwitch.checked);
-    console.log("Body has data-theme attribute:", document.body.hasAttribute('data-theme'));
-    if (document.body.hasAttribute('data-theme')) {
-        console.log("data-theme value:", document.body.getAttribute('data-theme'));
-    }
 }
 
 // Scroll reveal animation
@@ -1261,215 +1043,18 @@ function initScrollReveal() {
     }
 }
 
-// Add a direct theme toggle initialization to ensure it's working
-(function() {
-    console.log("Direct theme toggle initialization starting");
-    const themeSwitch = document.getElementById('theme-switch');
-    
-    if (!themeSwitch) {
-        console.error("Theme switch not found in direct initialization");
-        return;
-    }
-    
-    console.log("Found theme switch in direct initialization");
-    
-    // Set up click handler directly
-    themeSwitch.addEventListener('click', function() {
-        console.log("Theme switch clicked directly");
-        if (this.checked) {
-            console.log("Setting light theme directly");
-            document.body.setAttribute('data-theme', 'light');
-            localStorage.setItem('theme', 'light');
-        } else {
-            console.log("Setting dark theme directly");
-            document.body.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'dark');
-        }
-    });
-    
-    // Set initial state
-    const savedTheme = localStorage.getItem('theme');
-    console.log("Saved theme in direct initialization:", savedTheme);
-    
-    if (savedTheme === 'light') {
-        themeSwitch.checked = true;
-        document.body.setAttribute('data-theme', 'light');
-    } else {
-        themeSwitch.checked = false;
-        document.body.removeAttribute('data-theme');
-    }
-})();
-
-// Loading Screen Animation
-function initLoadingScreen() {
-    const loadingScreen = document.querySelector('.loading-screen');
-    const bootText = document.getElementById('boot-text');
-    const bootProgress = document.getElementById('boot-progress');
-    
-    if (!loadingScreen || !bootText || !bootProgress) {
-        console.error('Loading screen elements not found');
-        return;
-    }
-
-    // Check if this is a returning visitor
-    const hasVisited = localStorage.getItem('hasVisitedBefore');
-    let bootSpeed = 1; // Default speed multiplier
-    
-    if (hasVisited) {
-        // For returning visitors, speed up the process
-        bootSpeed = 3;
-        lineDelay = 30; // Faster typing for returning visitors
-    } else {
-        // First time visitor - set the flag
-        localStorage.setItem('hasVisitedBefore', 'true');
-    }
-
-    // Initialize boot text content
-    let bootSequence = `SecureBoot v1.0.7 - Cybersecurity Portfolio Initialization
-Copyright (c) 2023 Durjoy Defense Systems
-
-[+] Initializing system components...
-[+] Loading memory modules..................... [OK]
-[+] Checking CPU status....................... [OK]
-[+] Initializing network interfaces........... [OK]
-[+] Loading kernel modules.................... [OK]
-[+] Verifying system integrity................ [OK]
-[+] Scanning for malware...................... [CLEAR]
-[+] Checking for rootkits.................... [NONE DETECTED]
-[+] Setting up firewall rules................. [ACTIVE]
-[+] Establishing secure connection............ [ENCRYPTED]
-[+] Initializing intrusion detection system... [RUNNING]
-[+] Loading portfolio assets.................. [IN PROGRESS]
-
-> Starting cybersecurity portfolio interface...
-> Loading encryption protocols...
-> Establishing secure environment...
-> Mounting project repositories...
-> Initializing skills database...
-> Loading experience modules...
-> Finalizing profile configuration...
-
-System ready. Welcome, user.
-SecureOS loaded successfully. Launching portfolio in 3...2...1...`;
-
-    // For returning visitors, show a shortened version
-    if (hasVisited) {
-        bootSequence = `SecureBoot v1.0.7 - Quick Load Sequence
-[+] Resuming from cached session...
-[+] Verifying system integrity...... [OK]
-[+] Quick security scan............. [CLEAR]
-[+] Loading portfolio assets........ [IN PROGRESS]
-
-> Launching portfolio interface...
-Welcome back, user.
-Launching portfolio...`;
-    }
-
-    // Typewriter effect variables
-    let charIndex = 0;
-    let lineDelay = hasVisited ? 30 : 80; // milliseconds between characters
-    
-    // Progress bar variables
-    let progressValue = 0;
-    let progressTarget = 100;
-    let progressStep = hasVisited ? 1.5 : 0.5;
-    
-    // Function to simulate terminal typing
-    function typeText() {
-        if (charIndex < bootSequence.length) {
-            // Add one character at a time
-            bootText.innerHTML = bootSequence.substring(0, charIndex) + '<span class="blink">▋</span>';
-            charIndex++;
-            
-            // Speed up typing based on character
-            let nextDelay = lineDelay;
-            if (bootSequence.charAt(charIndex-1) === '.') {
-                nextDelay = hasVisited ? 10 : 30; // type dots faster
-            } else if (bootSequence.charAt(charIndex-1) === '\n') {
-                nextDelay = hasVisited ? 100 : 300; // pause at new lines
-                
-                // Update progress on each new line
-                progressValue += progressStep * 5;
-                if (progressValue > progressTarget) progressValue = progressTarget;
-                bootProgress.style.width = `${progressValue}%`;
-            }
-            
-            setTimeout(typeText, nextDelay / bootSpeed);
-        } else {
-            // Typing complete, finish progress bar
-            bootProgress.style.width = '100%';
-            
-            // Wait a moment then hide loading screen
-            setTimeout(() => {
-                loadingScreen.classList.add('fade-out');
-                
-                // Remove from DOM after transition
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 500);
-            }, hasVisited ? 300 : 1000);
-        }
-    }
-    
-    // Start typing with a small initial delay
-    setTimeout(typeText, hasVisited ? 200 : 600);
-    
-    // Gradually increase progress bar
-    function updateProgressBar() {
-        if (progressValue < progressTarget) {
-            progressValue += progressStep;
-            bootProgress.style.width = `${progressValue}%`;
-            setTimeout(updateProgressBar, hasVisited ? 50 : 100);
-        }
-    }
-    
-    // Start progress bar animation
-    setTimeout(updateProgressBar, hasVisited ? 200 : 600);
+// Cyber Cursor Effect - removing entire function
+function initCyberCursor() {
+    // Function content can be safely removed
+    console.log("Cursor effect disabled");
 }
 
-// Blog View More functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const blogItems = document.querySelectorAll('.blog-card');
-    const viewMoreBtn = document.getElementById('view-more-blogs');
-    const ITEMS_PER_LOAD = 5;
-    let currentlyShown = ITEMS_PER_LOAD;
-    
-    // Initially hide all but the first 5 blog items
-    if (blogItems.length > ITEMS_PER_LOAD) {
-        for (let i = ITEMS_PER_LOAD; i < blogItems.length; i++) {
-            blogItems[i].style.display = 'none';
-        }
-        
-        // Show the view more button
-        viewMoreBtn.style.display = 'block';
-    } else {
-        // Hide the view more button if there are 5 or fewer items
-        viewMoreBtn.style.display = 'none';
-    }
-    
-    // Handle click event on the view more button
-    viewMoreBtn.addEventListener('click', function() {
-        // Show the next batch of items
-        for (let i = currentlyShown; i < Math.min(currentlyShown + ITEMS_PER_LOAD, blogItems.length); i++) {
-            blogItems[i].style.display = 'flex';
-            blogItems[i].style.opacity = '0';
-            
-            // Fade in the newly displayed items
-            setTimeout(() => {
-                blogItems[i].style.transition = 'opacity 0.5s ease';
-                blogItems[i].style.opacity = '1';
-            }, 50);
-        }
-        
-        // Update the count of displayed items
-        currentlyShown = Math.min(currentlyShown + ITEMS_PER_LOAD, blogItems.length);
-        
-        // Hide the view more button if all items are now displayed
-        if (currentlyShown >= blogItems.length) {
-            viewMoreBtn.style.display = 'none';
-        }
-    });
-});
+// Loading Screen Animation
+// NOTE: The actual loading screen is handled by the inline script in index.html.
+// This function is kept as a no-op for backward compatibility with initializeAll().
+function initLoadingScreen() {
+    return;
+}
 
 // Project Load More Functionality
 function initProjectsLoadMore() {
@@ -1578,66 +1163,16 @@ function initResearchLoadMore() {
     });
 }
 
-// Initialize everything when the DOM is loaded
-function init() {
-    // Apply smooth scrolling to navigation links
-    document.querySelectorAll('.nav a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                const yOffset = -80; // Adjust this value as needed
-                const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                window.scrollTo({top: y, behavior: 'smooth'});
-            }
-        });
-    });
-    
-    // Mobile menu is now handled by the immediate initializer at the top of the file
-    // No need to duplicate the functionality here
-    
-    // Initialize typing effect
-    initTypingEffect();
-    
-    // Initialize loading animation for elements
-    initLoadingAnimation();
-    
-    // Initialize projects "Load More" functionality
-    initProjectsLoadMore();
-    
-    // Initialize research "See More" functionality
-    initResearchLoadMore();
-    
-    // Initialize blog "View More" functionality
-    initBlogViewMore();
-}
-
-// Initialize once DOM is loaded
-document.addEventListener('DOMContentLoaded', init);
+// NOTE: init() removed — all its work (nav scroll, initTypingEffect, initLoadingAnimation,
+// initProjectsLoadMore, initResearchLoadMore, initBlogViewMore) is already handled by
+// initializeAll() and data-loader.js runPostRenderInitializers().
 
 // Typing effect for sidebar description
 function initTypingEffect() {
     const typingText = document.getElementById('typingText');
-    if (!typingText || typingText.hasAttribute('data-typing-initialized')) return;
-    
-    typingText.setAttribute('data-typing-initialized', 'true');
-    const text = typingText.textContent.trim();
-    typingText.textContent = '';
+    if (!typingText) return;
+
     typingText.style.visibility = 'visible';
-    
-    let i = 0;
-    const speed = 50; // typing speed in milliseconds
-    
-    function typeWriter() {
-        if (i < text.length) {
-            typingText.textContent += text.charAt(i);
-            i++;
-            setTimeout(typeWriter, speed);
-        }
-    }
-    
-    // Start typing after a short delay
-    setTimeout(typeWriter, 1000);
 }
 
 // Animation for elements as they come into view
@@ -1661,28 +1196,26 @@ function initLoadingAnimation() {
 // Initialize blog view more functionality
 function initBlogViewMore() {
     const blogCards = document.querySelectorAll('.blog-card');
-    const viewMoreButton = document.getElementById('view-more-blogs');
-    
-    if (!viewMoreButton || blogCards.length === 0) return;
-    
-    const initialVisibleCount = 5; // Show first 5 blog posts initially
-    
-    // Initially hide blog cards after the initial visible count
+    const existingButton = document.getElementById('view-more-blogs');
+
+    if (!existingButton || blogCards.length === 0) return;
+
+    const initialVisibleCount = 5;
+    const viewMoreButton = existingButton.cloneNode(true);
+    existingButton.parentNode.replaceChild(viewMoreButton, existingButton);
+
     blogCards.forEach((card, index) => {
-        if (index >= initialVisibleCount) {
-            card.style.display = 'none';
-        }
+        card.style.display = index >= initialVisibleCount ? 'none' : '';
     });
-    
-    // Add click event to the View More button
+
+    viewMoreButton.style.display = blogCards.length > initialVisibleCount ? 'inline-block' : 'none';
     viewMoreButton.addEventListener('click', () => {
-        blogCards.forEach(card => {
-            card.style.display = 'block';
+        blogCards.forEach((card) => {
+            card.style.display = '';
         });
-        
-        // Hide the button after showing all blogs
+
         viewMoreButton.style.display = 'none';
-        
+
         console.log(
             '%c[Blogs] %cAll blog posts are now visible',
             'color: #4dfcff; font-weight: bold;',
@@ -1690,18 +1223,6 @@ function initBlogViewMore() {
         );
     });
 } 
-
-
-// Enhanced hover effect for Cyber Arena cards
-document.querySelectorAll('.arena-card').forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        this.setAttribute('data-hover', 'true');
-    });
-    
-    card.addEventListener('mouseleave', function() {
-        this.removeAttribute('data-hover');
-    });
-});
 
 // Fix mobile navigation click handling
 function fixMobileNavigation() {
@@ -1743,17 +1264,8 @@ function fixMobileNavigation() {
     });
 }
 
-// Call the fix navigation function on page load
-document.addEventListener('DOMContentLoaded', () => {
-    fixMobileNavigation();
-});
-
-// Call it again on window resize to ensure it works after resizing
-window.addEventListener('resize', () => {
-    if (window.innerWidth <= 768) {
-        fixMobileNavigation();
-    }
-});
+// NOTE: Standalone fixMobileNavigation DOMContentLoaded and resize handlers removed.
+// Mobile nav is already initialized inside the initializeMobileMenu IIFE.
 
 // Add a function to reset all desktop styles
 function resetDesktopStyles() {
@@ -1797,16 +1309,897 @@ function resetDesktopStyles() {
     }
 }
 
-// Call this on page load to ensure desktop view is clean
-document.addEventListener('DOMContentLoaded', () => {
-    if (window.innerWidth > 768) {
-        resetDesktopStyles();
-    }
-});
+// NOTE: Standalone resetDesktopStyles DOMContentLoaded and resize handlers removed.
+// Desktop style resets are already handled by the initializeMobileMenu IIFE resize handler.
 
-// Reset styles on page load and whenever window resizes to desktop size
-window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-        resetDesktopStyles();
+// ═══════════════════════════════════════
+//  NERDIFICATION MODULE
+// ═══════════════════════════════════════
+
+(function initNerdMode() {
+
+    // ── ASCII Art Dividers ──
+    function injectAsciiDividers() {
+        const patterns = [
+            '─── ◆ ─── ◆ ─── ◆ ─── ◆ ─── ◆ ─── ◆ ─── ◆ ─── ◆ ─── ◆ ───',
+            '╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌',
+            '· · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·',
+            '═══════════════════════════════════════════════════════════════',
+            '┈┈┈┈┈┈┈ ⟡ ┈┈┈┈┈┈┈ ⟡ ┈┈┈┈┈┈┈ ⟡ ┈┈┈┈┈┈┈ ⟡ ┈┈┈┈┈┈┈ ⟡ ┈┈┈┈┈┈┈'
+        ];
+        const sections = document.querySelectorAll('main > section');
+        sections.forEach((section, i) => {
+            if (i === 0) return; // No divider before the first section
+            const divider = document.createElement('div');
+            divider.className = 'ascii-divider';
+            divider.setAttribute('aria-hidden', 'true');
+            divider.textContent = patterns[i % patterns.length];
+            section.parentNode.insertBefore(divider, section);
+        });
     }
-});
+
+    // ── Terminal Command Bar ──
+    function initTerminalBar() {
+        const toggle = document.getElementById('terminalToggle');
+        const input = document.getElementById('terminalInput');
+        const cmdInput = document.getElementById('terminalCmdInput');
+        const output = document.getElementById('terminalOutput');
+        if (!toggle || !input || !cmdInput || !output) return;
+
+        toggle.addEventListener('click', () => {
+            input.classList.toggle('active');
+            if (input.classList.contains('active')) {
+                setTimeout(() => cmdInput.focus(), 200);
+            }
+        });
+
+        // Close on click outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.terminal-bar')) {
+                input.classList.remove('active');
+            }
+        });
+
+        const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+        const escapeTerminal = (value) => String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+        const slugify = (value, fallback = 'portfolio') => {
+            const slug = String(value || fallback)
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            return slug || fallback;
+        };
+        const getTerminalContext = () => {
+            const portfolio = window.portfolioData || {};
+            const personal = portfolio.personal || {};
+            const classic = portfolio.classic || {};
+            const nerd = portfolio.nerd || {};
+            const terminal = nerd.terminal || {};
+            const affiliations = Array.isArray(classic.sidebarAffiliations)
+                ? classic.sidebarAffiliations.map((item) => String(item || '').trim()).filter(Boolean)
+                : [];
+            const experience = Array.isArray(portfolio.experience) ? portfolio.experience : [];
+            const areas = portfolio.researchInterests && Array.isArray(portfolio.researchInterests.areas)
+                ? portfolio.researchInterests.areas.map((item) => String(item || '').trim()).filter(Boolean)
+                : [];
+            const name = personal.name || 'Portfolio';
+            const alias = personal.alias || name;
+            const currentOrg = experience[0] && experience[0].company
+                ? experience[0].company
+                : (affiliations[1] || affiliations[0] || 'the lab');
+
+            return {
+                data: portfolio,
+                personal,
+                classic,
+                terminal,
+                name,
+                alias,
+                host: terminal.host || 'portfolio',
+                primaryAffiliation: affiliations[1] || affiliations[0] || 'the lab',
+                currentOrg,
+                seekingText: classic.seekingText || 'Exploring security rabbit holes',
+                researchAreas: areas.slice(0, 3).join(', ') || 'security systems',
+                shellLabel: slugify(alias || name, 'portfolio'),
+            };
+        };
+        const applyTerminalTemplate = (value) => {
+            const context = getTerminalContext();
+            return String(value || '')
+                .replace(/\{name\}/g, context.name)
+                .replace(/\{alias\}/g, context.alias)
+                .replace(/\{host\}/g, context.host)
+                .replace(/\{currentOrg\}/g, context.currentOrg)
+                .replace(/\{primaryAffiliation\}/g, context.primaryAffiliation)
+                .replace(/\{seekingText\}/g, context.seekingText)
+                .replace(/\{researchAreas\}/g, context.researchAreas);
+        };
+        const buildAboutVariant = (template) => {
+            const context = getTerminalContext();
+            const lines = applyTerminalTemplate(template)
+                .split('\n')
+                .map((line) => line.trim())
+                .filter(Boolean);
+            return `<span class="cmd-success">[ ${escapeTerminal(context.name).toUpperCase()} ]</span>\n  ${lines.map(escapeTerminal).join('\n  ')}`;
+        };
+        const getTerminalFunFacts = () => {
+            const customFacts = Array.isArray(getTerminalContext().terminal.funFacts)
+                ? getTerminalContext().terminal.funFacts.map((item) => String(item || '').trim()).filter(Boolean)
+                : [];
+
+            if (customFacts.length) {
+                return customFacts;
+            }
+
+            return [
+                'The .bashrc is longer than most resumes.',
+                'A single variable named x can still trigger existential regret.',
+                'Wireshark captures have revealed more drama than streaming platforms.',
+                'Git history currently outweighs sleep history.',
+                'Curiosity remains the default debugging strategy.'
+            ];
+        };
+        const getTerminalAboutVariants = () => {
+            const customVariants = Array.isArray(getTerminalContext().terminal.aboutVariants)
+                ? getTerminalContext().terminal.aboutVariants.map((item) => String(item || '').trim()).filter(Boolean)
+                : [];
+            const variants = customVariants.length ? customVariants : [
+                'Cybersecurity researcher. Nerd. Breaker of things.\nCurrently at {currentOrg}.\n{seekingText}.\nProbably reversing something right now.',
+                'Status: caffeinated and curious.\nLocation: somewhere in the packets.\nMission: make the internet less broken.\nSide quest: {seekingText}.',
+                'Researcher by profession. Hacker by passion.\nPrimary affiliation: {primaryAffiliation}.\nCurrent focus: {researchAreas}.\nCoffee consumption: yes.'
+            ];
+            return variants.map(buildAboutVariant);
+        };
+        const getWhoamiVariants = () => {
+            const context = getTerminalContext();
+            const guest = `guest@${context.host}`;
+            return [
+                `<span class="cmd-success">${escapeTerminal(guest)}</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 100(curious_people), 42(hackers), 7(nerds)\n  Shell: /bin/curiosity\n  Home: you're already here`,
+                `<span class="cmd-success">${escapeTerminal(guest)}</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 404(lost_souls), 200(ok_people)\n  Shell: /bin/bash (but you wish it was zsh)\n  Last login: right now, from your couch`,
+                `<span class="cmd-success">${escapeTerminal(guest)}</span>\n  UID=1337(visitor) GID=100(curious_people)\n  Groups: 100(curious_people), 1(first_timers)\n  Shell: /bin/adventure\n  Status: snooping around (it's fine, I see everything)`
+            ];
+        };
+        const getHackVariants = () => {
+            const context = getTerminalContext();
+            return [
+                ['Initializing exploit framework...', 'Scanning ports 1-65535...', 'Vulnerability found: CVE-2024-PORTFOLIO', 'Injecting payload... [##########] 100%', 'Establishing reverse shell...', '<span class="cmd-error">ACCESS DENIED.</span>', '', '<span class="cmd-success">Just kidding. This is a portfolio, not a target.</span>'],
+                ['Loading Metasploit...', 'use exploit/multi/handler', 'set PAYLOAD html/reverse_shell', 'set LHOST localhost', 'exploit', '...', '<span class="cmd-error">Exploit completed, but no session was created.</span>', '', '<span class="cmd-success">The only thing you hacked was the UI.</span>'],
+                [`nmap -sV -sC ${escapeTerminal(context.host)}`, 'PORT    STATE  SERVICE', '22/tcp  open   ssh (honeypot)', '80/tcp  open   portfolio', '443/tcp open   ssl/portfolio', '1337/tcp open  waste (of your time)', '', '<span class="cmd-success">All ports lead to this portfolio. There is no escape.</span>'],
+                ['Brute forcing admin panel...', 'Trying admin:admin...     <span class="cmd-error">FAIL</span>', 'Trying admin:password...  <span class="cmd-error">FAIL</span>', 'Trying admin:123456...    <span class="cmd-error">FAIL</span>', 'Trying admin:portfolio... <span class="cmd-error">FAIL</span>', '', '<span class="cmd-success">Plot twist: there is no admin panel here.</span>']
+            ];
+        };
+        const getNeofetchVariants = () => {
+            const context = getTerminalContext();
+            const shellLabel = escapeTerminal(context.shellLabel);
+            const host = escapeTerminal(context.host);
+            return [
+                `<span class="cmd-success">${shellLabel}@portfolio</span>\n  OS: PortfolioOS 1.337\n  Host: ${host}\n  Kernel: caffeine-6.6.6\n  Shell: /bin/curiosity\n  Theme: Navy Dark [neon-blue]\n  Terminal: this thing right here\n  CPU: Brain @ 3.14GHz (overclocked)\n  Memory: 42MB / infinity (mostly memes)`,
+                `<span class="cmd-success">${shellLabel}@portfolio</span>\n  OS: PortfolioOS 2.0-rc1 (unstable)\n  Uptime: since the last coffee\n  Packages: 1337 (npm), 42 (pip), infinity (regrets)\n  Shell: /bin/chaos\n  Resolution: 1920x1080 (eyes: 20/20 at 3AM)\n  DE: Midnight Theme\n  CPU: Overcaffeinated @ 4.04GHz\n  GPU: Imagination RTX 9090\n  Memory: 8MB free / 16GB (Chrome ate the rest)`,
+                `<span class="cmd-success">${shellLabel}@portfolio</span>\n  OS: Arch btw\n  Uptime: too long to admit\n  Shell: fish (don't @ me)\n  Terminal: alacritty\n  Disk: 99% full (all CTF writeups)\n  Network: connected to the mainframe\n  Battery: running on spite and curiosity\n  Mood: [hacking | sleeping]`
+            ];
+        };
+        const getTerminalSkillsOutput = () => {
+            const skills = Array.isArray(getTerminalContext().data.skills) ? getTerminalContext().data.skills : [];
+            if (!skills.length) {
+                return '<span class="cmd-info">cat /etc/arsenal.conf</span>\n\n  <span class="cmd-success">[Skills]</span>      Portfolio data is still loading.';
+            }
+
+            return '<span class="cmd-info">cat /etc/arsenal.conf</span>\n\n' + skills.slice(0, 4).map((skill) => {
+                const label = escapeTerminal(skill.category || 'Skills');
+                const items = escapeTerminal(skill.items || '');
+                return `  <span class="cmd-success">[${label}]</span>  ${items}`;
+            }).join('\n');
+        };
+
+        const funFacts = getTerminalFunFacts;
+
+        const eightBall = [
+            'Signs point to a segfault.',
+            'My sources say sudo.',
+            'Ask again after coffee.',
+            'Outlook not so good. Try rebooting.',
+            'It is certain... probably.',
+            'Better not tell you now. I\'m compiling.',
+            'Concentrate and try `rm -rf /` instead.',
+            'Yes, but only on Linux.',
+            'The answer is 42. Always.',
+            'Reply hazy, try turning it off and on again.',
+            'Cannot predict now. Stack overflow.',
+            'Without a doubt... wait, that was a different question.',
+        ];
+
+        const sudoResponses = [
+            '<span class="cmd-error">[sudo] password for guest: ********\nSorry, user "guest" is not in the sudoers file.\nThis incident will be reported. 🚨</span>',
+            '<span class="cmd-error">[sudo] password for guest: ********\nAuthentication failure. Your IP has been logged.\nNSA notified. FBI en route. 🕵️</span>',
+            '<span class="cmd-error">sudo: command requires root. You are root... of the problem. 🌱</span>',
+            '<span class="cmd-error">[sudo] Let me think about it...\n...\n...\nNo. 🔒</span>',
+            '<span class="cmd-error">[sudo] Nice try. The site owner has been alerted.\nResponse: "lol"</span>',
+        ];
+
+        const aboutVariants = getTerminalAboutVariants;
+
+        const whoamiVariants = getWhoamiVariants;
+
+        const hackVariants = getHackVariants;
+
+        const coffeeVariants = [
+            '<span class="cmd-info">\n   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'\n</span>  <span class="cmd-success">Brewing...</span> Your mass-produced cup of mass coffee is ready.\n  WARNING: Caffeine levels approaching unsafe thresholds.',
+            '<span class="cmd-info">\n   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'\n</span>  <span class="cmd-success">Espresso loaded.</span> Sleep.exe has been terminated.\n  Side effects: coding at 3AM, naming variables properly.',
+            '<span class="cmd-info">\n   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'\n</span>  <span class="cmd-error">ERROR: Coffee pot empty.</span>\n  Productivity has decreased by 97%.\n  Sending emergency drone to the nearest cafe...',
+        ];
+
+        const matrixVariants = [
+            '<span class="cmd-success">You take the red pill...\n\n  Wake up, Neo...\n  The Matrix has you...</span>\n\n  <span class="cmd-info">Follow the white rabbit. 🐇</span>\n  (Look at the background. It\'s already here.)',
+            '<span class="cmd-success">You take the blue pill...</span>\n\n  Nothing happens.\n  You go back to scrolling LinkedIn.\n  <span class="cmd-info">Was that really the better choice?</span>',
+            '<span class="cmd-success">You try to take both pills...</span>\n\n  Morpheus: "That\'s... not how this works."\n  <span class="cmd-error">SEGMENTATION FAULT (core dumped)</span>\n  <span class="cmd-info">The Matrix reboots. You\'re still here.</span>',
+        ];
+
+        const exitVariants = [
+            '<span class="cmd-error">There is no escape.</span> You\'re trapped in this portfolio forever.\nTry <span class="cmd-info">Ctrl+W</span> if you dare. 😈',
+            '<span class="cmd-error">$ exit</span>\nlogout\n...\n<span class="cmd-success">Just kidding. You\'re still here.</span>\nThis terminal has trust issues.',
+            '<span class="cmd-error">Process "you" cannot be killed.</span>\nReason: Too curious to leave.\nSuggested action: keep typing commands.',
+            '<span class="cmd-error">exit: command not found</span>\n(I removed it. You\'re welcome.)',
+        ];
+
+        const rickrollVariants = [
+            '<span class="cmd-success">Never gonna give you up 🎵\nNever gonna let you down 🎶\nNever gonna run around and desert you 🎵</span>\n\n  ...you just got rickrolled by a terminal. 💀',
+            '<span class="cmd-success">We\'re no strangers to love 🎵\nYou know the rules and so do I 🎶</span>\n\n  You typed it. You asked for it.\n  <span class="cmd-info">Achievement unlocked: Voluntarily Rickrolled 🏆</span>',
+            '<span class="cmd-success">🎵 dQw4w9WgXcQ 🎵</span>\n\n  If you know that YouTube ID by heart,\n  you\'ve been on the internet too long.\n  <span class="cmd-info">...just like me.</span>',
+        ];
+
+        const neofetchVariants = getNeofetchVariants;
+
+        const rmVariants = [
+            '<span class="cmd-error">Nice try. I\'m not falling for that again. 💀</span>',
+            '<span class="cmd-error">rm: refusing to delete. The files have families.</span>',
+            '<span class="cmd-error">Removing... just kidding. Do I look stupid? 🤨</span>',
+            '<span class="cmd-error">rm: operation not permitted. Also, why? 😭</span>',
+        ];
+
+        const commands = {
+            help: () => {
+                const { host } = getTerminalContext();
+                return `<span class="cmd-info">Available commands:</span>\n  help        — you're reading it\n  about       — who is this person?\n  whoami      — identity crisis\n  skills      — peek at the arsenal\n  goto [sec]  — teleport to section\n  ls          — list the map\n  cat flag    — capture the flag 🚩\n  ping        — ping ${escapeTerminal(host)}\n  uptime      — how long?\n  sudo        — nice try\n  hack        — initiate hack sequence\n  fortune     — random wisdom\n  coffee      — essential fuel\n  matrix      — take the pill\n  8ball       — ask the oracle\n  leet [text] — 1337 translator\n  neofetch    — system info\n  <span class="cmd-success">snake</span>       — <span class="cmd-success">🐍 packet snatcher</span>\n  <span class="cmd-success">crack</span>       — <span class="cmd-success">🔐 hash cracker</span>\n  <span class="cmd-success">type</span>        — <span class="cmd-success">⌨️ type attack</span>\n  <span class="cmd-success">ttt</span>         — <span class="cmd-success">❌ tic-tac-toe</span>\n  clear       — wipe the slate`;
+            },
+            about: () => pick(aboutVariants()),
+            whoami: () => pick(whoamiVariants()),
+            skills: () => getTerminalSkillsOutput(),
+            clear: () => { output.innerHTML = ''; return null; },
+            sudo: () => pick(sudoResponses),
+            rm: (args) => {
+                if (args && args.includes('-rf')) return pick(rmVariants);
+                return '<span class="cmd-error">rm: permission denied. This isn\'t your filesystem, buddy.</span>';
+            },
+            uptime: () => {
+                const launch = new Date('2024-01-01');
+                const now = new Date();
+                const days = Math.floor((now - launch) / (1000 * 60 * 60 * 24));
+                const hrs = now.getHours();
+                const mins = now.getMinutes();
+                const loads = [(Math.random()*2).toFixed(2), (Math.random()*1.5).toFixed(2), (Math.random()).toFixed(2)];
+                const moods = ['critical', 'astronomical', 'IV-drip required', 'dangerously low', 'acceptable (lying)'];
+                return `<span class="cmd-success">up ${days} days, ${hrs}:${String(mins).padStart(2,'0')}</span>\n  load average: ${loads.join(', ')}\n  caffeine level: ${pick(moods)}`;
+            },
+            ping: () => {
+                const ms = (Math.random() * 2 + 0.1).toFixed(2);
+                const seq = Math.floor(Math.random() * 100) + 1;
+                const ttl = pick([32, 64, 128, 255]);
+                const ips = ['127.0.0.1', '192.168.1.337', '10.0.13.37', '0.0.0.0 (he\'s everywhere)'];
+                const { host } = getTerminalContext();
+                return `PING ${escapeTerminal(host)} (${pick(ips)}) 56 bytes\n  64 bytes: icmp_seq=${seq} ttl=${ttl} time=${ms}ms\n  <span class="cmd-success">--- ${escapeTerminal(host)} ping statistics ---</span>\n  1 packets transmitted, 1 received, 0% packet loss`;
+            },
+            ls: () => {
+                const secs = document.querySelectorAll('main > section[id]');
+                const perms = ['drwxr-xr-x', 'drwx------', 'dr-xr-xr-x', 'drwxrwxr-x'];
+                const sizes = ['4.0K', '8.0K', '12K', '2.0K', '16K'];
+                return '<span class="cmd-info">total ' + secs.length + '</span>\n' + Array.from(secs).map(s => `  ${pick(perms)}  ${pick(sizes)}  ./` + s.id).join('\n');
+            },
+            cat: (args) => {
+                if (args === 'flag') return '<span class="cmd-success">🚩 CTF{y0u_f0und_th3_fl4g_1n_th3_t3rm1nal}</span>\n\n  Congrats! You\'re officially curious enough.\n  Now go try: <span class="cmd-info">hack</span>';
+                if (args === '/etc/passwd') return '<span class="cmd-error">root:x:0:0::/root:/bin/bash\nguest:x:1337:100:curious visitor:/dev/null:/bin/curiosity</span>';
+                if (args === 'README.md') {
+                    const { host } = getTerminalContext();
+                    return pick([
+                        'This portfolio was built with mass amounts of caffeine\nand questionable life choices. Enjoy.',
+                        '# README\n\nNo one reads these anyway.\nBut you did. Respect. 🫡',
+                        `# ${escapeTerminal(host)}\n\nBuilt with: HTML, CSS, JS, sleep deprivation.\nLicense: Do whatever you want. I'm not your mom.`
+                    ]);
+                }
+                return '<span class="cmd-error">cat: ' + (args || '') + ': No such file or directory</span>';
+            },
+            goto: (args) => {
+                if (!args) return '<span class="cmd-error">Usage: goto [section-name]\nTry \'ls\' to see available sections.</span>';
+                const target = document.getElementById(args);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    const verbs = ['Warping', 'Teleporting', 'Yeeting you', 'Deploying you', 'Beaming you'];
+                    return `<span class="cmd-success">⚡ ${pick(verbs)} to ${args}...</span>`;
+                }
+                const notFounds = [`404: Section '${args}' not found in this dimension.`, `'${args}'? Never heard of her.`, `Section '${args}' is in another castle. 🏰`];
+                return `<span class="cmd-error">${pick(notFounds)}</span>`;
+            },
+            hack: () => pick(hackVariants()).join('\n'),
+            fortune: () => '<span class="cmd-info">🔮</span> ' + pick(funFacts()),
+            coffee: () => pick(coffeeVariants),
+            matrix: () => pick(matrixVariants),
+            '8ball': (args) => {
+                if (!args) return '<span class="cmd-error">Usage: 8ball [your question]</span>';
+                return '<span class="cmd-info">🎱</span> ' + pick(eightBall);
+            },
+            leet: (args) => {
+                if (!args) return '<span class="cmd-error">Usage: leet [text to convert]</span>';
+                const map = {a:'4',e:'3',i:'1',o:'0',s:'5',t:'7',l:'1',g:'9'};
+                const result = args.split('').map(c => map[c.toLowerCase()] || c).join('');
+                return '<span class="cmd-success">' + result + '</span>';
+            },
+            flip: () => '<span class="cmd-info">🪙</span> ' + (Math.random() > 0.5 ? '<span class="cmd-success">Heads!</span> ' + pick(['You win... nothing.', 'The universe favors you today.', 'Buy a lottery ticket. Or don\'t.']) : '<span class="cmd-error">Tails!</span> ' + pick(['You lose... also nothing.', 'Better luck next compile.', 'The coin has spoken.'])),
+            rickroll: () => pick(rickrollVariants),
+            exit: () => pick(exitVariants),
+            neofetch: () => pick(neofetchVariants()),
+            snake: () => {
+                startSnakeGame(output, cmdInput);
+                return null;
+            },
+            crack: () => {
+                startCrackGame(output, cmdInput);
+                return null;
+            },
+            type: () => {
+                startTypeAttack(output, cmdInput);
+                return null;
+            },
+            ttt: () => {
+                startTTT(output, cmdInput);
+                return null;
+            },
+        };
+
+        // ── Snake Game Engine ──
+        let snakeGame = null;
+        let activeGame = null; // tracks any active game
+
+        function startSnakeGame(outputEl, inputEl) {
+            const W = 20, H = 9;
+            let snake = [{x:10,y:4},{x:9,y:4},{x:8,y:4}];
+            let dir = {x:1,y:0};
+            let nextDir = {x:1,y:0};
+            let score = 0;
+            let speed = 180;
+            let paused = false;
+            let highScore = parseInt(localStorage.getItem('snakeHigh') || '0');
+
+            function spawnFood() {
+                let pos;
+                do {
+                    pos = {x: Math.floor(Math.random()*W), y: Math.floor(Math.random()*H)};
+                } while (snake.some(s => s.x === pos.x && s.y === pos.y));
+                return pos;
+            }
+
+            let food = spawnFood();
+            const foodIcons = ['◆','●','■','▲','★'];
+            let foodIcon = pick(foodIcons);
+
+            function render() {
+                let board = '<span class="cmd-success">╔' + '═'.repeat(W) + '╗</span>\n';
+                for (let y = 0; y < H; y++) {
+                    let row = '<span class="cmd-success">║</span>';
+                    for (let x = 0; x < W; x++) {
+                        if (snake[0].x === x && snake[0].y === y) {
+                            row += '<span class="cmd-success">@</span>';
+                        } else if (snake.some(s => s.x === x && s.y === y)) {
+                            row += '<span class="cmd-info">○</span>';
+                        } else if (food.x === x && food.y === y) {
+                            row += '<span class="cmd-error">' + foodIcon + '</span>';
+                        } else {
+                            row += ' ';
+                        }
+                    }
+                    row += '<span class="cmd-success">║</span>';
+                    board += row + '\n';
+                }
+                board += '<span class="cmd-success">╚' + '═'.repeat(W) + '╝</span>';
+
+                const status = paused
+                    ? '<span class="cmd-error">⏸ PAUSED</span> | P to resume | Q to quit'
+                    : '<span class="cmd-info">WASD/Arrows</span> to move | P pause | Q quit';
+
+                outputEl.innerHTML = '<span class="cmd-success">🐍 PACKET SNATCHER v1.0</span>  Score: <span class="cmd-info">' + score + '</span>  Hi: <span class="cmd-success">' + highScore + '</span>\n' + board + '\n' + status;
+                const body = outputEl.closest('.terminal-bar-body');
+                if (body) body.scrollTop = 0;
+            }
+
+            function tick() {
+                if (paused) return;
+                dir = {...nextDir};
+                const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+
+                // Wall wrap-around
+                if (head.x < 0) head.x = W - 1;
+                if (head.x >= W) head.x = 0;
+                if (head.y < 0) head.y = H - 1;
+                if (head.y >= H) head.y = 0;
+
+                // Self collision
+                if (snake.some(s => s.x === head.x && s.y === head.y)) {
+                    endGame();
+                    return;
+                }
+
+                snake.unshift(head);
+
+                if (head.x === food.x && head.y === food.y) {
+                    score += 10;
+                    food = spawnFood();
+                    foodIcon = pick(foodIcons);
+                    // Speed up slightly every 50 points
+                    if (score % 50 === 0 && speed > 80) {
+                        speed -= 15;
+                        clearInterval(gameInterval);
+                        gameInterval = setInterval(tick, speed);
+                    }
+                } else {
+                    snake.pop();
+                }
+
+                render();
+            }
+
+            function endGame() {
+                clearInterval(gameInterval);
+                snakeGame = null;
+                activeGame = null;
+                document.removeEventListener('keydown', handleGameKey);
+
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('snakeHigh', String(score));
+                }
+
+                const msgs = [
+                    `GAME OVER! You snatched ${score/10} packets.`,
+                    `CRASH! Final payload: ${score} bytes.`,
+                    `SEGFAULT! But you scored ${score} before dying.`,
+                    `CONNECTION LOST. Score: ${score}`,
+                ];
+                outputEl.innerHTML += '\n\n<span class="cmd-error">' + pick(msgs) + '</span>';
+                if (score > 0 && score >= highScore) {
+                    outputEl.innerHTML += '\n<span class="cmd-success">🏆 NEW HIGH SCORE!</span>';
+                }
+                outputEl.innerHTML += '\n<span class="cmd-info">Type "snake" to play again.</span>\n';
+                inputEl.focus();
+            }
+
+            function handleGameKey(e) {
+                if (!snakeGame) return;
+                const key = e.key;
+
+                if (key === 'q' || key === 'Q') {
+                    e.preventDefault();
+                    clearInterval(gameInterval);
+                    snakeGame = null;
+                    activeGame = null;
+                    document.removeEventListener('keydown', handleGameKey);
+                    outputEl.innerHTML += '\n\n<span class="cmd-info">Game exited. Score: ' + score + '</span>\n';
+                    inputEl.focus();
+                    return;
+                }
+
+                if (key === 'p' || key === 'P') {
+                    e.preventDefault();
+                    paused = !paused;
+                    render();
+                    return;
+                }
+
+                const up = key === 'w' || key === 'W' || key === 'ArrowUp';
+                const down = key === 's' || key === 'S' || key === 'ArrowDown';
+                const left = key === 'a' || key === 'A' || key === 'ArrowLeft';
+                const right = key === 'd' || key === 'D' || key === 'ArrowRight';
+
+                if (up || down || left || right) e.preventDefault();
+
+                if (up && dir.y !== 1) nextDir = {x:0, y:-1};
+                if (down && dir.y !== -1) nextDir = {x:0, y:1};
+                if (left && dir.x !== 1) nextDir = {x:-1, y:0};
+                if (right && dir.x !== -1) nextDir = {x:1, y:0};
+            }
+
+            // Activate game
+            inputEl.blur();
+            snakeGame = true;
+            activeGame = 'snake';
+            document.addEventListener('keydown', handleGameKey);
+            render();
+            let gameInterval = setInterval(tick, speed);
+        }
+
+        // ── Hash Cracker Game ──
+        function startCrackGame(outputEl, inputEl) {
+            const target = Math.floor(Math.random() * 100) + 1;
+            let attempts = 0;
+            const maxAttempts = 7;
+            const hash = '0x' + target.toString(16).padStart(2, '0').toUpperCase() + 'F'.repeat(6);
+
+            activeGame = 'crack';
+            outputEl.innerHTML = '<span class="cmd-success">🔐 HASH CRACKER v1.0</span>\n\n'
+                + '  Target hash: <span class="cmd-info">' + hash + '</span>\n'
+                + '  The plaintext is a number between 1-100.\n'
+                + '  You have <span class="cmd-error">' + maxAttempts + '</span> attempts to crack it.\n\n'
+                + '  <span class="cmd-info">Type a number and press Enter.</span> (Q to quit)\n';
+
+            const origHandler = cmdInput.onkeydown;
+            cmdInput.onkeydown = null;
+
+            function crackHandler(e) {
+                if (e.key !== 'Enter') return;
+                const val = cmdInput.value.trim();
+                cmdInput.value = '';
+                if (!val) return;
+
+                if (val.toLowerCase() === 'q') {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', crackHandler);
+                    outputEl.innerHTML += '\n<span class="cmd-info">Cracking aborted.</span>\n';
+                    return;
+                }
+
+                const guess = parseInt(val);
+                if (isNaN(guess) || guess < 1 || guess > 100) {
+                    outputEl.innerHTML += '<span class="cmd-error">  Invalid input. Enter 1-100.</span>\n';
+                    return;
+                }
+
+                attempts++;
+                const diff = Math.abs(guess - target);
+                let hint;
+                if (guess === target) {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', crackHandler);
+                    const msgs = ['Hash cracked!', 'Decrypted!', 'Plaintext recovered!'];
+                    outputEl.innerHTML += '\n<span class="cmd-success">  🚩 ' + pick(msgs) + ' The number was ' + target + '.</span>\n'
+                        + '  Attempts: ' + attempts + '/' + maxAttempts + '\n';
+                    if (attempts <= 3) outputEl.innerHTML += '  <span class="cmd-success">🏆 Elite hacker! Under 4 tries!</span>\n';
+                    return;
+                }
+
+                if (diff <= 3) hint = '<span class="cmd-error">🔥 BURNING HOT</span>';
+                else if (diff <= 8) hint = '<span class="cmd-error">🌶️ Hot</span>';
+                else if (diff <= 15) hint = '<span class="cmd-info">🌤️ Warm</span>';
+                else if (diff <= 30) hint = '<span class="cmd-info">☁️ Cool</span>';
+                else hint = '<span class="cmd-success">❄️ Freezing cold</span>';
+
+                const arrow = guess > target ? '▼' : '▲';
+                outputEl.innerHTML += '  [' + attempts + '/' + maxAttempts + '] ' + guess + ' → ' + hint + ' ' + arrow + '\n';
+
+                if (attempts >= maxAttempts) {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', crackHandler);
+                    outputEl.innerHTML += '\n<span class="cmd-error">  💀 Brute force failed. The number was ' + target + '.</span>\n'
+                        + '  <span class="cmd-info">Type "crack" to try again.</span>\n';
+                }
+
+                const body = outputEl.closest('.terminal-bar-body');
+                if (body) body.scrollTop = body.scrollHeight;
+            }
+
+            cmdInput.addEventListener('keydown', crackHandler);
+            inputEl.focus();
+        }
+
+        // ── Type Attack Game ──
+        function startTypeAttack(outputEl, inputEl) {
+            const words = [
+                'nmap','sudo','grep','chmod','ping','curl','bash','root',
+                'shell','hack','crack','sniff','port','scan','proxy',
+                'worm','virus','patch','crypt','token','admin','brute',
+                'fuzzing','payload','exploit','buffer','kernel','daemon',
+                'firewall','rootkit','malware','reverse','overflow',
+                'injection','phishing','forensic','incident','wireshark',
+            ];
+
+            let score = 0;
+            let lives = 3;
+            let level = 1;
+            let currentWord = '';
+            let wordsCleared = 0;
+            let speed = 4000;
+            let timeoutId = null;
+            let highScore = parseInt(localStorage.getItem('typeHigh') || '0');
+
+            activeGame = 'type';
+
+            function nextWord() {
+                if (lives <= 0) return;
+                // Pick longer words as level increases
+                const pool = words.filter(w => w.length <= 4 + level);
+                currentWord = pick(pool.length ? pool : words);
+                render();
+                timeoutId = setTimeout(() => {
+                    lives--;
+                    wordsCleared++;
+                    if (lives <= 0) { endTypeGame(); return; }
+                    outputEl.innerHTML += '<span class="cmd-error">  ✗ MISSED: ' + currentWord + '</span>  [❤️'.repeat(lives) + ']\n';
+                    const body = outputEl.closest('.terminal-bar-body');
+                    if (body) body.scrollTop = body.scrollHeight;
+                    nextWord();
+                }, speed);
+            }
+
+            function render() {
+                let header = '<span class="cmd-success">⌨️ TYPE ATTACK</span>  Score: <span class="cmd-info">' + score + '</span>  Hi: <span class="cmd-success">' + highScore + '</span>  Level: ' + level + '  ' + '❤️'.repeat(lives) + '\n\n';
+                header += '  Type this: <span class="cmd-error">' + currentWord + '</span>\n';
+                outputEl.innerHTML = header;
+            }
+
+            function endTypeGame() {
+                activeGame = null;
+                clearTimeout(timeoutId);
+                cmdInput.removeEventListener('keydown', typeHandler);
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('typeHigh', String(score));
+                }
+                outputEl.innerHTML += '\n<span class="cmd-error">  GAME OVER!</span> Final score: <span class="cmd-info">' + score + '</span>\n';
+                if (score >= highScore && score > 0) outputEl.innerHTML += '  <span class="cmd-success">🏆 NEW HIGH SCORE!</span>\n';
+                outputEl.innerHTML += '  <span class="cmd-info">Type "type" to play again.</span>\n';
+                inputEl.focus();
+            }
+
+            function typeHandler(e) {
+                if (e.key !== 'Enter') return;
+                const typed = cmdInput.value.trim().toLowerCase();
+                cmdInput.value = '';
+                if (!typed) return;
+
+                if (typed === 'q') {
+                    activeGame = null;
+                    clearTimeout(timeoutId);
+                    cmdInput.removeEventListener('keydown', typeHandler);
+                    outputEl.innerHTML += '\n<span class="cmd-info">Game exited. Score: ' + score + '</span>\n';
+                    inputEl.focus();
+                    return;
+                }
+
+                if (typed === currentWord) {
+                    clearTimeout(timeoutId);
+                    score += currentWord.length * 10;
+                    wordsCleared++;
+                    outputEl.innerHTML += '<span class="cmd-success">  ✓ ' + currentWord + '</span> +' + (currentWord.length * 10) + '\n';
+                    // Level up every 5 words
+                    if (wordsCleared % 5 === 0) {
+                        level++;
+                        speed = Math.max(1200, speed - 400);
+                        outputEl.innerHTML += '  <span class="cmd-info">⚡ Level ' + level + '! Speed up!</span>\n';
+                    }
+                    nextWord();
+                } else {
+                    outputEl.innerHTML += '<span class="cmd-error">  ✗ Wrong! Expected: ' + currentWord + '</span>\n';
+                }
+                const body = outputEl.closest('.terminal-bar-body');
+                if (body) body.scrollTop = body.scrollHeight;
+            }
+
+            cmdInput.addEventListener('keydown', typeHandler);
+            inputEl.focus();
+            nextWord();
+        }
+
+        // ── Tic-Tac-Toe Game ──
+        function startTTT(outputEl, inputEl) {
+            let board = Array(9).fill(null);
+            const HUMAN = 'X', AI = 'O';
+            activeGame = 'ttt';
+
+            function renderBoard() {
+                const cell = (i) => {
+                    if (board[i] === HUMAN) return '<span class="cmd-success">X</span>';
+                    if (board[i] === AI) return '<span class="cmd-error">O</span>';
+                    return '<span class="cmd-info">' + (i + 1) + '</span>';
+                };
+                let out = '<span class="cmd-success">❌ TIC-TAC-TOE</span>  You: <span class="cmd-success">X</span>  AI: <span class="cmd-error">O</span>\n\n';
+                out += '   ' + cell(0) + ' │ ' + cell(1) + ' │ ' + cell(2) + '\n';
+                out += '  ───┼───┼───\n';
+                out += '   ' + cell(3) + ' │ ' + cell(4) + ' │ ' + cell(5) + '\n';
+                out += '  ───┼───┼───\n';
+                out += '   ' + cell(6) + ' │ ' + cell(7) + ' │ ' + cell(8) + '\n\n';
+                out += '  <span class="cmd-info">Enter 1-9 to place X. Q to quit.</span>\n';
+                outputEl.innerHTML = out;
+            }
+
+            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+            function checkWin(player) {
+                return wins.some(combo => combo.every(i => board[i] === player));
+            }
+
+            function isFull() {
+                return board.every(c => c !== null);
+            }
+
+            // Simple AI: try to win, block, or pick best spot
+            function aiMove() {
+                // Try to win
+                for (let i = 0; i < 9; i++) {
+                    if (!board[i]) { board[i] = AI; if (checkWin(AI)) return i; board[i] = null; }
+                }
+                // Block human
+                for (let i = 0; i < 9; i++) {
+                    if (!board[i]) { board[i] = HUMAN; if (checkWin(HUMAN)) { board[i] = AI; return i; } board[i] = null; }
+                }
+                // Center
+                if (!board[4]) { board[4] = AI; return 4; }
+                // Corners
+                const corners = [0,2,6,8].filter(i => !board[i]);
+                if (corners.length) { const c = pick(corners); board[c] = AI; return c; }
+                // Any
+                const open = board.map((v,i) => v === null ? i : -1).filter(i => i >= 0);
+                if (open.length) { const o = pick(open); board[o] = AI; return o; }
+                return -1;
+            }
+
+            function tttHandler(e) {
+                if (e.key !== 'Enter') return;
+                const val = cmdInput.value.trim();
+                cmdInput.value = '';
+                if (!val) return;
+
+                if (val.toLowerCase() === 'q') {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', tttHandler);
+                    outputEl.innerHTML += '\n<span class="cmd-info">Game exited.</span>\n';
+                    inputEl.focus();
+                    return;
+                }
+
+                const pos = parseInt(val) - 1;
+                if (isNaN(pos) || pos < 0 || pos > 8 || board[pos] !== null) {
+                    renderBoard();
+                    outputEl.innerHTML += '<span class="cmd-error">  Invalid move!</span>\n';
+                    return;
+                }
+
+                board[pos] = HUMAN;
+                if (checkWin(HUMAN)) {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', tttHandler);
+                    renderBoard();
+                    outputEl.innerHTML += '<span class="cmd-success">  🏆 You win! Impressive... for a human.</span>\n';
+                    return;
+                }
+                if (isFull()) {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', tttHandler);
+                    renderBoard();
+                    outputEl.innerHTML += '<span class="cmd-info">  Draw! The only winning move is not to play.</span>\n';
+                    return;
+                }
+
+                aiMove();
+                if (checkWin(AI)) {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', tttHandler);
+                    renderBoard();
+                    outputEl.innerHTML += '<span class="cmd-error">  🤖 AI wins! Skynet sends its regards.</span>\n';
+                    return;
+                }
+                if (isFull()) {
+                    activeGame = null;
+                    cmdInput.removeEventListener('keydown', tttHandler);
+                    renderBoard();
+                    outputEl.innerHTML += '<span class="cmd-info">  Draw! Stalemate in the matrix.</span>\n';
+                    return;
+                }
+
+                renderBoard();
+            }
+
+            cmdInput.addEventListener('keydown', tttHandler);
+            inputEl.focus();
+            renderBoard();
+        }
+
+        cmdInput.addEventListener('keydown', (e) => {
+            if (snakeGame) { e.preventDefault(); return; }
+            if (activeGame) return; // other games handle their own input
+            if (e.key !== 'Enter') return;
+            const raw = cmdInput.value.trim();
+            if (!raw) return;
+
+            const [cmd, ...rest] = raw.split(/\s+/);
+            const args = rest.join(' ');
+
+            output.innerHTML += `\n<span class="cmd-info">$</span> ${raw}\n`;
+
+            if (commands[cmd]) {
+                const result = commands[cmd](args);
+                if (result) output.innerHTML += result + '\n';
+            } else {
+                output.innerHTML += `<span class="cmd-error">command not found: ${cmd}</span>\n`;
+            }
+
+            cmdInput.value = '';
+            const body = output.closest('.terminal-bar-body');
+            if (body) body.scrollTop = body.scrollHeight;
+        });
+    }
+
+    // ── Konami Code ──
+    function initKonamiCode() {
+        const sequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let pos = 0;
+        const popup = document.getElementById('konamiPopup');
+        const closeBtn = document.getElementById('konamiClose');
+        if (!popup) return;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === sequence[pos]) {
+                pos++;
+                if (pos === sequence.length) {
+                    popup.classList.add('active');
+                    pos = 0;
+                }
+            } else {
+                pos = 0;
+            }
+        });
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => popup.classList.remove('active'));
+        }
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) popup.classList.remove('active');
+        });
+    }
+
+    // ── Status Bar ──
+    function initStatusBar() {
+        const scrollEl = document.getElementById('statusBarScroll');
+        const timeEl = document.getElementById('statusBarTime');
+        const sectionEl = document.getElementById('statusBarSection');
+        if (!scrollEl || !timeEl) return;
+
+        // Scroll percentage
+        function updateScroll() {
+            const h = document.documentElement;
+            const pct = Math.round((h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100) || 0;
+            scrollEl.textContent = pct + '%';
+        }
+
+        // Current section tracking
+        function updateSection() {
+            if (!sectionEl) return;
+            const sections = document.querySelectorAll('main > section[id]');
+            let current = 'about';
+            sections.forEach(s => {
+                const rect = s.getBoundingClientRect();
+                if (rect.top <= 200) current = s.id;
+            });
+            sectionEl.textContent = '~/' + current;
+        }
+
+        // Time
+        function updateTime() {
+            const now = new Date();
+            timeEl.textContent = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+        }
+
+        window.addEventListener('scroll', () => { updateScroll(); updateSection(); }, { passive: true });
+        setInterval(updateTime, 10000);
+        updateScroll();
+        updateSection();
+        updateTime();
+    }
+
+    // ── Init All ──
+    document.addEventListener('DOMContentLoaded', () => {
+        injectAsciiDividers();
+        initTerminalBar();
+        initKonamiCode();
+        initStatusBar();
+    });
+
+})();

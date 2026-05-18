@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        // Mark session as active so refreshing other pages doesn't redirect back here
+        sessionStorage.setItem('portfolio-session-active', 'true');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Durjoy Majumdar — Cybersecurity Researcher</title>
+    <meta name="description" content="Durjoy Majumdar — Cybersecurity researcher at IIT Patna. M.Tech CS, blockchain security, seeking PhD positions Fall 2027.">
+    <meta property="og:title" content="Durjoy Majumdar — Portfolio">
+    <meta property="og:description" content="Cybersecurity researcher at IIT Patna specializing in blockchain and distributed systems security. Seeking PhD positions Fall 2027.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://asokakrsna.github.io/images/og-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Durjoy Majumdar — Portfolio">
+    <meta name="twitter:description" content="Cybersecurity researcher at IIT Patna. Blockchain security, adversarial analysis, seeking PhD Fall 2027.">
+    <link rel="shortcut icon" href="./images/AsokaKrsna.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #111119;
+            color: #e8e4dc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Subtle background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 20%, rgba(40, 36, 52, 0.5) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 80%, rgba(28, 32, 48, 0.4) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .entrance {
+            position: relative;
+            text-align: center;
+            max-width: 720px;
+            width: 100%;
+            padding: 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .entrance-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 600;
+            color: #f0ece2;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.5rem;
+        }
+
+        .entrance-line {
+            width: 48px;
+            height: 1px;
+            background: #d4a574;
+            margin: 1.2rem auto 1.5rem;
+            opacity: 0.6;
+        }
+
+        .entrance-prompt {
+            font-size: 0.95rem;
+            color: #9a9590;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            margin-bottom: 2.5rem;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .mode-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 2.2rem 1.8rem;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            overflow: hidden;
+        }
+
+        .mode-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .mode-card.classic::before {
+            background: radial-gradient(ellipse at bottom left, rgba(212, 165, 116, 0.08) 0%, transparent 70%);
+        }
+
+        .mode-card.nerd::before {
+            background: radial-gradient(ellipse at bottom left, rgba(100, 255, 218, 0.06) 0%, transparent 70%);
+        }
+
+        .mode-card:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateY(-3px);
+        }
+
+        .mode-card:hover::before {
+            opacity: 1;
+        }
+
+        .mode-card.classic:hover {
+            border-color: rgba(212, 165, 116, 0.25);
+        }
+
+        .mode-card.nerd:hover {
+            border-color: rgba(100, 255, 218, 0.25);
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            display: block;
+        }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f0ece2;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.02em;
+        }
+
+        .classic .card-title {
+            color: #d4a574;
+        }
+
+        .nerd .card-title {
+            color: #64ffda;
+        }
+
+        .card-description {
+            font-size: 0.85rem;
+            line-height: 1.65;
+            color: #a8a39c;
+            margin-bottom: 1.2rem;
+            flex: 1;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .card-tag {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            letter-spacing: 0.03em;
+            font-weight: 500;
+        }
+
+        .classic .card-tag {
+            background: rgba(212, 165, 116, 0.1);
+            color: #d4a574;
+        }
+
+        .nerd .card-tag {
+            background: rgba(100, 255, 218, 0.08);
+            color: #64ffda;
+        }
+
+        .entrance-footer {
+            font-size: 0.75rem;
+            color: #5a5550;
+            letter-spacing: 0.02em;
+        }
+
+        /* Mobile */
+        @media (max-width: 580px) {
+            .cards {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .mode-card {
+                padding: 1.6rem 1.4rem;
+            }
+
+            .entrance {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Focus styles for accessibility */
+        .mode-card:focus-visible {
+            outline: 2px solid #d4a574;
+            outline-offset: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="entrance">
+        <h1 class="entrance-name">Durjoy Majumdar</h1>
+        <div class="entrance-line"></div>
+        <p class="entrance-prompt">Choose your experience</p>
+
+        <div class="cards">
+            <a href="classic.html" class="mode-card classic" role="button" data-mode="classic">
+                <span class="card-icon">📄</span>
+                <div class="card-title">Classic</div>
+                <p class="card-description">
+                    Research-focused, publication-forward. 
+                    Designed for faculty, review committees, and academic discourse.
+                </p>
+                <div class="card-tags">
+                    <span class="card-tag">Research</span>
+                    <span class="card-tag">Publications</span>
+                    <span class="card-tag">Academic</span>
+                </div>
+            </a>
+
+            <a href="index.html" class="mode-card nerd" role="button" data-mode="nerd">
+                <span class="card-icon">⚡</span>
+                <div class="card-title">Nerd</div>
+                <p class="card-description">
+                    The full picture — hacker culture, CTF war stories, 
+                    and everything in between. For the curious.
+                </p>
+                <div class="card-tags">
+                    <span class="card-tag">Cyber Arena</span>
+                    <span class="card-tag">Projects</span>
+                    <span class="card-tag">Full Stack</span>
+                </div>
+            </a>
+        </div>
+
+        <p class="entrance-footer">You can switch anytime from either mode</p>
+    </div>
+
+    <script>
+        // Save choice on click (no auto-redirect — user can always revisit this page)
+        document.querySelectorAll('.mode-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                const mode = this.dataset.mode;
+                localStorage.setItem('portfolio-mode', mode);
+            });
+        });
+    </script>
+</body>
+</html>
