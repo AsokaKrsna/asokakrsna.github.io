@@ -6,7 +6,7 @@
     "tagline": "Cybersecurity is a mindset, not a product.",
     "profileImage": "images/profile.png",
     "favicon": "./images/AsokaKrsna.ico",
-    "resumeLink": "Resume.pdf"
+    "resumeLink": "resume.pdf"
   },
   "nerd": {
     "loader": {
@@ -311,7 +311,7 @@
           "Cracking since 2023."
         ],
         "linkText": "View Writeups",
-        "url": "#"
+        "url": "https://asokakrsnasthoughts.vercel.app/"
       },
       {
         "name": "TryHackMe",
