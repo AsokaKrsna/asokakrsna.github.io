@@ -2,7 +2,7 @@
   "personal": {
     "name": "Durjoy Majumdar",
     "alias": "AsokaKrsna",
-    "title": "Cybersec Nerd | Researcher | Student",
+    "title": "Researcher | Student| Cybersec Nerd",
     "tagline": "Cybersecurity is a mindset, not a product.",
     "profileImage": "images/profile.png",
     "favicon": "./images/AsokaKrsna.ico",
@@ -17,6 +17,7 @@
       "Cybersecurity is a mindset, not a product.",
       "\"The important thing is not to stop questioning. Curiosity has its own reason for existing.\" - Albert Einstein",
       "Where others see function, I see attack vectors waiting to be secured.",
+      "Every assumption is a vulnerability waiting to be exploited.",
       "Research is creating new knowledge and new ways to ask better security questions."
     ],
     "terminal": {
@@ -24,28 +25,29 @@
       "branch": "main",
       "welcome": "Welcome. Type 'help' for available commands.",
       "aboutVariants": [
-        "Cybersecurity researcher. Nerd. Breaker of things.\\nCurrently at {currentOrg}.\\n{seekingText}.\\nProbably reversing something right now.",
-        "Status: caffeinated and curious.\\nLocation: somewhere in the packets.\\nMission: make the internet less broken.\\nSide quest: {seekingText}.",
-        "Researcher by profession. Hacker by passion.\\nPrimary affiliation: {primaryAffiliation}.\\nCurrent focus: {researchAreas}.\\nCoffee consumption: yes."
+        "Cybersecurity researcher. Nerd. Breaking things.\\nCurrently at {currentOrg}.\\n{seekingText}.\\nProbably researching something right now.",
+        "Status: At higher state and curious.\\nLocation: somewhere in the realm.\\nMission: make the internet more secure.\\nSide quest: {seekingText}.",
+        "Researcher by passion. Building the profession.\\nPrimary affiliation: {primaryAffiliation}.\\nCurrent focus: {researchAreas}.\\nDreamning: High."
       ],
       "funFacts": [
-        "His .bashrc is longer than most people's resumes.",
-        "He once named a variable x and felt guilty for three days.",
-        "His Wireshark captures have captured more drama than Netflix.",
-        "He dreams in hex.",
-        "His git log has more entries than his sleep log."
+        "Research is my cardio",
+        "Once named a variable x and felt guilty for three days.",
+        "Wireshark captures have captured more drama than Netflix.",
+        "Dreams are encrypted.",
+        "Transactions are append only, but my research is all about rewriting the rules.",
+        "I have a habit of going down rabbit holes that sometimes turn into research."
       ]
     }
   },
   "about": {
     "paragraphs": [
-      "Cybersecurity researcher. I break things to understand how to defend them - from AI-driven threats and blockchain security to network intrusion detection. Currently an M.Tech student at <a href=\"https://www.iitp.ac.in/\" target=\"_blank\" rel=\"noopener noreferrer\">IIT Patna</a> and a Junior Research Associate at the Security Lab, building blockchain testbeds and poking at distributed systems.",
-      "I have 3 published papers (IEEE, Springer), multiple CTF wins, and a habit of going down rabbit holes that sometimes turn into research. I am looking for opportunities to do meaningful security research - the kind that makes systems actually harder to break."
+      "Cybersecurity researcher. I break things to understand how to defend them - from AI-driven threats and blockchain security to network intrusion detection. Currently an M.Tech student at <a href=\"https://www.iitp.ac.in/\" target=\"_blank\" rel=\"noopener noreferrer\">IIT Patna</a> and a Junior Research Associate at the Cybersecurity Lab, building blockchain testbeds and poking at distributed systems.",
+      "I have multiple published papers (IEEE, Springer), multiple CTF wins and a habit of going down rabbit holes that sometimes turn into research. Looking for opportunities to do meaningful security research - the kind that makes systems actually safer, not just papers. If you have a project or research direction in mind, let's talk."
     ]
   },
   "researchInterests": {
     "title": "Research Focus",
-    "statement": "My research interests focus on the security of distributed and blockchain systems. I am interested in understanding how these systems behave under realistic adversarial conditions, and in exploring practical ways to evaluate and improve security, trust, and reliability through experimentation and system-level analysis.",
+    "statement": "My research interests focus on the security of distributed and blockchain systems. I am interested in understanding how these systems behave under realistic adversarial conditions and in exploring practical ways to evaluate and improve security, trust and reliability through experimentation and system-level analysis.",
     "areas": [
       "Blockchain Security",
       "Distributed Systems",
@@ -54,7 +56,7 @@
       "Network Security",
       "Cryptographic Systems"
     ],
-    "futureGoals": ""
+    "futureGoals": "Adaptive with time. Currently looking forward to make cross-chain bridges more secure and to explore the security implications of AI in cybersecurity."
   },
   "education": [
     {
@@ -69,28 +71,28 @@
       "location": "Vaddeswaram, Andhra Pradesh, India",
       "grade": "CGPA: 9.26 out of 10.00",
       "period": "2021-25",
-      "degree": "B.Tech CSE (Honours); specialization in cybersecurity and blockchain technology."
+      "degree": "B.Tech CSE ; Specialization in Cybersecurity and Blockchain Technology."
     },
     {
       "institution": "Govt. Shamsur Rahman College",
       "location": "Shariatpur, Dhaka, Bangladesh",
       "grade": "GPA: 5.00 out of 5.00",
       "period": "2019-21",
-      "degree": "Higher Secondary School Certificate; Science major."
+      "degree": "Higher Secondary School Certificate ; Science major."
     },
     {
       "institution": "Idilpur Pilot High School",
       "location": "Shariatpur, Dhaka, Bangladesh",
       "grade": "GPA: 5.00 out of 5.00",
       "period": "2017-19",
-      "degree": "Secondary School Certificate; Science major."
+      "degree": "Secondary School Certificate ; Science major."
     }
   ],
   "experience": [
     {
       "period": "Nov'25 - Present",
       "title": "Junior Research Associate",
-      "company": "Security Lab, IIT Patna",
+      "company": "Cybersecurity Lab, IIT Patna",
       "location": "[Patna, IN]",
       "responsibilities": [
         "Working on blockchain security. Currently building a local blockchain testbed to support security testing and attack simulation."
@@ -474,11 +476,11 @@
   "scratchpad": {
     "intro": "A graveyard of ideas that haven't worked out, or things I am just planning for.",
     "linkText": "Read latest writing",
-    "url": "https://www.linkedin.com/pulse/attribution-error-trap-how-genai-tools-reshaping-secure-majumdar-hxm6c/?trackingId=bpcBAUbbSdiR5DBkz397Wg%3D%3D"
+    "url": "https://asokakrsnasthoughts.vercel.app/"
   },
   "classic": {
     "sidebarAffiliations": [
-      "M.Tech, Computer Science (Cybersecurity)",
+      "M.Tech, Computer Science & Engineering.",
       "Indian Institute of Technology Patna"
     ],
     "seekingText": "Seeking PhD positions - Fall 2027",
