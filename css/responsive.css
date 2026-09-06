@@ -34,26 +34,28 @@
         left: 20px !important;
         font-size: 1.2rem !important;
         line-height: 1.2 !important;
-        color: var(--text-color) !important;
+        color: #e8f0ff !important;
+        background-color: rgba(8, 15, 30, 0.85) !important;
         text-shadow: 0 0 3px rgba(0, 255, 255, 0.3);
         z-index: 10001 !important;
         padding: 5px 10px !important;
         border-radius: 4px !important;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important;
     }
-    
+
     /* Dark theme styling - deeper navy to match theme */
     body.dark-theme .sidebar.active .logo.glitch-name {
         background-color: rgba(8, 15, 30, 0.85) !important;
         text-shadow: 0 0 3px rgba(0, 255, 255, 0.3) !important;
         color: #ffffff !important;
     }
-    
-    /* Light theme styling */
+
+    /* The site only ships the dark navy theme; keep the name chip dark so it
+       never renders as a white box against the overlay. */
     body:not(.dark-theme) .sidebar.active .logo.glitch-name {
-        background-color: rgba(240, 240, 240, 0.9) !important;
-        text-shadow: 0 0 3px rgba(0, 100, 255, 0.3) !important;
-        color: #333333 !important;
+        background-color: rgba(8, 15, 30, 0.85) !important;
+        text-shadow: 0 0 3px rgba(0, 255, 255, 0.3) !important;
+        color: #ffffff !important;
     }
     
     /* Reduce glitch effect in mobile */

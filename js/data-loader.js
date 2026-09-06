@@ -105,6 +105,19 @@ class PortfolioLoader {
             profileImg.alt = personal.name ? `${personal.name} profile image` : 'Profile image';
         }
 
+        const mobileProfileImg = document.querySelector('.mobile-profile-photo');
+        if (mobileProfileImg) {
+            mobileProfileImg.src = this.sanitizeUrl(personal.profileImage, 'images/profile.png');
+        }
+        const mobileProfileName = document.querySelector('.mobile-profile-name');
+        if (mobileProfileName) {
+            mobileProfileName.textContent = personal.name || '';
+        }
+        const mobileProfileTitle = document.querySelector('.mobile-profile-title');
+        if (mobileProfileTitle) {
+            mobileProfileTitle.textContent = personal.title || '';
+        }
+
         const nameElement = document.querySelector('.logo.glitch-name');
         if (nameElement) {
             const displayName = personal.name || 'Portfolio';
@@ -305,11 +318,6 @@ class PortfolioLoader {
                 </div>
             `;
         }).join('');
-
-        const loadMoreBtn = document.getElementById('load-more-projects');
-        if (loadMoreBtn) {
-            loadMoreBtn.style.display = projects.length > 3 ? 'inline-block' : 'none';
-        }
     }
 
     renderBlogs() {

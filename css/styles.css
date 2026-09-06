@@ -1052,8 +1052,8 @@ ul {
 
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 1.25rem;
     margin-top: 2rem;
 }
 
@@ -1571,17 +1571,16 @@ footer {
         display: none;
     }
     
-    /* Certifications timeline mobile styling */
+    /* Certifications grid mobile styling */
     .certifications-timeline {
-        padding-left: 25px;
+        grid-template-columns: 1fr;
+        padding-left: 0;
     }
-    
+
     .certification-dot {
-        left: -25px;
-        width: 14px;
-        height: 14px;
+        display: none;
     }
-    
+
     .certification-content {
         padding: 12px 15px;
     }
@@ -2206,8 +2205,10 @@ body:not(.loading-active) .menu-button {
 /* ── End Scratchpad ── */
 
 .certifications-timeline {
-    position: relative;
-    padding-left: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+    gap: 1rem;
+    padding-left: 0;
     margin-top: 1.5rem;
     width: 100%;
 }
@@ -2231,7 +2232,7 @@ body:not(.loading-active) .menu-button {
     position: relative;
     display: flex;
     align-items: flex-start;
-    margin-bottom: 1.2rem;
+    margin-bottom: 0;
     opacity: 0;
     transform: translateY(20px);
     animation: fadeUp 0.3s ease forwards;
@@ -2247,17 +2248,7 @@ body:not(.loading-active) .menu-button {
 .certification-item:nth-child(6) { --animation-order: 6; }
 
 .certification-dot {
-    position: absolute;
-    left: -30px;
-    top: 5px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: var(--accent);
-    border: 2px solid var(--accent);
-    z-index: 1; cursor: pointer; /* Added pointer cursor for better UX */
-    /* Add a subtle glow effect */
-    box-shadow: 0 0 8px rgba(100, 255, 218, 0.5);
+    display: none;
 }
 
 /* Add a subtle pulse animation to the dots */
@@ -2309,9 +2300,9 @@ body:not(.loading-active) .menu-button {
 /* Add responsive adjustment for very small screens */
 @media (max-width: 480px) {
     .certifications-timeline {
-        padding-left: 20px;
+        padding-left: 0;
     }
-    
+
     .certification-content {
         padding: 0.8rem 1rem;
     }

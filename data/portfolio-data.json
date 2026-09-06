@@ -2,7 +2,7 @@
   "personal": {
     "name": "Durjoy Majumdar",
     "alias": "AsokaKrsna",
-    "title": "Researcher | Student| Cybersec Nerd",
+    "title": "Researcher | Student | Cybersec Nerd",
     "tagline": "Cybersecurity is a mindset, not a product.",
     "profileImage": "images/profile.png",
     "favicon": "./images/AsokaKrsna.ico",
@@ -27,7 +27,7 @@
       "aboutVariants": [
         "Cybersecurity researcher. Nerd. Breaking things.\\nCurrently at {currentOrg}.\\n{seekingText}.\\nProbably researching something right now.",
         "Status: At higher state and curious.\\nLocation: somewhere in the realm.\\nMission: make the internet more secure.\\nSide quest: {seekingText}.",
-        "Researcher by passion. Building the profession.\\nPrimary affiliation: {primaryAffiliation}.\\nCurrent focus: {researchAreas}.\\nDreamning: High."
+        "Researcher by passion. Building the profession.\\nPrimary affiliation: {primaryAffiliation}.\\nCurrent focus: {researchAreas}.\\nDreaming: High."
       ],
       "funFacts": [
         "Research is my cardio",
@@ -56,7 +56,7 @@
       "Network Security",
       "Cryptographic Systems"
     ],
-    "futureGoals": "Adaptive with time. Currently looking forward to make cross-chain bridges more secure and to explore the security implications of AI in cybersecurity."
+    "futureGoals": "Adaptive with time. Currently looking forward to making cross-chain bridges more secure and to exploring the security implications of AI in cybersecurity."
   },
   "education": [
     {
@@ -72,20 +72,6 @@
       "grade": "CGPA: 9.26 out of 10.00",
       "period": "2021-25",
       "degree": "B.Tech CSE ; Specialization in Cybersecurity and Blockchain Technology."
-    },
-    {
-      "institution": "Govt. Shamsur Rahman College",
-      "location": "Shariatpur, Dhaka, Bangladesh",
-      "grade": "GPA: 5.00 out of 5.00",
-      "period": "2019-21",
-      "degree": "Higher Secondary School Certificate ; Science major."
-    },
-    {
-      "institution": "Idilpur Pilot High School",
-      "location": "Shariatpur, Dhaka, Bangladesh",
-      "grade": "GPA: 5.00 out of 5.00",
-      "period": "2017-19",
-      "degree": "Secondary School Certificate ; Science major."
     }
   ],
   "experience": [
@@ -390,7 +376,7 @@
       "Three-time consecutive winner of a state-level debate championship."
     ],
     "leadership": [
-      "Research Advisor, White Hat Hackers Club, KL University (May'24 - Present)",
+      "Research Advisor, White Hat Hackers Club, KL University (May'24 - Jul'25)",
       "Head of the Quality Assessment Council, Student Activity Center (SAC), KL University",
       "Head Coordinator, Winter School on Speech and Audio Processing (WiSSAP-2024)",
       "Co-founder and Head of Cybersecurity Wing, LaShido Tech Society",
@@ -515,6 +501,6 @@
     "nerdText": "Built and maintained by Durjoy Majumdar",
     "classicText": "Portfolio maintained by Durjoy Majumdar",
     "copyright": "Copyright 2026 Durjoy Majumdar",
-    "lastUpdated": "May 2026"
+    "lastUpdated": "September 2026"
   }
 }

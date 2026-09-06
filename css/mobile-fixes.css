@@ -229,7 +229,8 @@ body.is-mobile .sidebar.active .sidebar-social {
     left: 20px !important;
     font-size: 1.2rem !important;
     line-height: 1.2 !important;
-    color: var(--text-color) !important;
+    color: #e8f0ff !important;
+    background-color: rgba(8, 15, 30, 0.85) !important;
     text-shadow: 0 0 3px rgba(0, 255, 255, 0.3) !important;
     z-index: 10001 !important;
     padding: 5px 10px !important;
@@ -244,17 +245,13 @@ body.dark-theme .sidebar.active .logo {
     color: #ffffff !important;
 }
 
-/* Light theme styling */
+/* Light theme styling
+   The site only ships the dark navy theme; keep the name chip dark so it
+   never renders as a white box against the overlay. */
 body:not(.dark-theme) .sidebar.active .logo {
-    background-color: rgba(240, 240, 240, 0.9) !important;
-    text-shadow: 0 0 3px rgba(0, 100, 255, 0.3) !important;
-    color: #333333 !important;
-}
-
-/* Special styling for light theme */
-body:not(.dark-theme) .sidebar.active .logo {
-    background-color: rgba(240, 240, 240, 0.8) !important; /* Light background for light theme */
-    text-shadow: 0 0 3px rgba(0, 100, 255, 0.3) !important; /* Adjusted glow for light theme */
+    background-color: rgba(8, 15, 30, 0.85) !important;
+    text-shadow: 0 0 3px rgba(0, 255, 255, 0.3) !important;
+    color: #ffffff !important;
 }
 
 /* CRITICAL: Hide ALL profile elements ONLY IN MOBILE */
@@ -427,3 +424,57 @@ body.menu-open .main-content {
         pointer-events: none !important;
     }
 } 
+/* ===================================
+   COMPACT MOBILE IDENTITY HEADER
+   Shows photo + name + title above the
+   fold on phones; hidden on desktop.
+   =================================== */
+.mobile-profile-header {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-profile-header {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1rem 2rem 0;
+        margin-bottom: 0.25rem;
+    }
+
+    .mobile-profile-photo {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid rgba(100, 255, 218, 0.35);
+        flex-shrink: 0;
+    }
+
+    .mobile-profile-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        min-width: 0;
+    }
+
+    .mobile-profile-name {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #e8f0ff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .mobile-profile-title {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.04em;
+        color: #8892b0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

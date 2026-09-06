@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://asokakrsna.github.io/sitemap.txt

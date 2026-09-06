@@ -8,6 +8,8 @@
         if (!sessionStorage.getItem('portfolio-session-active') && !isPreviewMode) {
             window.location.replace('entrance.html');
         }
+        // Full loader animation only on the first visit of a session; repeats skip it
+        const skipLoaderAnimation = isPreviewMode || sessionStorage.getItem('loader-played') === '1';
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Loading...</title>
@@ -19,11 +21,35 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" id="nerd-twitter-title" content="Portfolio | Loading...">
     <meta name="twitter:description" id="nerd-twitter-description" content="Loading portfolio content from the shared JSON source.">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Durjoy Majumdar",
+        "alternateName": "AsokaKrsna",
+        "jobTitle": "Cybersecurity Researcher",
+        "affiliation": {
+            "@type": "Organization",
+            "name": "Indian Institute of Technology Patna"
+        },
+        "url": "https://asokakrsna.github.io/",
+        "image": "https://asokakrsna.github.io/images/profile.png",
+        "email": "mailto:durjoymajumdar02@gmail.com",
+        "sameAs": [
+            "https://scholar.google.com/citations?user=c7OEFoIAAAAJ&hl=en",
+            "https://orcid.org/0009-0002-3086-9893",
+            "https://github.com/AsokaKrsna",
+            "https://www.linkedin.com/in/durjoy-majumdar/",
+            "https://t.me/as0kakrsna",
+            "https://x.com/Durjoy_02"
+        ]
+    }
+    </script>
 	<link rel="shortcut icon" href="./images/AsokaKrsna.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/mobile-fixes.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script>
@@ -62,6 +88,13 @@
                 if (!loadingScreen || !hexProgressLine || !progressPercentage) {
                     console.error('Loading screen elements not found');
                     if (loadingScreen) loadingScreen.style.display = 'none';
+                    return;
+                }
+
+                // Repeat visits: skip the animation entirely
+                if (skipLoaderAnimation) {
+                    ensureContentVisible();
+                    loadingScreen.style.display = 'none';
                     return;
                 }
                 
@@ -147,6 +180,7 @@
                         progress = 100;
                         clearInterval(progressInterval);
                         clearInterval(hexUpdateInterval);
+                        sessionStorage.setItem('loader-played', '1');
                         
                         setTimeout(() => {
                             document.body.classList.remove('loading-active');
@@ -324,6 +358,15 @@
 
         <!-- Main content area -->
         <main class="main-content">
+            <!-- Compact identity header, visible on mobile only -->
+            <div class="mobile-profile-header" aria-hidden="true">
+                <img src="images/profile.png" alt="" class="mobile-profile-photo">
+                <div class="mobile-profile-text">
+                    <span class="mobile-profile-name">Durjoy Majumdar</span>
+                    <span class="mobile-profile-title">Researcher | Student | Cybersec Nerd</span>
+                </div>
+            </div>
+
             <section id="about" class="about">
                 <div class="container">
                     <h2 class="section-title">About Me</h2>
@@ -374,9 +417,6 @@
                     <div class="projects-grid">
                         <!-- Content loaded dynamically from data/portfolio-data.json -->
                     </div>
-                </div>
-                <div class="project-cta">
-                    <button id="load-more-projects" class="btn load-more">Load More</button>
                 </div>
             </section>
 
@@ -481,7 +521,7 @@
     <script src="js/main.js"></script>
     
     <script>
-        // Mode switching for nerd â†’ entrance (choose mode)
+        // Mode switching for nerd → entrance (choose mode)
         (function() {
             var switchBtn = document.getElementById('switch-to-classic');
             if (switchBtn) {

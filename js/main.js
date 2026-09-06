@@ -1056,66 +1056,15 @@ function initLoadingScreen() {
     return;
 }
 
-// Project Load More Functionality
+// Project visibility
+// All projects render up front now (no pagination); kept as a safeguard so cards
+// hidden by an older cached state become visible again.
 function initProjectsLoadMore() {
-    const projectCards = document.querySelectorAll('.project-card');
+    document.querySelectorAll('.project-card').forEach((card) => {
+        card.classList.remove('hidden');
+    });
     const loadMoreBtn = document.getElementById('load-more-projects');
-    const projectsPerPage = 3;
-    let currentlyVisible = 0;
-
-    // Function to show/hide projects
-    function showProjects() {
-        let counter = 0;
-        
-        projectCards.forEach((card, index) => {
-            // Reset any previous classes
-            card.classList.remove('hidden');
-            
-            // If the card should be hidden (beyond the currently visible count)
-            if (index >= currentlyVisible) {
-                card.classList.add('hidden');
-            } else {
-                // Add animation for visible cards
-                setTimeout(() => {
-                    card.classList.add('visible');
-                }, 100 * counter);
-                counter++;
-            }
-        });
-        
-        // Hide the load more button if all projects are visible
-        if (currentlyVisible >= projectCards.length) {
-            loadMoreBtn.style.display = 'none';
-        }
-    }
-
-    // Initially show only the first batch of projects
-    if (projectCards.length > 0) {
-        // Calculate how many to show initially
-        currentlyVisible = Math.min(projectsPerPage, projectCards.length);
-        showProjects();
-        // Show the button only if there are more than projectsPerPage
-        if (projectCards.length > projectsPerPage) {
-            loadMoreBtn.style.display = 'inline-block';
-        } else {
-            loadMoreBtn.style.display = 'none';
-        }
-    } else {
-        // No projects found, hide the button
-        if (loadMoreBtn) loadMoreBtn.style.display = 'none';
-    }
-
-    // Add click event to load more button
-    if (loadMoreBtn) {
-        loadMoreBtn.addEventListener('click', () => {
-            // Show more projects
-            currentlyVisible = Math.min(currentlyVisible + projectsPerPage, projectCards.length);
-            showProjects();
-            
-            // Add cybersecurity-themed console message
-            console.log(`%c[INFO] Loaded ${currentlyVisible}/${projectCards.length} projects. Scanning for vulnerabilities...`, 'color: #4dfcff');
-        });
-    }
+    if (loadMoreBtn) loadMoreBtn.style.display = 'none';
 }
 
 // Research "See More" button functionality
