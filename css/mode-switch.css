@@ -1,0 +1,207 @@
+/* Academic | Nerd segmented switch + page transition overlay. Shared by index.html and nerd.html. */
+.mode-switch {
+  --ms-bg: var(--surface, #fff);
+  --ms-border: var(--rule, #e4e1da);
+  --ms-text: var(--muted, #5d636e);
+  --ms-thumb: var(--accent, #1f4e79);
+  --ms-on: var(--bg, #fbfaf7);
+  position: relative; display: inline-grid; grid-template-columns: 1fr 1fr; flex: none;
+  padding: 3px; border-radius: 999px; border: 1px solid var(--ms-border); background: var(--ms-bg);
+  font: 600 .76rem/1 var(--sans, 'Inter'), system-ui, sans-serif; letter-spacing: .01em;
+  isolation: isolate; user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.mode-switch .ms-opt {
+  position: relative; z-index: 1; display: inline-flex; align-items: center; justify-content: center; gap: .38rem;
+  /* equal fixed widths keep the 50%-wide thumb aligned with either option */
+  min-width: 7.2rem; box-sizing: border-box;
+  padding: .45rem .7rem; border-radius: 999px; color: var(--ms-text); text-decoration: none; white-space: nowrap;
+  transition: color .3s ease;
+}
+.mode-switch .ms-opt:hover { color: var(--text, #1d1f23); }
+.mode-switch .ms-opt[aria-current="page"] { color: var(--ms-on); cursor: default; }
+.mode-switch .ms-opt svg { width: .9rem; height: .9rem; flex: none; }
+.mode-switch .ms-prompt { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; font-size: .78rem; }
+.mode-switch .ms-thumb {
+  position: absolute; z-index: 0; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px);
+  border-radius: 999px; background: var(--ms-thumb);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .18), 0 2px 6px rgba(0, 0, 0, .12);
+  transition: transform .45s cubic-bezier(.7, 0, .2, 1), background-color .45s ease;
+}
+.mode-switch[data-current="nerd"] .ms-thumb { transform: translateX(100%); }
+/* the thumb leans toward the other option on hover, hinting it can move */
+.mode-switch[data-current="academic"]:has(.ms-opt[data-mode="nerd"]:hover) .ms-thumb { transform: translateX(7%); }
+.mode-switch[data-current="nerd"]:has(.ms-opt[data-mode="academic"]:hover) .ms-thumb { transform: translateX(93%); }
+.mode-switch.is-switching[data-current="academic"] .ms-thumb { transform: translateX(100%); }
+.mode-switch.is-switching[data-current="nerd"] .ms-thumb { transform: translateX(0); }
+.mode-switch.is-switching .ms-opt[aria-current="page"] { color: var(--ms-text); }
+.mode-switch.is-switching .ms-opt:not([aria-current]) { color: var(--ms-on); }
+
+/* dark terminal flavour for nerd.html */
+.mode-switch.ms-terminal {
+  --ms-bg: rgba(10, 14, 23, .85); --ms-border: rgba(100, 255, 218, .22); --ms-text: #8892b0;
+  --ms-thumb: #64ffda; --ms-on: #0a0e17;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.mode-switch.ms-terminal .ms-opt:hover { color: #e6f1ff; }
+/* nerd.html: sits left of the fixed Resume button (top/right 1.5rem, ~96x48px) */
+.mode-switch.ms-floating { position: fixed; top: calc(1.5rem + 7px); right: calc(1.5rem + 108px); z-index: 10050; }
+@media (max-width: 900px) {
+  /* mobile: Resume + menu buttons own the top-right and the terminal FAB the bottom-right */
+  .mode-switch.ms-floating { top: auto; right: auto; bottom: 16px; left: 16px; }
+}
+
+/* ═══════════ Transitions ═══════════
+   Academic → Nerd: the page decrypts, the CRT switches off, a terminal handshake, Nerd powers on.
+   Nerd → Academic: the terminal glitches, paper irises open, the name is set and glides into the header. */
+
+:root { --ms-green: #64ffda; --ms-ink: #0a0e17; }
+
+/* 1. decrypt: the page drains into terminal colours while its text scrambles */
+html.ms-decrypt, html.ms-decrypt body { background-color: var(--ms-ink) !important; transition: background-color .45s ease; }
+html.ms-decrypt body * {
+  color: var(--ms-green) !important; border-color: rgba(100, 255, 218, .18) !important;
+  background-color: transparent !important; box-shadow: none !important;
+  text-shadow: 0 0 6px rgba(100, 255, 218, .45);
+  transition: color .35s ease, background-color .35s ease, border-color .35s ease;
+}
+html.ms-decrypt img { filter: grayscale(1) contrast(1.3) brightness(.7) sepia(1) hue-rotate(115deg) saturate(2.4); transition: filter .4s ease; }
+.ms-scan {
+  position: fixed; inset: 0; z-index: 99990; pointer-events: none; opacity: 0;
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, .28) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, .55) 100%);
+  transition: opacity .4s ease;
+}
+.ms-scan.on { opacity: 1; animation: ms-flicker .12s steps(2) infinite; }
+@keyframes ms-flicker { 50% { opacity: .9; } }
+
+/* 2. CRT power-off: collapse to a line, then to a point of light */
+html.ms-crt-off { background: #000 !important; }
+html.ms-crt-off body { animation: ms-crt-off .42s cubic-bezier(.7, 0, .84, 0) forwards; transform-origin: 50% 50vh; }
+@keyframes ms-crt-off {
+  0% { transform: none; filter: brightness(1); }
+  55% { transform: scale(1, .004); filter: brightness(4); }
+  100% { transform: scale(0, .004); filter: brightness(8); }
+}
+
+/* 3. terminal handshake */
+.ms-term {
+  position: fixed; inset: 0; z-index: 100000; background: var(--ms-ink); color: var(--ms-green);
+  display: grid; place-items: center; padding: 1.5rem;
+  font: 500 clamp(.8rem, 2.1vw, 1rem)/1.75 'JetBrains Mono', ui-monospace, Consolas, monospace;
+}
+.ms-term pre { margin: 0; white-space: pre-wrap; max-width: 44rem; width: 100%; text-shadow: 0 0 8px rgba(100, 255, 218, .35); }
+.ms-term .dim { color: #5c7a8f; }
+.ms-term .ok { color: #e6f1ff; font-weight: 700; }
+.ms-term .caret { display: inline-block; width: .6em; height: 1.15em; vertical-align: -.2em; background: currentColor; animation: ms-blink 1s steps(1) infinite; }
+.ms-term::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, .25) 0 1px, transparent 1px 3px);
+}
+@keyframes ms-blink { 50% { opacity: 0; } }
+
+/* bridge while Nerd Mode loads: the handshake's last line holds the screen */
+html.ms-arriving::after {
+  content: '  access granted'; white-space: pre; position: fixed; inset: 0; z-index: 99999;
+  display: grid; place-items: center; background: #0a0e17; color: #64ffda;
+  font: 500 clamp(.8rem, 2.1vw, 1rem)/1.75 'JetBrains Mono', ui-monospace, Consolas, monospace;
+}
+
+/* 4. CRT power-on (arriving in Nerd Mode): a bright line opens into the page */
+.ms-power { position: fixed; inset: 0; z-index: 100000; pointer-events: none; }
+.ms-power .half { position: absolute; left: 0; right: 0; height: 50.5%; background: var(--ms-ink); transition: transform .55s cubic-bezier(.16, 1, .3, 1); }
+.ms-power .half.top { top: 0; }
+.ms-power .half.bottom { bottom: 0; }
+.ms-power .line {
+  position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: #e6fffa;
+  box-shadow: 0 0 18px 4px rgba(100, 255, 218, .8); transform: scaleX(0);
+  transition: transform .22s cubic-bezier(.16, 1, .3, 1), opacity .35s ease .25s;
+}
+.ms-power.go .line { transform: scaleX(1); opacity: 0; }
+.ms-power.go .half.top { transform: translateY(-101%); transition-delay: .14s; }
+.ms-power.go .half.bottom { transform: translateY(101%); transition-delay: .14s; }
+
+/* 5. leaving Nerd Mode: log out, then the page goes quiet */
+.ms-term.ms-exit { background: rgba(10, 14, 23, .55); }
+.ms-term.ms-exit::after { content: none; }
+html.ms-calm body { transition: filter .9s cubic-bezier(.16, 1, .3, 1), opacity .9s ease; filter: grayscale(1) brightness(1.5) contrast(.7) blur(5px); opacity: .55; }
+html.ms-calm canvas { transition: opacity .5s ease; opacity: 0 !important; }
+
+/* 6. paper: a clean sheet, the name is set like type */
+.ms-paper {
+  --p-bg: #fbfaf7; --p-ink: #1d1f23; --p-accent: #1f4e79; --p-muted: #5d636e;
+  position: fixed; inset: 0; z-index: 100000; pointer-events: none; background: var(--p-bg);
+  clip-path: circle(0 at var(--x, 50%) var(--y, 50%));
+}
+.ms-paper.dark { --p-bg: #15171b; --p-ink: #e7e5e0; --p-accent: #8fb8e3; --p-muted: #a9aeb7; }
+.ms-paper.open { clip-path: circle(150vmax at var(--x, 50%) var(--y, 50%)); transition: clip-path .7s cubic-bezier(.65, 0, .35, 1); }
+.ms-paper.full { clip-path: none; }
+.ms-paper.ms-sheet { clip-path: none; transform: translateY(102%); box-shadow: 0 -1px 0 rgba(255, 255, 255, .08), 0 -24px 60px rgba(0, 0, 0, .35); }
+.ms-paper.ms-sheet.up { transform: none; transition: transform .75s cubic-bezier(.16, 1, .3, 1); }
+.ms-caption {
+  position: fixed; z-index: 100001; left: 50%; top: calc(46% + clamp(2.6rem, 6vw, 4rem)); transform: translateX(-50%);
+  font: italic 400 clamp(.95rem, 2.2vw, 1.1rem)/1 'Source Serif 4', Georgia, serif; color: var(--p-muted, #5d636e);
+  opacity: 0; pointer-events: none; white-space: nowrap;
+}
+.ms-caption.show { animation: ms-fadein .7s ease-out 1s forwards; }
+.ms-name {
+  position: fixed; z-index: 100001; left: 50%; top: 46%; transform: translate(-50%, -50%);
+  margin: 0; white-space: nowrap; pointer-events: none; color: var(--p-ink, #1d1f23);
+  font: 600 clamp(2.4rem, 7vw, 4.6rem)/1.1 'Source Serif 4', Georgia, 'Times New Roman', serif; letter-spacing: -.01em;
+}
+.ms-name.setting { animation: ms-name-set .8s cubic-bezier(.16, 1, .3, 1) .38s both; }
+.ms-rule {
+  position: fixed; z-index: 100001; left: 50%; top: calc(46% + clamp(1.8rem, 4.6vw, 3rem)); width: min(22rem, 60vw); height: 1px;
+  margin-left: calc(min(22rem, 60vw) / -2); background: var(--p-accent, #1f4e79); transform: scaleX(0); transform-origin: left;
+  pointer-events: none;
+}
+.ms-rule.drawing { animation: ms-rule .9s cubic-bezier(.16, 1, .3, 1) .7s forwards; }
+@keyframes ms-name-set { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes ms-rule { to { transform: scaleX(1); } }
+
+/* hand-off on the academic page: hide the real heading only while its stand-in flies in */
+html.ms-flip .hero h1 { visibility: hidden; }
+@keyframes ms-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+html.ms-landed .hero .role, html.ms-landed .hero .seeking, html.ms-landed .hero-links, html.ms-landed .avatar { animation: ms-rise .55s cubic-bezier(.16, 1, .3, 1) both; }
+html.ms-landed .hero .seeking { animation-delay: .06s; }
+html.ms-landed .hero-links { animation-delay: .12s; }
+
+/* reduced motion: a plain crossfade */
+.ms-fade { position: fixed; inset: 0; z-index: 100000; pointer-events: none; opacity: 0; transition: opacity .22s ease; }
+.ms-fade.on { opacity: 1; }
+@keyframes ms-fadein { from { opacity: 0; } to { opacity: 1; } }
+.ms-fadein { animation: ms-fadein .45s ease-out both; }
+/* reduced motion: no flicker, no moving reveal; colour and text still tell the story */
+html.ms-reduced .ms-scan.on { animation: none; }
+html.ms-reduced .ms-name.setting { animation: ms-fadein .7s ease-out .15s both; }
+html.ms-reduced .ms-rule.drawing { animation: ms-fadein .7s ease-out .45s forwards; transform: scaleX(1); }
+html.ms-reduced.ms-landed .hero .role, html.ms-reduced.ms-landed .hero .seeking,
+html.ms-reduced.ms-landed .hero-links, html.ms-reduced.ms-landed .avatar { animation: ms-fadein .4s ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .mode-switch .ms-thumb { transition-duration: .2s; }
+}
+
+/* ═══════════ Back to top (both modes) ═══════════ */
+.to-top {
+  position: fixed; z-index: 10040; right: 20px; bottom: 20px;
+  width: 42px; height: 42px; display: grid; place-items: center; padding: 0; cursor: pointer;
+  border-radius: 999px; border: 1px solid var(--rule, #e4e1da); background: var(--surface, #fff); color: var(--accent, #1f4e79);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .12), 0 8px 20px -10px rgba(0, 0, 0, .3);
+  opacity: 0; transform: translateY(10px); pointer-events: none;
+  transition: opacity .25s ease, transform .35s cubic-bezier(.16, 1, .3, 1), border-color .2s ease;
+}
+.to-top.show { opacity: 1; transform: none; pointer-events: auto; }
+.to-top:hover { border-color: var(--accent, #1f4e79); }
+.to-top svg { width: 18px; height: 18px; }
+/* Nerd Mode: terminal styling, placed beside the >_ terminal toggle */
+.to-top.terminal {
+  right: calc(2rem + 62px); bottom: calc(2rem + 4px);
+  border-color: rgba(100, 255, 218, .3); background: rgba(10, 14, 23, .85); color: #64ffda;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.to-top.terminal:hover { border-color: #64ffda; }
+@media (max-width: 900px) {
+  .to-top.terminal { right: calc(1rem + 4px); bottom: calc(1.5rem + 62px); }
+}
+@media print { .to-top { display: none !important; } }
+@media (prefers-reduced-motion: reduce) { .to-top { transition: opacity .2s ease; transform: none; } }

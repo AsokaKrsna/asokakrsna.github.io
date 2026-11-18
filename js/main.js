@@ -740,7 +740,7 @@ function initializeAll() {
     setTimeout(() => {
         initTypingEffect();
         initScrollReveal();
-        initMobileMenu();
+        if (typeof initMobileMenu === 'function') initMobileMenu();
         initProjectsLoadMore();
     }, 500);
 }

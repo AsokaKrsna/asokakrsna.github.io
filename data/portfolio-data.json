@@ -2,11 +2,11 @@
   "personal": {
     "name": "Durjoy Majumdar",
     "alias": "AsokaKrsna",
-    "title": "Researcher | Student | Cybersec Nerd",
+    "title": "Cross-chain security & AI | M.Tech, IIT Patna",
     "tagline": "Cybersecurity is a mindset, not a product.",
     "profileImage": "images/profile.png",
     "favicon": "./images/AsokaKrsna.ico",
-    "resumeLink": "Resume.pdf"
+    "resumeLink": "CV.pdf"
   },
   "nerd": {
     "loader": {
@@ -41,154 +41,279 @@
   },
   "about": {
     "paragraphs": [
-      "Cybersecurity researcher. I break things to understand how to defend them - from AI-driven threats and blockchain security to network intrusion detection. Currently an M.Tech student at <a href=\"https://www.iitp.ac.in/\" target=\"_blank\" rel=\"noopener noreferrer\">IIT Patna</a> and a Junior Research Associate at the Cybersecurity Lab, building blockchain testbeds and poking at distributed systems.",
-      "I have multiple published papers (IEEE, Springer), multiple CTF wins and a habit of going down rabbit holes that sometimes turn into research. Looking for opportunities to do meaningful security research - the kind that makes systems actually safer, not just papers. If you have a project or research direction in mind, let's talk."
+      "Cybersecurity researcher working on the security of cross-chain systems and on AI for security. I am an M.Tech student at <a href=\"https://www.iitp.ac.in/\" target=\"_blank\" rel=\"noopener noreferrer\">IIT Patna</a> and a Junior Researcher in its Cybersecurity Lab, where I build testbeds that reproduce real bridge exploits and study how they could have been caught.",
+      "I like reading systems for what they assume rather than what they do, and asking what happens when an adversary does not share those assumptions. Outside research I play CTFs with team Enigma Hunters, design challenges, and teach security in English and Bengali."
     ]
   },
   "researchInterests": {
     "title": "Research Focus",
-    "statement": "My research interests focus on the security of distributed and blockchain systems. I am interested in understanding how these systems behave under realistic adversarial conditions and in exploring practical ways to evaluate and improve security, trust and reliability through experimentation and system-level analysis.",
+    "statement": "I study how cross-chain systems fail when verifiers, signers or relayers do not behave as their security argument assumes, and how AI agents can help detect, explain and respond to those failures. A second thread asks how far LLM judgments about security can be trusted.",
     "areas": [
-      "Blockchain Security",
-      "Distributed Systems",
-      "Adversarial Analysis",
-      "AI Security",
-      "Network Security",
-      "Cryptographic Systems"
+      "Cross-chain & blockchain security",
+      "Agentic AI for security",
+      "Adversarial uses of LLMs",
+      "Reliability of LLMs in security analysis",
+      "Network & protocol security",
+      "Trust assumptions in distributed systems"
     ],
-    "futureGoals": "Adaptive with time. Currently looking forward to making cross-chain bridges more secure and to exploring the security implications of AI in cybersecurity."
+    "futureGoals": "Moving cross-chain security from after-the-fact postmortems to in-time detection and bounded, auditable response."
   },
   "education": [
     {
       "institution": "Indian Institute of Technology Patna",
       "location": "Patna, Bihar, India",
-      "grade": "Current CPI: 8.73 out of 10.00",
+      "grade": "CPI: 8.73 / 10.00 (current)",
       "period": "2025-27",
-      "degree": "M.Tech CSE (Cybersecurity)"
+      "degree": "M.Tech, Computer Science & Engineering",
+      "details": "Supervisor: Dr. Somnath Tripathy. Thesis area: agentic AI for cross-chain security."
     },
     {
       "institution": "KL University (KLEF)",
       "location": "Vaddeswaram, Andhra Pradesh, India",
-      "grade": "CGPA: 9.26 out of 10.00",
+      "grade": "CGPA: 9.19 / 10.00",
       "period": "2021-25",
-      "degree": "B.Tech CSE ; Specialization in Cybersecurity and Blockchain Technology."
+      "degree": "B.Tech (Honours), Computer Science & Engineering",
+      "details": "Specialisation in Cybersecurity and Blockchain Technology."
     }
   ],
   "experience": [
     {
-      "period": "Nov'25 - Present",
-      "title": "Junior Research Associate",
+      "period": "Nov 2025 - Present",
+      "title": "Junior Researcher",
       "company": "Cybersecurity Lab, IIT Patna",
-      "location": "[Patna, IN]",
+      "location": "Patna, IN",
+      "kind": "research",
+      "academic": true,
       "responsibilities": [
-        "Working on blockchain security. Currently building a local blockchain testbed to support security testing and attack simulation."
+        "Blockchain and cross-chain security research with Dr. Somnath Tripathy.",
+        "Built Crucible, a testbed that reproduces historical bridge exploits on forked chains, and a private multi-node Ethereum network used for lab experiments and academic projects.",
+        "Working on agentic AI for cross-chain attack detection, and with a lab summer intern on making hashed time-lock contracts (HTLCs) resistant to miner bribery."
+      ],
+      "cv": [
+        "Research on blockchain and cross-chain bridge security, supervised by Dr. Somnath Tripathy.",
+        "Built Crucible, a testbed that reproduces historical cross-chain bridge exploits on forked EVM chains, and a private multi-node Ethereum network for smart contract security experiments (see Research Software).",
+        "Ongoing: agentic AI for cross-chain attack detection (M.Tech thesis); with a lab summer intern, making hashed time-lock contracts (HTLCs) resistant to miner bribery."
       ]
     },
     {
-      "period": "Apr'25 - Present",
-      "title": "Security Researcher (Intern)",
+      "period": "Aug 2025 - Present",
+      "title": "Teaching Assistant",
+      "company": "IIT Patna",
+      "location": "Patna, IN",
+      "kind": "teaching",
+      "academic": true,
+      "responsibilities": [
+        "Teaching assistant for Natural Language Processing and Advanced Topics in Blockchain."
+      ]
+    },
+    {
+      "period": "Apr 2025 - Nov 2026",
+      "title": "Cybersecurity Researcher (part-time)",
       "company": "CRAC Learning",
-      "location": "[Delhi, IN]",
+      "location": "Remote",
+      "kind": "research",
+      "academic": true,
       "responsibilities": [
-        "Exploring how nefarious actors exploit AI models for cyber threats beyond conventional uses.",
-        "Working toward AI adoption in cybersecurity defense mechanisms."
+        "Studied how adversaries misuse AI models beyond conventional uses, and how AI can support defensive security."
       ]
     },
     {
-      "period": "Nov'24 - Jul'25",
+      "period": "Nov 2024 - May 2025",
       "title": "Research Associate (Intern)",
-      "company": "SRG Lab, KLEF",
-      "location": "[Andhra Pradesh, IN]",
+      "company": "Speech Research Group, KL University",
+      "location": "Andhra Pradesh, IN",
+      "kind": "research",
+      "academic": true,
       "responsibilities": [
-        "Worked on mitigating voice-based authentication risks such as replay attacks and deepfakes.",
-        "Explored LLM fine-tuning and training in practice.",
-        "Helped secure systems and data, and supported web development tasks as needed."
+        "Supported the lab's data management, systems and security, and a project on voice-authentication attacks (replay and deepfake).",
+        "Built and maintained the WiSSAP 2024 winter school website."
+      ],
+      "cv": [
+        "Supported the lab's data management, systems and security, and a project on voice-authentication attacks (replay and deepfake)."
       ]
     },
     {
-      "period": "May'24 - Jul'25",
+      "period": "",
+      "title": "Student Researcher",
+      "company": "AI4ECN Horizon Europe consortium proposal",
+      "location": "",
+      "kind": "research",
+      "academic": true,
+      "responsibilities": [
+        "Represented KL University in a Horizon Europe consortium proposal on AI for the edge-cloud-network continuum, with 17 international partners including UCL and Telefónica; contributed research ideas to the proposal."
+      ],
+      "cv": [
+        "Represented KL University in a Horizon Europe consortium proposal on AI for the edge-cloud-network continuum, with 17 international partners including UCL and Telefónica."
+      ]
+    },
+    {
+      "period": "May 2024 - Apr 2025",
       "title": "Research Advisor",
       "company": "White Hat Hackers Club, KL University",
-      "location": "[Andhra Pradesh, IN]",
+      "location": "Andhra Pradesh, IN",
+      "kind": "service",
+      "academic": true,
       "responsibilities": [
-        "Initiated 6 research projects with 15+ team members and led 3 of them, resulting in 2 IEEE-published papers.",
-        "Partnered with 5+ external entities for collaborative research.",
-        "Facilitated 24+ biweekly discussions averaging 100+ participants, with 60% attendance retention."
+        "Initiated 6 student research projects and guided 10 members, leading to 2 published papers.",
+        "Ran biweekly research discussions and collaborated with 5 other security clubs and organisations."
+      ],
+      "cv": [
+        "Initiated 6 student research projects and guided 10 members, leading to 2 published papers; ran biweekly research discussions."
       ]
     },
     {
-      "period": "May'23 - May'24",
-      "title": "Technical Chair",
+      "period": "May 2023 - May 2024",
+      "title": "Technical Chairperson",
       "company": "White Hat Hackers Club, KL University",
-      "location": "[Andhra Pradesh, IN]",
+      "location": "Andhra Pradesh, IN",
+      "kind": "service",
+      "academic": true,
       "responsibilities": [
-        "Coordinated 15+ events with 1500+ participants, achieving an 85% satisfaction rate.",
-        "Crafted 20+ CTF challenges across 3 difficulty levels, completed by 300+ participants.",
-        "Guided students in cybersecurity growth and delivered 15+ technical sessions."
+        "Planned and coordinated 15+ security events with 1,500+ participants in total.",
+        "Authored CTF challenges for 4 events, many built around covert channels; guided 75+ members on projects."
+      ],
+      "cv": [
+        "Coordinated 15+ security events with 1,500+ participants; authored CTF challenges for 4 events, many built around covert channels."
       ]
     },
     {
-      "period": "Apr'22 - Jun'24",
-      "title": "Student Peer Mentor & Teaching Assistant",
-      "company": "White Hat Hackers Club, KL University",
-      "location": "[Andhra Pradesh, IN]",
+      "period": "Apr 2022 - Jun 2024",
+      "title": "Peer Mentor",
+      "company": "KL University",
+      "location": "Andhra Pradesh, IN",
+      "kind": "teaching",
+      "academic": true,
       "responsibilities": [
-        "Mentored 100+ undergraduates across 7 core security courses, achieving 80% positive feedback.",
-        "Conducted 20+ study sessions, provided coursework guidance, and assisted in labs."
+        "Mentored 100+ undergraduates across 7 courses, including Computer Networks & Security and Digital Forensics.",
+        "Co-developed 4 lab workbooks used by 2,000+ students, working with 8 faculty members."
+      ],
+      "cv": [
+        "Mentored 100+ undergraduates across 7 security courses, including Computer Networks & Security and Digital Forensics; co-developed 4 lab workbooks used by 2,000+ students with 8 faculty members."
       ]
     }
   ],
   "skills": [
     {
-      "category": "Research Methodology",
-      "icon": "fas fa-microscope",
-      "items": "Literature review and analysis, experimental design, quantitative and qualitative analysis, statistical methods, research writing and documentation, peer review process, academic collaboration, data collection and analysis, technical report writing."
-    },
-    {
-      "category": "Security Operations",
-      "icon": "fas fa-compass",
-      "items": "Incident response, threat hunting, security monitoring, digital forensics, log analysis, malware analysis, SIEM implementation."
-    },
-    {
-      "category": "Tools & Technologies",
-      "icon": "fas fa-tools",
-      "items": "Kali Linux, Metasploit, Wireshark, Burp Suite, Nmap, Splunk, GNS3, Autopsy, Volatility, Snort, Suricata, Sysinternals Toolkit, and more."
-    },
-    {
-      "category": "Software Development",
+      "category": "Languages",
       "icon": "fas fa-code",
-      "items": "HTML, CSS, JavaScript, C, Bash, PowerShell, React, Node.js, Django, and AI-assisted development tools such as Cursor. Built fully functional web applications plus Android and iOS apps with AI-assisted workflows."
+      "items": "Python, Rust, Solidity, C, JavaScript, Bash, PowerShell, LaTeX."
+    },
+    {
+      "category": "Blockchain",
+      "icon": "fas fa-link",
+      "items": "Foundry (forge, anvil, cast), Geth, EVM forking and transaction replay, MetaMask, Docker-based private networks."
+    },
+    {
+      "category": "Security",
+      "icon": "fas fa-shield-alt",
+      "items": "Wireshark, Burp Suite, Nmap, Metasploit, Splunk, Volatility, Autopsy, Snort, Suricata; incident response, log and malware analysis."
+    },
+    {
+      "category": "Research Tooling",
+      "icon": "fas fa-microscope",
+      "items": "Jupyter, pandas, LLM APIs and agent frameworks, Docker, Git, LLM-assisted development."
     }
   ],
   "projects": [
     {
-      "title": "Logalyzer: Autonomous Threat Defense System",
-      "description": "An in-house SIEM solution for real-time log analysis, reducing incident response time by 30% through automated threat remediation. It also enables log collection from geographically isolated endpoints.",
+      "title": "Crucible",
+      "description": "A CLI-first, modular testbed for EVM bridge security research. It forks chains at historical blocks and reruns exploits deterministically, with structured run artifacts and a plugin SDK for attack, bridge and LLM-agent plugins. Ships with benchmark reproductions of the Wormhole, Nomad, Poly Network, Horizon, BNB Bridge and Multichain incidents.",
+      "technologies": [
+        "Python",
+        "Foundry",
+        "Solidity",
+        "Docker"
+      ],
+      "githubUrl": "",
+      "liveUrl": "https://asokakrsna.github.io/crucible_docs/",
+      "linkText": "Docs",
+      "status": "Code in limited access",
+      "academic": true,
+      "category": "software",
+      "cv": "Modular, CLI-first testbed for EVM cross-chain bridge security research: forks chains at historical blocks, replays exploits deterministically, records run artifacts with integrity hashes, and offers a plugin SDK for attack, bridge and LLM-agent plugins. Benchmarks for six incidents, including Wormhole, Nomad and Poly Network."
+    },
+    {
+      "title": "Private Ethereum Research Testbed",
+      "description": "A multi-node proof-of-work Ethereum network on lab machines at IIT Patna, with a faucet and a role-based dashboard, used for smart-contract security experiments and academic projects.",
+      "technologies": [
+        "Geth",
+        "Docker",
+        "Flask",
+        "Nginx"
+      ],
+      "githubUrl": "",
+      "liveUrl": "",
+      "academic": true,
+      "category": "software",
+      "cv": "Multi-node proof-of-work Ethereum network on lab machines at IIT Patna, with a faucet and role-based dashboard."
+    },
+    {
+      "title": "CryptoSIM",
+      "description": "A desktop application for teaching cryptography and blockchain through interactive simulation: 310 primitives and an instructor-facing Professor Mode.",
+      "technologies": [
+        "Rust",
+        "Tauri"
+      ],
+      "githubUrl": "",
+      "liveUrl": "https://cryptosim-a2e.pages.dev/",
+      "academic": true,
+      "category": "software",
+      "cv": "Desktop application for teaching cryptography and blockchain through simulation; 310 primitives and an instructor Professor Mode."
+    },
+    {
+      "title": "0xProblems",
+      "description": "An atlas of 229 open cybersecurity problems across 11 areas, from LLM security to PQC and blockchain, to help students find a problem worth working on.",
+      "technologies": [
+        "JavaScript"
+      ],
+      "githubUrl": "",
+      "liveUrl": "https://0xproblems.vercel.app/",
+      "academic": true,
+      "category": "project",
+      "cv": "Atlas of 229 open cybersecurity research problems across 11 areas, for students choosing a research direction."
+    },
+    {
+      "title": "Logalyzer",
+      "description": "An in-house SIEM for real-time log analysis and automated response, including log collection from geographically isolated endpoints. Smart India Hackathon 2023 finalist.",
       "technologies": [
         "Python",
         "PHP",
-        "PowerShell scripting",
+        "PowerShell",
         "JavaScript"
       ],
       "githubUrl": "https://github.com/AsokaKrsna/SIH2023",
-      "liveUrl": "#"
+      "liveUrl": "",
+      "academic": true,
+      "category": "project",
+      "cv": "SIEM for real-time log analysis and automated response, with log collection from isolated endpoints. Smart India Hackathon 2023 finalist."
     },
     {
       "title": "WeCrypt",
-      "description": "Researched possible ways to recover and decrypt WeChat messages in a forensic environment, and developed a tool to discover the database using a degradation vulnerability in WeChat, achieving 95% success across 50+ databases and multiple scenarios.",
+      "description": "A forensic tool to locate and decrypt WeChat message databases using a downgrade weakness in WeChat, tested on 50+ databases. KAVACH 2023 finalist.",
       "technologies": [
         "JavaScript",
-        "HTML",
-        "Shell Scripting"
+        "Shell"
       ],
       "githubUrl": "https://github.com/AsokaKrsna/KAVACH_2023",
-      "liveUrl": "#"
+      "liveUrl": "",
+      "academic": true,
+      "category": "project",
+      "cv": "Forensic tool to locate and decrypt WeChat message databases via a downgrade weakness, tested on 50+ databases. KAVACH 2023 finalist."
+    },
+    {
+      "title": "SereneSEC",
+      "description": "A distraction-free reading place for staying up to date in cybersecurity.",
+      "technologies": [
+        "JavaScript"
+      ],
+      "githubUrl": "https://github.com/AsokaKrsna/SereneSEC",
+      "liveUrl": "https://serenesec.netlify.app/",
+      "academic": false
     },
     {
       "title": "SignatureVault",
-      "description": "Aggregates a wide range of attack patterns across threat categories, providing a useful resource for security professionals, researchers, and enthusiasts. The project is open for collaboration.",
+      "description": "A collection of attack patterns across threat categories for security professionals and researchers. Open for collaboration.",
       "technologies": [
-        "Roff",
         "C",
         "C++",
         "Python",
@@ -196,16 +321,18 @@
         "Regex"
       ],
       "githubUrl": "https://github.com/AsokaKrsna/SignatureVault",
-      "liveUrl": "#"
+      "liveUrl": "",
+      "academic": false
     },
     {
       "title": "CyberMasteryGuide",
-      "description": "An open-source guide to mastering cybersecurity. I found it difficult to start in the endless ocean of cyber, and that inspired me to build a curated pathway for beginners. The project is published under the MIT license on GitHub.",
+      "description": "An open-source, curated learning pathway for beginners in cybersecurity, published under the MIT license.",
       "technologies": [
         "Markdown"
       ],
       "githubUrl": "https://github.com/AsokaKrsna/CyberMasteryGuide",
-      "liveUrl": "#"
+      "liveUrl": "",
+      "academic": false
     },
     {
       "title": "Sri Vinayaka Packers Website",
@@ -216,60 +343,109 @@
         "JavaScript"
       ],
       "githubUrl": "https://github.com/AsokaKrsna/sri-vinayaka-packers-website",
-      "liveUrl": "https://srivinayakapackers.in/"
+      "liveUrl": "https://srivinayakapackers.in/",
+      "academic": false
     },
     {
       "title": "WiSSAP2024",
-      "description": "Built the website for the Winter School on Speech and Audio Processing 2024 hosted by KL University.",
+      "description": "Website for the Winter School on Speech and Audio Processing 2024 hosted by KL University.",
       "technologies": [
         "HTML",
         "CSS",
         "JavaScript"
       ],
       "githubUrl": "https://github.com/AsokaKrsna/WiSSAP2024",
-      "liveUrl": "https://wissap24.kluniversity.in/"
+      "liveUrl": "https://wissap24.kluniversity.in/",
+      "academic": false
     }
   ],
   "research": [
     {
-      "date": "Dec'24",
-      "publication": "SpringerNature | ISICDS2024",
-      "title": "Beyond Copy-Pasting-Contextualizing LLMs for Secure Code Generation",
-      "description": "This study evaluates security vulnerabilities in code generated by Large Language Models (LLMs) and copilots, emphasizing the need for strategic contextualization in secure coding practices. Through qualitative analysis, it assesses risks and proposes actionable strategies to help developers fine-tune LLMs for secure code generation. By integrating proactive security measures, this research aligns accelerated development with robust security practices.",
-      "tldr": "LLM-generated code is riddled with vulnerabilities; strategic prompt contextualization can fix that.",
-      "url": "https://link.springer.com/chapter/10.1007/978-981-97-5791-6_15",
+      "date": "Aug 2026",
+      "year": "2026",
+      "publication": "Preprint | Research Square",
+      "venue": "Preprint, Research Square",
+      "status": "preprint",
+      "authors": "D. Majumdar",
+      "title": "Beyond F1: A Study of LLM Reliability in Smart Contract Vulnerability Detection",
+      "description": "Evaluates 14 LLMs from seven model families on 54 Solidity contracts under four prompting techniques. Model choice matters far more than prompting strategy, small open-source models flag vulnerabilities in every contract, and more inference-time reasoning does not reliably help: one model's F1 fell 11.5% with extended thinking enabled.",
+      "tldr": "Across 14 LLMs, model choice matters more than prompting, and more reasoning does not always help.",
+      "url": "https://doi.org/10.21203/rs.3.rs-10783572/v1",
+      "type": "preprint",
+      "yourRole": "Sole Author",
+      "impactArea": "Blockchain Security, AI Security",
+      "doi": "10.21203/rs.3.rs-10783572/v1"
+    },
+    {
+      "date": "2025",
+      "year": "2025",
+      "publication": "IEEE PuneCon 2025",
+      "venue": "IEEE Pune Section International Conference (PuneCon), pp. 1-6",
+      "status": "published",
+      "authors": "T. R. Smriti, D. Majumdar",
+      "title": "Hybrid Machine-Deep Learning Ensembles for English, Bangla and Banglish Spam Text Detection",
+      "description": "Hybrid machine-learning and deep-learning ensembles for spam detection in English, Bangla and code-mixed Banglish text, with a new dataset.",
+      "tldr": "Spam detection for Bangla and code-mixed Banglish, with a new dataset.",
+      "url": "https://doi.org/10.1109/PuneCon67554.2025.11377913",
+      "type": "published",
+      "yourRole": "Co-Author",
+      "impactArea": "NLP Security",
+      "doi": "10.1109/PuneCon67554.2025.11377913"
+    },
+    {
+      "date": "2024",
+      "year": "2024",
+      "publication": "IEEE ISCS 2024",
+      "venue": "International Conference on Intelligent Systems for Cybersecurity (ISCS), IEEE",
+      "status": "published",
+      "authors": "D. Majumdar, S. Arjun, P. Boyina, S. S. P. Rayidi, Y. R. Sai, S. V. Gangashetty",
+      "title": "Beyond Text: Nefarious Actors Harnessing LLMs for Strategic Advantage",
+      "description": "This study explores how malicious actors exploit Large Language Models (LLMs) for cyber threats beyond conventional uses. Through literature review, case studies, and real-world analysis, it examines LLM-driven deception, social engineering, and cybercrimes such as phishing, password cracking, and malware propagation, highlighting emerging security challenges.",
+      "tldr": "How attackers use LLMs for deception, phishing, password cracking and malware.",
+      "url": "https://doi.org/10.1109/ISCS61804.2024.10581181",
+      "type": "published",
+      "yourRole": "Lead Author",
+      "impactArea": "AI Security, Threat Intelligence",
+      "doi": "10.1109/ISCS61804.2024.10581181"
+    },
+    {
+      "date": "2024",
+      "year": "2024",
+      "publication": "Springer ICICDS 2024",
+      "venue": "International Conference on Innovations in Cybersecurity and Data Science (ICICDS), Springer",
+      "status": "published",
+      "authors": "S. Arjun, D. Majumdar, A. Z. Nabin, A. K. Sharma, S. M. Raheman",
+      "title": "Beyond Copy–Pasting—Contextualizing LLMs for Secure Code Generation",
+      "description": "This study evaluates security vulnerabilities in code generated by Large Language Models (LLMs) and copilots, emphasizing the need for strategic contextualization in secure coding practices. Through qualitative analysis, it assesses risks and proposes actionable strategies to help developers fine-tune LLMs for secure code generation.",
+      "tldr": "LLM-generated code carries vulnerabilities; contextualization reduces them.",
+      "url": "https://doi.org/10.1007/978-981-97-5791-6_15",
+      "doi": "10.1007/978-981-97-5791-6_15",
       "type": "published",
       "yourRole": "Co-Author",
       "impactArea": "Secure Software Engineering, AI Security"
     },
     {
-      "date": "Jul'24",
-      "publication": "ISCS2024 | IEEE Xplore",
-      "title": "Beyond Text: Nefarious Actors Harnessing LLMs for Strategic Advantage",
-      "description": "This study explores how malicious actors exploit Large Language Models (LLMs) for cyber threats beyond conventional uses. Through literature review, case studies, and real-world analysis, it examines LLM-driven deception, social engineering, and cybercrimes such as phishing, password cracking, and malware propagation, highlighting emerging security challenges.",
-      "tldr": "Bad actors are weaponizing LLMs for phishing, malware, and social engineering at scale.",
-      "url": "https://ieeexplore.ieee.org/document/10581181",
-      "type": "published",
-      "yourRole": "Lead Researcher",
-      "impactArea": "AI Security, Threat Intelligence"
-    },
-    {
-      "date": "May'23",
-      "publication": "ICACCS2023 | IEEE Xplore",
-      "title": "Shadow APR-ing for APR Poisoning Detection",
+      "date": "2023",
+      "year": "2023",
+      "publication": "IEEE ICACCS 2023",
+      "venue": "9th International Conference on Advanced Computing and Communication Systems (ICACCS), IEEE",
+      "status": "published",
+      "authors": "D. Majumdar, R. R. Chintala",
+      "title": "Shadow ARP-ing for ARP Poisoning Detection",
       "description": "This study addresses ARP spoofing, a longstanding network security threat enabling attacks such as MITM and DDoS. It proposes an automated OS-based monitoring technique to detect ARP poisoning in real time, reducing reliance on manual ARP table checks and minimizing detection delays.",
-      "tldr": "Automated OS-level ARP monitoring that catches poisoning attacks in real time without manual table checks.",
-      "url": "https://ieeexplore.ieee.org/abstract/document/10112712",
+      "tldr": "Automated, OS-level ARP cache monitoring that detects ARP poisoning as it happens.",
+      "url": "https://doi.org/10.1109/ICACCS57279.2023.10112712",
       "type": "published",
-      "yourRole": "Lead Researcher",
-      "impactArea": "Network Security, Intrusion Detection"
+      "yourRole": "Lead Author",
+      "impactArea": "Network Security, Intrusion Detection",
+      "doi": "10.1109/ICACCS57279.2023.10112712"
     }
   ],
   "blogs": [
     {
       "date": "Jan 22, 2025",
       "title": "The Attribution Error Trap: How GenAI Tools Are Reshaping Secure Coding",
-      "url": "https://www.linkedin.com/pulse/attribution-error-trap-how-genai-tools-reshaping-secure-majumdar-hxm6c/?trackingId=bpcBAUbbSdiR5DBkz397Wg%3D%3D"
+      "url": "https://www.linkedin.com/pulse/attribution-error-trap-how-genai-tools-reshaping-secure-majumdar-hxm6c/"
     },
     {
       "date": "Nov 4, 2024",
@@ -288,24 +464,24 @@
     }
   ],
   "cyberArena": {
-    "intro": "My playground for showcasing cybersecurity challenges, CTF writeups, and practical security exercises I have developed or participated in.",
+    "intro": "My playground for CTFs and hands-on security practice.",
     "platforms": [
       {
         "name": "CTF Competitions",
         "icon": "fas fa-flag",
         "highlights": [
-          "Cracking since 2023."
+          "Playing since 2022 with team Enigma Hunters.",
+          "Authored challenges for 4 club CTF events, many built around covert channels."
         ],
-        "linkText": "View Writeups",
-        "url": "#"
+        "linkText": "",
+        "url": ""
       },
       {
         "name": "TryHackMe",
         "icon": "fas fa-laptop-code",
         "highlights": [
-          "Top 1% in the global leaderboard",
-          "400+ day streak, 31k+ points, 200+ rooms completed, 26 badges earned.",
-          "4 learning paths completed."
+          "Top 1% on the global leaderboard",
+          "500+ day streak, 200+ rooms and 5 learning paths completed."
         ],
         "linkText": "View Profile",
         "url": "https://tryhackme.com/p/AsokaKrsna"
@@ -314,9 +490,8 @@
         "name": "LetsDefend",
         "icon": "fas fa-laptop-code",
         "highlights": [
-          "Top 3 in the national leaderboard",
-          "6k+ points, 7k+ SLA, 85% success rate on ticket solving.",
-          "5 learning paths completed, 100+ rooms completed."
+          "Top 1% on the global leaderboard",
+          "6.5k+ points, 85% success rate on alert tickets, 5 learning paths completed."
         ],
         "linkText": "View Profile",
         "url": "https://app.letsdefend.io/user/AsokaKrsna"
@@ -325,64 +500,77 @@
   },
   "certifications": [
     {
-      "name": "TryHackMe Security Analyst Level-1 (SAL1)",
-      "date": "Apr'25"
+      "name": "TryHackMe Security Analyst Level 1 (SAL1)",
+      "date": "Apr 2025"
     },
     {
       "name": "GitHub Foundations",
-      "date": "Jan'25"
+      "date": "Jan 2025"
     },
     {
-      "name": "OCI GenAI Professional",
-      "date": "Jul'24"
+      "name": "OCI Generative AI Professional",
+      "date": "Jul 2024"
     },
     {
-      "name": "Oracle Certified Foundations Associate",
-      "date": "Jun'24"
+      "name": "Oracle Cloud Infrastructure Foundations Associate",
+      "date": "Jun 2024"
     },
     {
       "name": "Microsoft AI-900 (Azure AI Fundamentals)",
-      "date": "Jun'24"
+      "date": "Jun 2024"
     },
     {
-      "name": "Fortinet Certified Cybersecurity Associate",
-      "date": "May'24"
+      "name": "PCAP: Certified Associate in Python Programming",
+      "date": "May 2024"
+    },
+    {
+      "name": "Fortinet Certified Associate in Cybersecurity",
+      "date": "May 2024"
+    },
+    {
+      "name": "Google Cybersecurity Professional Certificate",
+      "date": "Feb 2024"
     },
     {
       "name": "Juniper Networks Certified Associate, Junos (JNCIA-Junos)",
-      "date": "May'23"
+      "date": "May 2023"
     },
     {
       "name": "ISC2 Certified in Cybersecurity (CC)",
-      "date": "Dec'23"
+      "date": "Dec 2022"
+    },
+    {
+      "name": "Google IT Support Professional Certificate",
+      "date": "Nov 2022"
     }
   ],
   "achievements": {
     "academic": [
-      "ICCR Scholar at IIT Patna - India's most prestigious fully funded scholarship for international students, awarded for exceptional academic merit, leadership, and dedication to cultural exchange.",
-      "SII (Study in India) Scholar - scholarship awarded to 250 students worldwide by the Government of India based on the PRAGATII exam conducted by the National Testing Agency of India.",
-      "CGPA 9.26/10.00 in B.Tech CSE (Honours) - Top 5% of graduating class.",
-      "Received a conference grant to attend Seasides Cybersecurity Conference 2025.",
-      "Recognized as LinkedIn's Cybersecurity Community Top Voice (Golden Badge) for contributions to collaborative community articles.",
-      "Nationalist of the Extraordinary Talent Hunt Competition 2019 (Science section) - awarded by the education minister of the Government of Bangladesh.",
-      "Received the 'Best meritorious student of the year of the state in science' award three times in a row.",
-      "Perfect GPA 5.00/5.00 in both SSC and HSC examinations."
+      "ICCR scholarship (Government of India) for M.Tech study at IIT Patna.",
+      "Study in India (SII) scholarship: awarded to 250 students worldwide by the Government of India, based on the PRAGATII exam conducted by the National Testing Agency.",
+      "Selected to attend the Google DeepMind APAC Research Symposium 2026 (Student Days).",
+      "Conference grant to attend Seasides Cybersecurity Conference 2025.",
+      "B.Tech CGPA 9.19/10.",
+      "National finalist, Extraordinary Talent Hunt 2019 (Science), Bangladesh: divisional winner, advanced to the national round.",
+      "'Best meritorious student of the year in science' award, three consecutive years.",
+      "GPA 5.00/5.00 in both SSC and HSC examinations."
     ],
     "competitions": [
-      "Runner-up, Smart India Hackathon 2023 - the world's biggest open innovation model and the largest hackathon in India.",
-      "Runner-up, KAVACH 2023 - India's biggest cybersecurity hackathon.",
-      "Top 1% in the TryHackMe global leaderboard (400+ day streak, 31k+ points).",
-      "Top 3 in the LetsDefend national leaderboard with an 85% ticket-solving success rate.",
+      "Finalist, Smart India Hackathon 2023 (top 5 teams nationally for the problem statement).",
+      "Finalist, KAVACH 2023 national cybersecurity hackathon (top 5 teams nationally for the problem statement).",
+      "Top 1% on the TryHackMe and LetsDefend global leaderboards.",
+      "CTF player with team Enigma Hunters since 2022.",
       "Three-time consecutive winner of a state-level debate championship."
     ],
     "leadership": [
-      "Research Advisor, White Hat Hackers Club, KL University (May'24 - Jul'25)",
-      "Head of the Quality Assessment Council, Student Activity Center (SAC), KL University",
-      "Head Coordinator, Winter School on Speech and Audio Processing (WiSSAP-2024)",
+      "Research Advisor, White Hat Hackers Club, KL University (May 2024 - Apr 2025)",
+      "Technical Chairperson, White Hat Hackers Club, KL University (May 2023 - May 2024)",
+      "Head of Quality Assessment, Student Activity Center (SAC), KL University (Dec 2024 - Apr 2025)",
+      "Head Coordinator, Winter School on Speech and Audio Processing (WiSSAP 2024)",
       "Co-founder and Head of Cybersecurity Wing, LaShido Tech Society",
-      "Technical Chair, White Hat Hackers Club, KL University (May'23 - May'24)",
-      "Co-founder and Vice President, GSRC Science Club - fostering hands-on practice and learning of science and technology for college students",
-      "Received the 'Best boy scout of the division' award in 2018 and the 'Best rover scout of the division' award in 2020."
+      "Co-founder and Vice President, GSRC Science Club",
+      "Recognised as a LinkedIn Community Top Voice in cybersecurity for collaborative articles.",
+      "'Best boy scout of the division' (2018) and 'Best rover scout of the division' (2020)."
     ]
   },
   "volunteering": [
@@ -390,27 +578,27 @@
       "organization": "Local Community Education Initiative",
       "role": "Cybersecurity Awareness Volunteer",
       "period": "2024 - Present",
-      "description": "Delivering free cybersecurity awareness sessions for underprivileged students, including instruction in Bengali. Developing basic learning materials in the local language to improve accessibility.",
-      "impact": "Reached hundreds of students and continuing the initiative to improve digital safety awareness."
+      "description": "Free cybersecurity awareness sessions for underprivileged students, taught in Bengali, with learning materials in the local language.",
+      "impact": "Reached hundreds of students."
     },
     {
       "organization": "Skillmate",
       "role": "Cybersecurity Mentor (Volunteer)",
       "period": "2025 - Present",
-      "description": "Providing free one-on-one mentorship and introductory sessions in cybersecurity, focused on guiding students through learning paths, fundamentals, and practical problem-solving. Sessions are offered voluntarily despite there being a paid model to follow.",
-      "impact": "Making mentorship in cybersecurity accessible to learners."
+      "description": "Free one-on-one mentorship on learning paths, fundamentals and practical problem-solving.",
+      "impact": ""
     },
     {
       "organization": "Gold Heart Foundation",
       "role": "Cybersecurity Mentor (Volunteer)",
       "period": "2025 - Present",
-      "description": "Providing free cybersecurity mentorship and guidance to underprivileged students.",
-      "impact": "Supporting access to cybersecurity education for underserved learners."
+      "description": "Free cybersecurity mentorship and guidance for underprivileged students.",
+      "impact": ""
     }
   ],
   "contact": {
-    "description": "I am actively seeking PhD and research opportunities that contribute to building a safer cyberspace. Whether you would like to discuss research directions, collaboration opportunities, or simply connect, I would be glad to hear from you.",
-    "phone": "+917810976687",
+    "description": "I am looking for PhD positions in security for the 2027-28 intake, and I am happy to talk about research, collaboration or problems you think are worth solving.",
+    "phone": "",
     "emails": [
       "durjoymajumdar02@gmail.com",
       "durjoy_2511cs25@iitp.ac.in"
@@ -421,42 +609,50 @@
     {
       "platform": "Google Scholar",
       "icon": "fas fa-graduation-cap",
-      "url": "https://scholar.google.com/citations?user=c7OEFoIAAAAJ&hl=en"
+      "url": "https://scholar.google.com/citations?user=c7OEFoIAAAAJ&hl=en",
+      "academic": true
     },
     {
       "platform": "ORCID",
       "icon": "fas fa-id-badge",
-      "url": "https://orcid.org/0009-0002-3086-9893"
+      "url": "https://orcid.org/0009-0002-3086-9893",
+      "academic": true
     },
     {
       "platform": "GitHub",
       "icon": "fab fa-github",
-      "url": "https://github.com/AsokaKrsna"
+      "url": "https://github.com/AsokaKrsna",
+      "academic": true
     },
     {
       "platform": "LinkedIn",
       "icon": "fab fa-linkedin-in",
-      "url": "https://www.linkedin.com/in/durjoy-majumdar/"
-    },
-    {
-      "platform": "Telegram",
-      "icon": "fab fa-telegram-plane",
-      "url": "https://t.me/as0kakrsna"
-    },
-    {
-      "platform": "Facebook",
-      "icon": "fab fa-facebook-f",
-      "url": "https://www.facebook.com/AsokaKrsna"
-    },
-    {
-      "platform": "Instagram",
-      "icon": "fab fa-instagram",
-      "url": "https://www.instagram.com/asokakrsna/"
+      "url": "https://www.linkedin.com/in/durjoy-majumdar/",
+      "academic": true
     },
     {
       "platform": "Twitter",
       "icon": "fab fa-twitter",
-      "url": "https://x.com/Durjoy_02"
+      "url": "https://x.com/Durjoy_02",
+      "academic": true
+    },
+    {
+      "platform": "Telegram",
+      "icon": "fab fa-telegram-plane",
+      "url": "https://t.me/as0kakrsna",
+      "academic": false
+    },
+    {
+      "platform": "Facebook",
+      "icon": "fab fa-facebook-f",
+      "url": "https://www.facebook.com/AsokaKrsna",
+      "academic": false
+    },
+    {
+      "platform": "Instagram",
+      "icon": "fab fa-instagram",
+      "url": "https://www.instagram.com/asokakrsna/",
+      "academic": false
     }
   ],
   "scratchpad": {
@@ -466,41 +662,142 @@
   },
   "classic": {
     "sidebarAffiliations": [
-      "M.Tech, Computer Science & Engineering.",
+      "M.Tech, Computer Science & Engineering",
       "Indian Institute of Technology Patna"
     ],
-    "seekingText": "Seeking PhD positions - Fall 2027",
-    "printHeader": "Durjoy Majumdar | Cybersecurity Researcher | IIT Patna",
+    "role": "M.Tech student and Junior Researcher, Cybersecurity Lab, IIT Patna",
+    "seekingText": "Seeking PhD positions (2027-28 intake)",
+    "printHeader": "Durjoy Majumdar | Cross-chain security & AI | IIT Patna",
+    "bio": [
+      "I'm a second-year M.Tech student in Computer Science and Engineering at <a href=\"https://www.iitp.ac.in/\">IIT Patna</a> and a Junior Researcher in its Cybersecurity Lab, where I work with Dr. Somnath Tripathy.",
+      "Most of my work comes back to one question: what happens when a system's trust assumptions meet an adversary who doesn't share them? I first asked it of ARP, then of LLM-generated code, and now of cross-chain bridges, which fail when verifiers, signers or relayers stop behaving the way the security argument assumes. I'm working on AI agents that detect and explain these failures, and I built <a href=\"https://asokakrsna.github.io/crucible_docs/\">Crucible</a>, a testbed that replays historical bridge exploits on forked chains, so that this work can be tested against real attacks.",
+      "I also study the other side of AI in security: how attackers use LLMs, and how far LLM judgments about code and smart contracts can be trusted."
+    ],
+    "currentWork": [
+      {
+        "title": "Agentic AI for cross-chain security",
+        "text": "My M.Tech thesis: applying agentic AI to cross-chain security. Under development."
+      },
+      {
+        "title": "Bribery-resistant HTLCs",
+        "text": "Working with a lab summer intern on attacks against existing hashed time-lock contract (HTLC) designs and on making them resistant to miner bribery."
+      }
+    ],
+    "honors": [
+      {
+        "year": "2026",
+        "text": "Selected to attend the Google DeepMind APAC Research Symposium (Student Days)."
+      },
+      {
+        "year": "2025-27",
+        "text": "ICCR scholarship, Government of India, for M.Tech study at IIT Patna."
+      },
+      {
+        "year": "2025",
+        "text": "Conference grant, Seasides Cybersecurity Conference."
+      },
+      {
+        "year": "2023",
+        "text": "Finalist, Smart India Hackathon and KAVACH national cybersecurity hackathon (top 5 teams nationally per problem statement)."
+      },
+      {
+        "year": "2021-25",
+        "text": "Study in India (SII) scholarship, Government of India; 250 awardees worldwide, selected by the PRAGATII exam."
+      },
+      {
+        "year": "2019",
+        "text": "National finalist, Extraordinary Talent Hunt (Science), Bangladesh."
+      }
+    ],
+    "practice": "CTF player with team Enigma Hunters since 2022; authored CTF challenges, many on covert channels, for 4 university events. Top 1% globally on TryHackMe and LetsDefend.",
     "showCyberArena": false,
-    "showScratchpad": true,
+    "showScratchpad": false,
     "news": [
       {
+        "date": "Aug 2026",
+        "text": "Preprint: <a href=\"https://doi.org/10.21203/rs.3.rs-10783572/v1\"><em>Beyond F1: A Study of LLM Reliability in Smart Contract Vulnerability Detection</em></a>."
+      },
+      {
+        "date": "2026",
+        "text": "Built <a href=\"https://asokakrsna.github.io/crucible_docs/\">Crucible</a>, a testbed for reproducing historical cross-chain bridge exploits."
+      },
+      {
         "date": "Nov 2025",
-        "text": "Joined <strong>Security Lab, IIT Patna</strong> as Junior Research Associate, working on blockchain security and building a local blockchain testbed for attack simulation."
+        "text": "Joined the Cybersecurity Lab, IIT Patna, as a Junior Researcher working on blockchain security."
+      },
+      {
+        "date": "Aug 2025",
+        "text": "Started as a Teaching Assistant at IIT Patna."
       },
       {
         "date": "Jul 2025",
-        "text": "Started M.Tech in Computer Science (Cybersecurity) at <strong>IIT Patna</strong> as an ICCR Scholar."
+        "text": "Started M.Tech in Computer Science and Engineering at IIT Patna as an ICCR scholar."
       },
       {
-        "date": "Apr 2025",
-        "text": "Joined <strong>CRAC Learning</strong> as a Security Researcher intern, exploring AI-driven cybersecurity defense mechanisms."
-      },
-      {
-        "date": "Dec 2024",
-        "text": "Paper on contextualizing LLMs for secure code generation published at <a href=\"https://link.springer.com/chapter/10.1007/978-981-97-5791-6_15\" target=\"_blank\" rel=\"noopener noreferrer\">SpringerNature ISICDS 2024</a>."
-      },
-      {
-        "date": "Jul 2024",
-        "text": "Paper on adversarial exploitation of LLMs published at <a href=\"https://ieeexplore.ieee.org/document/10581181\" target=\"_blank\" rel=\"noopener noreferrer\">IEEE ISCS 2024</a>."
+        "date": "2025",
+        "text": "Paper on Bangla and Banglish spam detection published at <a href=\"https://doi.org/10.1109/PuneCon67554.2025.11377913\">IEEE PuneCon 2025</a>."
       }
     ]
   },
   "footer": {
     "text": "Built and maintained by Durjoy Majumdar",
     "nerdText": "Built and maintained by Durjoy Majumdar",
-    "classicText": "Portfolio maintained by Durjoy Majumdar",
+    "classicText": "Maintained by Durjoy Majumdar",
     "copyright": "Copyright 2026 Durjoy Majumdar",
-    "lastUpdated": "September 2026"
+    "lastUpdated": "November 2026"
+  },
+  "cv": {
+    "headline": "M.Tech, Computer Science & Engineering, IIT Patna | Junior Researcher, Cybersecurity Lab",
+    "phone": "+91 78109 76687",
+    "email": "durjoy_2511cs25@iitp.ac.in",
+    "emailAlt": "durjoymajumdar02@gmail.com",
+    "links": [
+      {
+        "label": "asokakrsna.github.io",
+        "url": "https://asokakrsna.github.io"
+      },
+      {
+        "label": "github.com/AsokaKrsna",
+        "url": "https://github.com/AsokaKrsna"
+      },
+      {
+        "label": "linkedin.com/in/durjoy-majumdar",
+        "url": "https://www.linkedin.com/in/durjoy-majumdar/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=c7OEFoIAAAAJ"
+      },
+      {
+        "label": "ORCID 0009-0002-3086-9893",
+        "url": "https://orcid.org/0009-0002-3086-9893"
+      }
+    ],
+    "interests": "How systems fail when their trust assumptions meet an adversary who does not share them: blockchain and cross-chain bridge security; smart contract and DeFi security; agentic AI and large language models (LLMs) for security analysis and attack detection; adversarial uses of LLMs; network security and protocol-level attacks.",
+    "skills": [
+      {
+        "label": "Programming",
+        "items": "Python, Rust, Solidity, C, JavaScript, Bash, PowerShell, LaTeX; Linux, Docker, Git"
+      },
+      {
+        "label": "Blockchain",
+        "items": "Ethereum, EVM, smart contracts, cross-chain bridges, Foundry (Forge, Anvil, Cast), Geth, chain forking and transaction replay"
+      },
+      {
+        "label": "AI and LLMs",
+        "items": "LLM evaluation and benchmarking, prompt engineering, LLM agents, Jupyter, pandas"
+      },
+      {
+        "label": "Security",
+        "items": "Vulnerability analysis, incident response, log and malware analysis, digital forensics, intrusion detection; Wireshark, Burp Suite, Nmap, Metasploit, Splunk, Volatility, Snort, Suricata"
+      }
+    ],
+    "certifications": "ISC2 Certified in Cybersecurity (CC); Juniper JNCIA-Junos; Fortinet Certified Associate in Cybersecurity; Google Cybersecurity Certificate; OCI Generative AI Professional; TryHackMe SAL1",
+    "volunteering": "Free cybersecurity awareness sessions for underprivileged students in Bengali (2024 – Present); volunteer mentor with Skillmate and Gold Heart Foundation (2025 – Present).",
+    "practice": {
+      "title": "CTF Player, Team Enigma Hunters",
+      "period": "2022 - Present",
+      "text": "Competitive capture-the-flag player; top 1% globally on TryHackMe and LetsDefend."
+    }
   }
 }
