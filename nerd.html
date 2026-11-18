@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        const isPreviewMode = new URLSearchParams(window.location.search).get('preview') === '1';
+        // arriving from Academic mode: keep the terminal handshake on screen while this page loads
+        try { const m = JSON.parse(sessionStorage.getItem('ms-transition') || 'null'); if (m && m.to === 'nerd' && !m.skipped && Date.now() - m.at < 5000) document.documentElement.classList.add('ms-arriving'); } catch (e) {}
+        // Full loader animation only on the first visit of a session; repeats skip it
+        const skipLoaderAnimation = isPreviewMode || sessionStorage.getItem('loader-played') === '1';
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Loading...</title>
+    <meta name="description" id="nerd-meta-description" content="Loading portfolio content from the shared JSON source.">
+    <meta property="og:title" id="nerd-og-title" content="Portfolio | Loading...">
+    <meta property="og:description" id="nerd-og-description" content="Loading portfolio content from the shared JSON source.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://asokakrsna.github.io/images/og-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" id="nerd-twitter-title" content="Portfolio | Loading...">
+    <meta name="twitter:description" id="nerd-twitter-description" content="Loading portfolio content from the shared JSON source.">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Durjoy Majumdar",
+        "alternateName": "AsokaKrsna",
+        "jobTitle": "Cybersecurity Researcher",
+        "affiliation": {
+            "@type": "Organization",
+            "name": "Indian Institute of Technology Patna"
+        },
+        "url": "https://asokakrsna.github.io/",
+        "image": "https://asokakrsna.github.io/images/profile.png",
+        "email": "mailto:durjoymajumdar02@gmail.com",
+        "sameAs": [
+            "https://scholar.google.com/citations?user=c7OEFoIAAAAJ&hl=en",
+            "https://orcid.org/0009-0002-3086-9893",
+            "https://github.com/AsokaKrsna",
+            "https://www.linkedin.com/in/durjoy-majumdar/",
+            "https://t.me/as0kakrsna",
+            "https://x.com/Durjoy_02"
+        ]
+    }
+    </script>
+	<link rel="shortcut icon" href="./images/AsokaKrsna.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.css?v=791e741ce9">
+    <link rel="stylesheet" href="css/responsive.css?v=691baa3170">
+    <link rel="stylesheet" href="css/mobile-fixes.css?v=3955d0f507">
+    <link rel="stylesheet" href="css/nerd-sections.css?v=6c618aebf7">
+    <link rel="stylesheet" href="css/mode-switch.css?v=afb4f44345">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+    <link rel="canonical" href="https://asokakrsna.github.io/nerd.html">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        // Immediate script to ensure content visibility
+        document.documentElement.classList.remove('no-js');
+
+        function ensureContentVisible() {
+            document.body.classList.remove('loading-active');
+            document.querySelectorAll('.main-content, .sidebar, .menu-button').forEach(function(el) {
+                el.classList.add('force-visible');
+            });
+            var loadingScreen = document.querySelector('.loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.display = 'none';
+            }
+        }
+
+        // Fallback to make all content visible after a very short delay
+        window.addEventListener('DOMContentLoaded', function() {
+            // Force display all content after 300ms regardless of animations
+            setTimeout(function() {
+                document.body.style.opacity = "1";
+                var elements = document.querySelectorAll('.section-title, .about-content, .skills-content, .education-item, .experience-item, .project-card, .contact p, .contact .btn');
+                elements.forEach(function(el) {
+                    el.style.opacity = "1";
+                    el.style.transform = "translateY(0)";
+                });
+            }, 300);
+            
+            // Hex Stream Progress Bar Loading
+            function handleLoadingScreen() {
+                const loadingScreen = document.querySelector('.loading-screen');
+                const hexProgressLine = document.getElementById('hexProgressLine');
+                const progressPercentage = document.getElementById('progressPercentage');
+                
+                if (!loadingScreen || !hexProgressLine || !progressPercentage) {
+                    console.error('Loading screen elements not found');
+                    if (loadingScreen) loadingScreen.style.display = 'none';
+                    return;
+                }
+
+                // Repeat visits: skip the animation entirely
+                if (skipLoaderAnimation) {
+                    ensureContentVisible();
+                    loadingScreen.style.display = 'none';
+                    return;
+                }
+                
+                document.body.classList.add('loading-active');
+                
+                // Generate random hex characters
+                function generateHexChars(count) {
+                    const chars = '0123456789ABCDEF';
+                    let result = '';
+                    for (let i = 0; i < count; i++) {
+                        result += chars.charAt(Math.floor(Math.random() * chars.length));
+                        // Add space every 2 characters for readability
+                        if ((i + 1) % 2 === 0 && i < count - 1) {
+                            result += ' ';
+                        }
+                    }
+                    return result;
+                }
+                
+                // Compute dynamic count so hex spans full screen
+                function calcCharCount() {
+                    const fs = parseFloat(getComputedStyle(hexProgressLine).fontSize) || 14;
+                    const approxCharWidth = fs * 0.75 + (fs * 0.15); // font + letter-spacing
+                    return Math.ceil(window.innerWidth / Math.max(approxCharWidth, 8));
+                }
+
+                // Create a background matrix of hex lines that all reveal together
+                const linesContainer = document.createElement('div');
+                linesContainer.className = 'loader-lines';
+                loadingScreen.appendChild(linesContainer);
+                
+                const bgLines = [];
+                (function buildHexLines(){
+                    const fs = parseFloat(getComputedStyle(hexProgressLine).fontSize) || 14;
+                    const lineGap = fs * 1.6; // spacing between rows
+                    const total = Math.max(5, Math.floor(window.innerHeight / lineGap));
+                    const centerIndex = Math.floor(total / 2);
+                    const charCount = calcCharCount();
+                    
+                    for (let i = 0; i < total; i++) {
+                        const line = document.createElement('div');
+                        line.className = 'hex-line';
+                        line.textContent = generateHexChars(charCount);
+                        const top = Math.round((i + 0.5) * (window.innerHeight / total));
+                        line.style.top = top + 'px';
+                        
+                        // fade based on distance from center
+                        const dist = Math.abs(i - centerIndex);
+                        const maxDist = Math.max(centerIndex, 1);
+                        // much more faded background lines
+                        const baseOpacity = 0.18; // max opacity at center for bg lines
+                        const t = dist / maxDist;
+                        // power curve to fade faster as we move away from center
+                        const fade = Math.max(0.02, baseOpacity * (1 - Math.pow(t, 1.35)));
+                        line.style.opacity = fade.toString();
+                        line.style.setProperty('--reveal', '0%');
+                        
+                        linesContainer.appendChild(line);
+                        bgLines.push(line);
+                    }
+                })();
+
+                // Update hex stream continuously
+                const hexUpdateInterval = setInterval(() => {
+                    const count = calcCharCount();
+                    hexProgressLine.textContent = generateHexChars(count);
+                    bgLines.forEach(line => {
+                        line.textContent = generateHexChars(count);
+                    });
+                }, 100);
+                
+                // Progress animation
+                let progress = 0;
+                const duration = 2500;
+                const interval = 30;
+                const steps = duration / interval;
+                const increment = 100 / steps;
+
+                const progressInterval = setInterval(() => {
+                    progress += increment;
+                    
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(progressInterval);
+                        clearInterval(hexUpdateInterval);
+                        sessionStorage.setItem('loader-played', '1');
+                        
+                        setTimeout(() => {
+                            document.body.classList.remove('loading-active');
+                            
+                            document.querySelectorAll('.main-content, .sidebar, .menu-button').forEach(el => {
+                                el.classList.add('force-visible');
+                            });
+                            
+                            loadingScreen.classList.add('fade-out');
+                            
+                            setTimeout(() => {
+                                loadingScreen.style.display = 'none';
+                            }, 600);
+                        }, 400);
+                    }
+
+                    // Reveal hex from center via CSS var and aria state
+                    const revealValue = progress + '%';
+                    hexProgressLine.style.setProperty('--reveal', revealValue);
+                    bgLines.forEach(line => line.style.setProperty('--reveal', revealValue));
+                    hexProgressLine.setAttribute('aria-valuenow', Math.floor(progress));
+                    progressPercentage.textContent = Math.floor(progress) + '%';
+                }, interval);
+            }
+            
+            // Failsafe for 3 seconds
+            setTimeout(ensureContentVisible, 3000);
+            
+            // Start loading animation
+            handleLoadingScreen();
+        });
+
+        // Global failsafe timeout
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var loadingScreen = document.querySelector('.loading-screen');
+                if (loadingScreen && window.getComputedStyle(loadingScreen).display !== 'none') {
+                    console.log('Failsafe triggered: forcing loading screen removal');
+                    ensureContentVisible();
+                }
+            }, 3000);
+        });
+    </script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" role="alert" aria-live="polite" aria-busy="true">
+        <!-- ambient layers -->
+        <div class="loader-vignette" aria-hidden="true"></div>
+        <div class="loader-noise" aria-hidden="true"></div>
+
+        <!-- progress stream -->
+        <div class="hex-progress-line" id="hexProgressLine" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+
+        <!-- glass panel -->
+        <div class="loader-panel">
+            <div class="loader-center">
+                <h1 class="loader-title" id="nerd-loader-title">LOADING</h1>
+                <div class="loader-subtitle" id="nerd-loader-subtitle">Fetching portfolio...</div>
+                <div class="progress-percentage" id="progressPercentage">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <noscript>
+        <div class="nojs-banner">
+            Enable JavaScript to load the current portfolio content and shared SimpleEdit data.
+        </div>
+    </noscript>
+
+    <!-- Konami Code Popup -->
+    <div class="konami-popup" id="konamiPopup">
+        <button class="konami-close" id="konamiClose">&times;</button>
+        <div class="konami-ascii">
+ ██╗  ██╗ █████╗  ██████╗██╗  ██╗███████╗██████╗ 
+ ██║  ██║██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗
+ ███████║███████║██║     █████╔╝ █████╗  ██████╔╝
+ ██╔══██║██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗
+ ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║
+ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+        </div>
+        <div class="konami-msg">You found the secret. Root access granted.</div>
+        <div class="konami-sub">↑↑↓↓←→←→BA</div>
+    </div>
+
+    <!-- Terminal Command Bar -->
+    <div class="terminal-bar" id="terminalBar">
+        <div class="terminal-bar-input" id="terminalInput">
+            <div class="terminal-bar-header">
+                <span id="terminalHostLabel">guest@portfolio ~ </span>
+                <div class="terminal-dots"><span></span><span></span><span></span></div>
+            </div>
+            <div class="terminal-bar-body">
+                <div class="terminal-bar-output" id="terminalOutput">
+                    <span class="cmd-info" id="terminalWelcome">Loading terminal profile...</span>
+                </div>
+            </div>
+            <div class="terminal-bar-prompt">
+                <span>$</span>
+                <input type="text" id="terminalCmdInput" placeholder="type a command..." autocomplete="off" spellcheck="false">
+            </div>
+        </div>
+        <button class="terminal-bar-toggle" id="terminalToggle" aria-label="Toggle terminal">>_</button>
+    </div>
+
+    <!-- Status Bar Footer -->
+    <div class="status-bar" aria-hidden="true">
+        <div class="status-bar-left">
+            <div class="status-bar-item"><span class="dot green"></span> online</div>
+            <div class="status-bar-item" id="statusBarBranch">loading</div>
+            <div class="status-bar-item" id="statusBarSection">~/about</div>
+        </div>
+        <div class="status-bar-right">
+            <div class="status-bar-item" id="statusBarScroll">0%</div>
+            <div class="status-bar-item" id="statusBarTime"></div>
+            <div class="status-bar-item">UTF-8</div>
+        </div>
+    </div>
+
+    <!-- Resume Button -->
+    <a href="#" class="resume-button" target="_blank" rel="noopener noreferrer">Resume</a>
+    
+    <!-- Mobile menu button -->
+    <button class="menu-button" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    
+    <div class="wrapper">
+        <!-- Left sidebar with navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-header">
+                    <div class="profile-photo">
+                        <div class="image-wrapper">
+                            <img src="images/profile.png" alt="Profile image loading">
+                        </div>
+                    </div>
+                    <div class="logo glitch-name" data-name="Loading" data-alias="" data-text="Loading">Loading</div>
+                    <h2 class="subtitle">Loading profile...</h2>
+                    
+                    <p class="sidebar-description" id="typingText">Loading profile...</p>
+                </div>
+                
+                <nav class="nav">
+                    <ul>
+                        <li><a href="#about">ABOUT</a></li>
+                        <li><a href="#research">RESEARCH</a></li>
+                        <li><a href="#projects">PROJECTS</a></li>
+                        <li><a href="#experience">EXPERIENCE</a></li>
+                        <li><a href="#skills">ARSENAL</a></li>
+                        <li><a href="#cyber-arena">CYBER ARENA</a></li>
+                        <li><a href="#certifications">CERTS</a></li>
+                        <li><a href="#education">EDUCATION</a></li>
+                        <li><a href="#blogs">WRITEUPS & BLOGS</a></li>
+                        <li><a href="#achievements">ACHIEVEMENTS</a></li>
+                        <li><a href="#volunteering">VOLUNTEERING</a></li>
+                        <li><a href="#scratchpad">SCRATCHPAD</a></li>
+                        <li><a href="#contact">PING ME</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="sidebar-social">
+                    <ul></ul>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- Main content area -->
+        <main class="main-content">
+            <!-- Compact identity header, visible on mobile only -->
+            <div class="mobile-profile-header" aria-hidden="true">
+                <img src="images/profile.png" alt="" class="mobile-profile-photo">
+                <div class="mobile-profile-text">
+                    <span class="mobile-profile-name">Durjoy Majumdar</span>
+                    <span class="mobile-profile-title">Researcher | Student | Cybersec Nerd</span>
+                </div>
+            </div>
+
+            <section id="about" class="about">
+                <div class="container">
+                    <h2 class="section-title">About Me</h2>
+                    <div class="about-content">
+                        <div class="about-text full-width">
+                            <!-- Content loaded dynamically from data/portfolio-data.json -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="research" class="research">
+                <div class="container">
+                    <h2 class="section-title">Research</h2>
+                    <div class="research-statement-wrapper">
+                        <!-- Research interests statement loaded dynamically -->
+                    </div>
+                    <div class="research-content">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                    <div class="section-cta research-cta">
+                        <button id="load-more-research" class="btn small secondary">See More</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="projects" class="projects">
+                <div class="container">
+                    <h2 class="section-title">Projects</h2>
+                    <div class="projects-grid">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="experience" class="experience">
+                <div class="container">
+                    <h2 class="section-title">Experience</h2>
+                    <div class="experience-content">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="skills" class="skills">
+                <div class="container">
+                    <h2 class="section-title">Arsenal</h2>
+                    <div class="skills-content">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="cyber-arena" class="cyber-arena">
+                <div class="container">
+                    <h2 class="section-title">Cyber Arena</h2>
+                    <div class="cyber-arena-content">
+                        <p class="arena-intro">
+                            <!-- Content loaded dynamically from data/portfolio-data.json -->
+                        </p>
+                        
+                        <div class="arena-grid">
+                            <!-- Content loaded dynamically from data/portfolio-data.json -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="certifications" class="certifications">
+                <div class="container">
+                    <h2 class="section-title">Certifications</h2>
+                    <div class="certifications-timeline">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="education" class="education">
+                <div class="container">
+                    <h2 class="section-title">Education</h2>
+                    <div class="education-content">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="blogs" class="blogs">
+                <div class="container">
+                    <h2 class="section-title">Writeups & Blogs</h2>
+                    <div class="blogs-grid">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                    <div class="section-cta blog-cta">
+                        <button id="view-more-blogs" class="btn small secondary">View More</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="achievements" class="achievements">
+                <div class="container">
+                    <h2 class="section-title">Achievements & Honors</h2>
+                    <div class="achievements-timeline">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="volunteering" class="volunteering">
+                <div class="container">
+                    <h2 class="section-title">Volunteering & Community Service</h2>
+                    <div class="volunteering-content">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="scratchpad" class="scratchpad">
+                <div class="container">
+                    <div class="scratchpad-single-card"></div>
+                </div>
+            </section>
+
+            <section id="contact" class="contact">
+                <div class="container">
+                    <h2 class="section-title">Ping Me</h2>
+                    <p><!-- Content loaded dynamically from data/portfolio-data.json --></p>
+                    
+                    <div class="contact-info">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                    
+                    <a href="" target="_blank" rel="noopener noreferrer" class="btn primary" hidden>Let's Talk</a>
+                    
+                    <div class="social-links">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </section>
+            
+            <footer>
+                <div class="container">
+                    <div class="footer-content">
+                        <!-- Content loaded dynamically from data/portfolio-data.json -->
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Load portfolio data first, then main scripts -->
+    <script src="js/data-loader.js?v=5441e43eb3"></script>
+    <script src="js/main.js?v=c6d3dab85e"></script>
+    
+    <nav class="mode-switch ms-terminal ms-floating" data-current="nerd" aria-label="Site mode">
+        <a class="ms-opt" data-mode="academic" href="./">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>
+            Academic
+        </a>
+        <a class="ms-opt" data-mode="nerd" href="nerd.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 4 4-4 4"/><path d="M12 17h7"/></svg>
+            Nerd</a>
+        <span class="ms-thumb" aria-hidden="true"></span>
+    </nav>
+    <script src="js/mode-switch.js?v=396e5e8bc8"></script>
+</body>
+</html> 

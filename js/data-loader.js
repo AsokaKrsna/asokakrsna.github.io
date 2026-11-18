@@ -283,41 +283,34 @@ class PortfolioLoader {
         if (!projectsGrid) return;
 
         const projects = Array.isArray(this.data.projects) ? this.data.projects : [];
-        projectsGrid.innerHTML = projects.map((project) => {
+        const slug = (t) => String(t || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        const research = projects.filter((p) => p.category === 'software');
+        const builds = projects.filter((p) => p.category !== 'software');
+
+        const card = (project, featured) => {
             const githubUrl = this.sanitizeUrl(project.githubUrl, '#');
             const liveUrl = this.sanitizeUrl(project.liveUrl, '#');
-            const title = this.escapeHtml(project.title || '');
-            const titleMarkup = githubUrl !== '#'
-                ? `<a href="${this.escapeAttr(githubUrl)}" target="_blank" rel="noopener noreferrer">${title}</a>`
-                : title;
-
+            const links = [
+                githubUrl !== '#' ? `<a href="${this.escapeAttr(githubUrl)}" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> code</a>` : '',
+                liveUrl !== '#' ? `<a href="${this.escapeAttr(liveUrl)}" target="_blank" rel="noopener noreferrer"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> ${this.escapeHtml((project.linkText || 'live').toLowerCase())}</a>` : '',
+            ].filter(Boolean).join('');
+            const tags = (Array.isArray(project.technologies) ? project.technologies : [])
+                .map((t) => `<li>#${this.escapeHtml(String(t).toLowerCase().replace(/\s+/g, '-'))}</li>`).join('');
             return `
-                <div class="project-card">
-                    <div class="project-top">
-                        <div class="folder-icon">
-                            <i class="far fa-folder-open"></i>
-                        </div>
-                        <div class="project-links">
-                            ${githubUrl !== '#'
-                                ? `<a href="${this.escapeAttr(githubUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Open project source"><i class="fab fa-github"></i></a>`
-                                : ''
-                            }
-                            ${liveUrl !== '#'
-                                ? `<a href="${this.escapeAttr(liveUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Open live project"><i class="fas fa-external-link-alt"></i></a>`
-                                : ''
-                            }
-                        </div>
+                <article class="project-card${featured ? ' featured' : ''}">
+                    <div class="project-path"><i class="far fa-folder-open" aria-hidden="true"></i> ~/projects/${this.escapeHtml(slug(project.title))}${project.status ? ` <span class="project-status">[${this.escapeHtml(project.status.toLowerCase())}]</span>` : ''}</div>
+                    <h3 class="project-title">${this.escapeHtml(project.title || '')}</h3>
+                    <p class="project-description">${this.escapeHtml(project.description || '')}</p>
+                    <div class="project-foot">
+                        <ul class="project-tech-list">${tags}</ul>
+                        ${links ? `<div class="project-links">${links}</div>` : ''}
                     </div>
-                    <h3 class="project-title">${titleMarkup}</h3>
-                    <div class="project-description">
-                        <p>${this.escapeHtml(project.description || '')}</p>
-                    </div>
-                    <ul class="project-tech-list">
-                        ${(Array.isArray(project.technologies) ? project.technologies : []).map((tech) => `<li>${this.escapeHtml(tech)}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
-        }).join('');
+                </article>`;
+        };
+
+        projectsGrid.innerHTML =
+            (research.length ? `<p class="projects-group">// research tooling</p>${research.map((p, i) => card(p, i === 0)).join('')}` : '') +
+            (builds.length ? `<p class="projects-group">// builds &amp; side quests</p>${builds.map((p) => card(p, false)).join('')}` : '');
     }
 
     renderBlogs() {
@@ -388,15 +381,14 @@ class PortfolioLoader {
         if (!certificationsTimeline) return;
 
         const certifications = Array.isArray(this.data.certifications) ? this.data.certifications : [];
-        certificationsTimeline.innerHTML = certifications.map((certification) => `
-            <div class="certification-item">
-                <div class="certification-dot"></div>
-                <div class="certification-content">
-                    <h3 class="certification-title">${this.escapeHtml(certification.name || '')}</h3>
-                    <div class="certification-date">${this.escapeHtml(certification.date || '')}</div>
-                </div>
-            </div>
-        `).join('');
+        certificationsTimeline.innerHTML = `
+            <ul class="cert-list">
+                ${certifications.map((c) => `
+                <li class="certification-item">
+                    <span class="certification-date">${this.escapeHtml(c.date || '')}</span>
+                    <span class="certification-title">${this.escapeHtml(c.name || '')}</span>
+                </li>`).join('')}
+            </ul>`;
     }
 
     renderAchievements() {

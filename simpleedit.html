@@ -1,1685 +1,889 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Admin Panel</title>
-    <link rel="shortcut icon" href="./images/AsokaKrsna.ico" type="image/x-icon">
-    <link
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-    <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --bg: #0a0e17;
-            --surface: #111827;
-            --surface-2: #1a2332;
-            --border: #1e293b;
-            --border-hover: #334155;
-            --text: #e2e8f0;
-            --text-dim: #94a3b8;
-            --text-muted: #64748b;
-            --accent: #64ffda;
-            --accent-dim: rgba(100, 255, 218, 0.15);
-            --danger: #f87171;
-            --danger-dim: rgba(248, 113, 113, 0.15);
-            --warn: #fbbf24;
-            --success: #34d399;
-            --purple: #a78bfa;
-            --radius: 8px;
-            --mono: 'JetBrains Mono', monospace;
-            --sans: 'Inter', sans-serif;
-        }
-
-        body {
-            font-family: var(--sans);
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        /* ─── Gate ─── */
-        #gate {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background: var(--bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        #gate.hidden {
-            display: none;
-        }
-
-        #gate h1 {
-            font-family: var(--mono);
-            color: var(--accent);
-            font-size: 1.3rem;
-        }
-
-        #gate p {
-            color: var(--text-dim);
-            font-size: 0.85rem;
-        }
-
-        #gate input {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            color: var(--text);
-            padding: 0.7rem 1.2rem;
-            font-size: 0.9rem;
-            width: 280px;
-            font-family: var(--mono);
-            text-align: center;
-        }
-
-        #gate input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        #gate .gate-error {
-            color: var(--danger);
-            font-size: 0.8rem;
-            display: none;
-        }
-
-        /* ─── Top bar ─── */
-        .topbar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(10, 14, 23, 0.92);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            padding: 0.6rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .topbar-title {
-            font-family: var(--mono);
-            font-size: 0.85rem;
-            color: var(--accent);
-        }
-
-        .topbar-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        /* ─── Layout ─── */
-        .layout {
-            display: flex;
-            min-height: calc(100vh - 45px);
-        }
-
-        .sidebar {
-            width: 220px;
-            min-width: 220px;
-            background: var(--surface);
-            border-right: 1px solid var(--border);
-            padding: 1rem 0;
-            position: sticky;
-            top: 45px;
-            height: calc(100vh - 45px);
-            overflow-y: auto;
-        }
-
-        .sidebar a {
-            display: block;
-            padding: 0.45rem 1.2rem;
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.8rem;
-            transition: all 0.2s;
-            border-left: 2px solid transparent;
-        }
-
-        .sidebar a:hover {
-            color: var(--text);
-            background: rgba(100, 255, 218, 0.04);
-        }
-
-        .sidebar a.active {
-            color: var(--accent);
-            border-left-color: var(--accent);
-            background: var(--accent-dim);
-        }
-
-        .sidebar .sidebar-label {
-            padding: 0.8rem 1.2rem 0.3rem;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .content {
-            flex: 1;
-            padding: 1.5rem 2rem;
-            max-width: 900px;
-        }
-
-        .preview-panel {
-            flex: 1.2;
-            display: none;
-            flex-direction: column;
-            border-left: 1px solid var(--border);
-            background: var(--bg);
-            min-width: 400px;
-        }
-        .preview-panel.open {
-            display: flex;
-        }
-        .preview-header {
-            height: 45px;
-            background: var(--surface);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1rem;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-        #livePreviewIframe {
-            flex: 1;
-            width: 100%;
-            border: none;
-            background: #fff;
-        }
-
-        /* ─── Section panels ─── */
-        .panel {
-            display: none;
-        }
-
-        .panel.active {
-            display: block;
-        }
-
-        .panel-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .panel-header h2 {
-            font-family: var(--mono);
-            font-size: 1.1rem;
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        /* ─── Form elements ─── */
-        .field {
-            margin-bottom: 1rem;
-        }
-
-        .field label {
-            display: block;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin-bottom: 0.3rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .field input,
-        .field textarea,
-        .field select {
-            width: 100%;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            color: var(--text);
-            padding: 0.55rem 0.8rem;
-            font-size: 0.85rem;
-            font-family: var(--sans);
-            transition: border-color 0.2s;
-        }
-
-        .field input:focus,
-        .field textarea:focus,
-        .field select:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .field textarea {
-            resize: vertical;
-            min-height: 80px;
-            font-family: var(--mono);
-            font-size: 0.8rem;
-        }
-
-        .field small {
-            color: var(--text-muted);
-            font-size: 0.7rem;
-            margin-top: 0.2rem;
-            display: block;
-        }
-
-        .field-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.8rem;
-        }
-
-        /* ─── Buttons ─── */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.45rem 0.9rem;
-            border-radius: var(--radius);
-            font-size: 0.78rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: all 0.2s;
-            font-family: var(--sans);
-        }
-
-        .btn-primary {
-            background: var(--accent-dim);
-            color: var(--accent);
-            border-color: rgba(100, 255, 218, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: rgba(100, 255, 218, 0.25);
-        }
-
-        .btn-danger {
-            background: var(--danger-dim);
-            color: var(--danger);
-            border-color: rgba(248, 113, 113, 0.3);
-        }
-
-        .btn-danger:hover {
-            background: rgba(248, 113, 113, 0.25);
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--text-dim);
-            border-color: var(--border);
-        }
-
-        .btn-ghost:hover {
-            color: var(--text);
-            border-color: var(--border-hover);
-        }
-
-        .btn-save {
-            background: var(--accent);
-            color: var(--bg);
-            font-weight: 600;
-        }
-
-        .btn-save:hover {
-            background: #52e0c4;
-        }
-
-        .btn-sm {
-            padding: 0.3rem 0.6rem;
-            font-size: 0.72rem;
-        }
-
-        /* ─── Array items ─── */
-        .array-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        .array-item {
-            background: var(--surface-2);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1rem;
-            position: relative;
-        }
-
-        .array-item:hover {
-            border-color: var(--border-hover);
-        }
-
-        .array-item-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.8rem;
-            cursor: pointer;
-        }
-
-        .array-item-title {
-            font-family: var(--mono);
-            font-size: 0.82rem;
-            color: var(--purple);
-            font-weight: 500;
-        }
-
-        .array-item-actions {
-            display: flex;
-            gap: 0.3rem;
-        }
-
-        .array-item-body {
-            display: block;
-        }
-
-        .array-item.collapsed .array-item-body {
-            display: none;
-        }
-
-        /* ─── Tags / chips ─── */
-        .chip-input-wrap {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.3rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 0.4rem 0.6rem;
-            min-height: 38px;
-            align-items: center;
-            cursor: text;
-        }
-
-        .chip-input-wrap:focus-within {
-            border-color: var(--accent);
-        }
-
-        .chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            background: var(--accent-dim);
-            color: var(--accent);
-            padding: 0.15rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.72rem;
-            font-family: var(--mono);
-        }
-
-        .chip .chip-remove {
-            cursor: pointer;
-            opacity: 0.6;
-            font-size: 0.8rem;
-        }
-
-        .chip .chip-remove:hover {
-            opacity: 1;
-        }
-
-        .chip-input {
-            border: none !important;
-            background: transparent !important;
-            padding: 0.15rem !important;
-            font-size: 0.8rem !important;
-            flex: 1;
-            min-width: 80px;
-            color: var(--text) !important;
-        }
-
-        .chip-input:focus {
-            outline: none !important;
-        }
-
-        /* ─── String list (simple array of strings) ─── */
-        .string-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        .string-list-item {
-            display: flex;
-            gap: 0.4rem;
-            align-items: center;
-        }
-
-        .string-list-item input {
-            flex: 1;
-        }
-
-        /* ─── Status badge ─── */
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .status-dot.saved {
-            background: var(--success);
-        }
-
-        .status-dot.unsaved {
-            background: var(--warn);
-        }
-
-        .status-msg {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin-left: 0.4rem;
-        }
-
-        /* ─── Toast ─── */
-        .toast {
-            position: fixed;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            background: var(--surface-2);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 0.7rem 1.2rem;
-            font-size: 0.82rem;
-            color: var(--text);
-            z-index: 9000;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .toast.success {
-            border-color: var(--success);
-        }
-
-        .toast.error {
-            border-color: var(--danger);
-        }
-
-        /* ─── Modal ─── */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 8000;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .modal {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            width: 480px;
-            max-width: 90vw;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal h3 {
-            font-family: var(--mono);
-            color: var(--accent);
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: flex-end;
-            margin-top: 1.2rem;
-        }
-
-        /* ─── Scrollbar ─── */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--border-hover);
-        }
-
-        /* ─── Responsive ─── */
-        @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-
-            .content {
-                padding: 1rem;
-            }
-
-            .field-row {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Portfolio Editor</title>
+<link rel="icon" href="images/AsokaKrsna.ico" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b0f17;--surface:#111827;--surface-2:#172131;--border:#1f2a3a;--border-hover:#33445c;
+  --text:#e2e8f0;--dim:#94a3b8;--muted:#64748b;--accent:#64ffda;--accent-dim:rgba(100,255,218,.12);
+  --danger:#f87171;--danger-dim:rgba(248,113,113,.12);--warn:#fbbf24;--warn-dim:rgba(251,191,36,.1);--ok:#34d399;
+  --radius:8px;--mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.55;min-height:100vh;font-size:14px}
+a{color:var(--accent)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* sign-in */
+#signin{min-height:100vh;display:grid;place-items:center;padding:1.5rem}
+.signin-card{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;text-align:center}
+.signin-card h1{font:600 1.1rem var(--mono);color:var(--accent);margin-bottom:.4rem}
+.signin-card p{color:var(--dim);font-size:.85rem;margin-bottom:1.4rem}
+.gh-btn{display:inline-flex;align-items:center;gap:.6rem;background:#f0f6fc;color:#0d1117;border:0;border-radius:8px;padding:.7rem 1.1rem;font-weight:600}
+.gh-btn:hover{background:#fff}
+.gh-btn svg{width:18px;height:18px}
+.signin-alt{margin-top:1rem;font-size:.78rem;color:var(--muted)}
+.signin-alt button{background:none;border:0;color:var(--dim);text-decoration:underline}
+.signin-err{color:var(--danger);font-size:.8rem;margin-top:.8rem;min-height:1em}
+
+/* app shell */
+#app{display:none}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:.8rem;padding:.55rem 1rem;background:rgba(11,15,23,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.topbar .title{font:600 .82rem var(--mono);color:var(--accent);white-space:nowrap}
+.topbar .who{display:flex;align-items:center;gap:.45rem;color:var(--dim);font-size:.78rem;margin-left:.4rem}
+.topbar .who img{width:22px;height:22px;border-radius:50%}
+.topbar .spacer{flex:1}
+.status{display:flex;align-items:center;gap:.45rem;font-size:.78rem;color:var(--dim);white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.dot.dirty{background:var(--warn)}
+.btn{display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .8rem;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:.8rem;font-weight:500;white-space:nowrap}
+.btn:hover{border-color:var(--border-hover)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#06251d}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-danger{color:var(--danger);border-color:transparent;background:transparent}
+.btn-danger:hover{background:var(--danger-dim)}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--dim)}
+.btn-ghost:hover{color:var(--text);background:var(--surface-2)}
+.btn-sm{padding:.28rem .55rem;font-size:.74rem}
+.layout{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:calc(100vh - 49px)}
+.layout.with-preview{grid-template-columns:230px minmax(0,1fr) minmax(0,1fr)}
+.sidebar{border-right:1px solid var(--border);padding:1rem .6rem;position:sticky;top:49px;height:calc(100vh - 49px);overflow:auto}
+.sidebar .group{font:600 .65rem var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin:1rem .6rem .35rem}
+.sidebar .group:first-child{margin-top:0}
+.sidebar a{display:flex;justify-content:space-between;align-items:center;padding:.38rem .6rem;border-radius:6px;color:var(--dim);text-decoration:none;font-size:.84rem}
+.sidebar a:hover{background:var(--surface);color:var(--text)}
+.sidebar a.active{background:var(--accent-dim);color:var(--accent)}
+.sidebar .count{font:500 .68rem var(--mono);color:var(--muted)}
+.sidebar .warn-badge{font:600 .65rem var(--mono);color:var(--warn)}
+.content{padding:1.4rem 1.6rem 5rem;max-width:880px;width:100%}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.1rem}
+.panel-head h2{font:600 1.05rem var(--sans)}
+.panel-head p{color:var(--dim);font-size:.82rem;margin-top:.2rem;max-width:60ch}
+.where{display:inline-block;font:500 .66rem var(--mono);padding:.12rem .4rem;border-radius:4px;background:var(--surface-2);color:var(--dim);margin-left:.4rem;vertical-align:middle}
+
+.field{margin-bottom:.9rem}
+.field>label,.field .lbl{display:block;font-size:.74rem;font-weight:600;color:var(--dim);margin-bottom:.3rem}
+.field input[type=text],.field input[type=url],.field input[type=email],.field textarea,.field select{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:.5rem .65rem;font:inherit;font-size:.86rem}
+.field textarea{resize:vertical;min-height:2.6rem;line-height:1.5}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--accent)}
+.field small{display:block;color:var(--muted);font-size:.72rem;margin-top:.25rem}
+.field.invalid input,.field.invalid textarea{border-color:var(--warn)}
+.check{display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--dim);margin-bottom:.9rem;cursor:pointer}
+.check input{accent-color:var(--accent);width:15px;height:15px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0 .8rem}
+
+.items{display:flex;flex-direction:column;gap:.5rem}
+.item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+.item-head{display:flex;align-items:center;gap:.5rem;padding:.55rem .7rem;cursor:pointer;user-select:none}
+.item-head .chev{color:var(--muted);transition:transform .15s;font-size:.7rem;width:.8rem}
+.item.open .item-head .chev{transform:rotate(90deg)}
+.item-head .t{flex:1;min-width:0;font-size:.85rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item-head .sub{font:500 .7rem var(--mono);color:var(--muted);white-space:nowrap}
+.item-head .pill{font:600 .62rem var(--mono);padding:.12rem .35rem;border-radius:4px;background:var(--surface-2);color:var(--dim)}
+.item-head .pill.off{color:var(--muted);text-decoration:line-through}
+.item-body{display:none;padding:.4rem .9rem .3rem;border-top:1px solid var(--border)}
+.item.open .item-body{display:block}
+.add-row{margin-top:.6rem}
+.strings{display:flex;flex-direction:column;gap:.35rem}
+.string{display:flex;gap:.35rem;align-items:flex-start}
+.string input,.string textarea{flex:1}
+
+.banner{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;padding:.7rem .9rem;border-radius:8px;margin-bottom:1rem;font-size:.82rem}
+.banner.warn{background:var(--warn-dim);border:1px solid rgba(251,191,36,.3);color:#fde68a}
+.banner.info{background:var(--accent-dim);border:1px solid rgba(100,255,218,.25);color:#b5fff0}
+.banner .spacer{flex:1}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.8rem;margin-bottom:1.2rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem}
+.card h3{font-size:.85rem;margin-bottom:.35rem}
+.card p{color:var(--dim);font-size:.8rem;margin-bottom:.7rem}
+.warnings li{list-style:none;padding:.45rem .6rem;border-left:2px solid var(--warn);background:var(--warn-dim);border-radius:0 6px 6px 0;margin-bottom:.35rem;font-size:.8rem;cursor:pointer}
+.warnings li:hover{filter:brightness(1.15)}
+.warnings .ok{border-color:var(--ok);background:rgba(52,211,153,.08);cursor:default}
+
+.preview{border-left:1px solid var(--border);position:sticky;top:49px;height:calc(100vh - 49px);display:none;flex-direction:column}
+.layout.with-preview .preview{display:flex}
+.preview-head{display:flex;gap:.3rem;align-items:center;padding:.45rem .6rem;border-bottom:1px solid var(--border)}
+.preview-head .spacer{flex:1}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--dim);padding:.3rem .6rem;font-size:.74rem}
+.seg button.on{background:var(--accent-dim);color:var(--accent)}
+.preview iframe{flex:1;border:0;background:#fff;width:100%}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:1rem}
+.modal-bg.show{display:flex}
+.modal{width:100%;max-width:640px;max-height:85vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.3rem}
+.modal h3{font-size:1rem;margin-bottom:.8rem}
+.modal .actions{display:flex;justify-content:flex-end;gap:.5rem;margin-top:1rem}
+.diff{font:400 .75rem/1.5 var(--mono);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:.6rem .7rem;max-height:40vh;overflow:auto}
+.diff div{white-space:pre-wrap;word-break:break-word;padding:.1rem 0}
+.diff .k{color:var(--accent)}
+.diff .del{color:var(--danger)}
+.diff .add{color:var(--ok)}
+textarea.json{width:100%;height:55vh;background:var(--bg);color:var(--accent);border:1px solid var(--border);border-radius:6px;font:400 .74rem/1.5 var(--mono);padding:.6rem}
+
+.toast{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%) translateY(150%);background:var(--surface-2);border:1px solid var(--border);padding:.6rem 1rem;border-radius:8px;font-size:.82rem;z-index:200;transition:transform .25s;max-width:90vw}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--ok)}
+.toast.err{border-color:var(--danger)}
+
+.menu-btn{display:none}
+@media (max-width:860px){
+  .layout,.layout.with-preview{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:0;top:49px;width:250px;z-index:40;background:var(--bg);transform:translateX(-100%);transition:transform .2s}
+  .sidebar.open{transform:none}
+  .menu-btn{display:inline-flex}
+  .content{padding:1rem 1rem 5rem}
+  .preview{position:fixed;inset:49px 0 0 0;z-index:45;background:var(--bg)}
+  .topbar .who span,.status span{display:none}
+  .hide-sm{display:none}
+}
+</style>
 </head>
-
 <body>
 
-    <!-- Gate -->
-    <div id="gate">
-        <h1>[ edit@portfolio ]</h1>
-        <p>Enter passphrase to continue</p>
-        <input type="password" id="gate-pass" placeholder="passphrase" autofocus>
-        <p class="gate-error" id="gate-error">Invalid passphrase</p>
-    </div>
+<!-- ───────── Sign in ───────── -->
+<div id="signin">
+  <div class="signin-card">
+    <h1>[ portfolio editor ]</h1>
+    <p>Sign in with the GitHub account that owns the site repository. Your token stays in this browser tab only.</p>
+    <button class="gh-btn" id="gh-login" type="button">
+      <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      Sign in with GitHub
+    </button>
+    <div class="signin-err" id="signin-err"></div>
+    <div class="signin-alt">or <button type="button" id="offline-btn">open read-only</button> (edit, preview and download JSON without committing)</div>
+  </div>
+</div>
 
-    <!-- Top bar -->
-    <div class="topbar" style="display:none" id="app">
-        <div class="topbar-title">┌─[ PORTFOLIO EDITOR ]──</div>
-        <div class="topbar-actions">
-            <span class="status-dot unsaved" id="statusDot"></span>
-            <span class="status-msg" id="statusMsg">No changes</span>
-            <button class="btn btn-ghost btn-sm" onclick="downloadJSON()" title="Download JSON">↓ Download</button>
-            <button class="btn btn-ghost btn-sm" onclick="showGitHubModal()" title="Push to GitHub">⬆ GitHub
-                Push</button>
-            <button class="btn btn-ghost btn-sm" onclick="previewJSON()" title="Preview JSON">{ } JSON</button>
-            <button class="btn btn-save btn-sm" onclick="previewSite()" title="Live Preview">👁 Live Preview</button>
+<!-- ───────── App ───────── -->
+<div id="app">
+  <div class="topbar">
+    <button class="btn btn-ghost btn-sm menu-btn" id="menu-btn" type="button" aria-label="Sections">☰</button>
+    <div class="title">┌─[ editor ]</div>
+    <div class="who" id="who"></div>
+    <div class="spacer"></div>
+    <div class="status"><span class="dot" id="dot"></span><span id="status-msg">Up to date</span></div>
+    <button class="btn btn-ghost btn-sm hide-sm" type="button" onclick="App.showJSON()">{ } JSON</button>
+    <button class="btn btn-ghost btn-sm hide-sm" type="button" onclick="App.download()">↓ JSON</button>
+    <button class="btn btn-sm" type="button" id="preview-btn" onclick="App.togglePreview()">Preview</button>
+    <button class="btn btn-primary btn-sm" type="button" id="publish-btn" onclick="App.openPublish()">Publish</button>
+  </div>
+  <div class="layout" id="layout">
+    <nav class="sidebar" id="sidebar"></nav>
+    <div class="content" id="content"></div>
+    <aside class="preview" id="preview">
+      <div class="preview-head">
+        <div class="seg" id="preview-seg">
+          <button type="button" class="on" data-page="index.html">Academic</button>
+          <button type="button" data-page="nerd.html">Nerd</button>
         </div>
+        <div class="spacer"></div>
+        <button class="btn btn-ghost btn-sm" type="button" onclick="App.reloadPreview()">↻</button>
+        <button class="btn btn-ghost btn-sm" type="button" onclick="App.togglePreview()">✕</button>
+      </div>
+      <iframe id="preview-frame" title="Live preview"></iframe>
+    </aside>
+  </div>
+</div>
+
+<!-- Publish modal -->
+<div class="modal-bg" id="publish-modal">
+  <div class="modal">
+    <h3>Publish changes</h3>
+    <div id="publish-body"></div>
+    <div class="field" style="margin-top:.9rem"><label for="commit-msg">Commit message</label><input type="text" id="commit-msg"></div>
+    <div class="actions">
+      <button class="btn" type="button" onclick="App.closeModal('publish-modal')">Cancel</button>
+      <button class="btn btn-primary" type="button" id="commit-btn" onclick="App.commit()">Commit to GitHub</button>
     </div>
+  </div>
+</div>
+<!-- JSON modal -->
+<div class="modal-bg" id="json-modal">
+  <div class="modal">
+    <h3>Raw JSON</h3>
+    <textarea class="json" id="json-area" readonly></textarea>
+    <div class="actions">
+      <button class="btn" type="button" onclick="App.closeModal('json-modal')">Close</button>
+      <button class="btn btn-primary" type="button" onclick="App.copyJSON()">Copy</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <!-- Layout -->
-    <div class="layout" style="display:none" id="layout">
-        <nav class="sidebar" id="sidebar">
-            <div class="sidebar-label">Core</div>
-            <a href="#" data-panel="personal" class="active">Personal</a>
-            <a href="#" data-panel="about">About</a>
-            <a href="#" data-panel="contact">Contact</a>
-            <a href="#" data-panel="socialLinks">Social Links</a>
-            <div class="sidebar-label">Academic</div>
-            <a href="#" data-panel="education">Education</a>
-            <a href="#" data-panel="researchInterests">Research Interests</a>
-            <a href="#" data-panel="research">Publications</a>
-            <a href="#" data-panel="certifications">Certifications</a>
-            <div class="sidebar-label">Professional</div>
-            <a href="#" data-panel="experience">Experience</a>
-            <a href="#" data-panel="skills">Skills / Arsenal</a>
-            <a href="#" data-panel="projects">Projects</a>
-            <div class="sidebar-label">Extras</div>
-            <a href="#" data-panel="cyberArena">Cyber Arena</a>
-            <a href="#" data-panel="blogs">Blogs & Writeups</a>
-            <a href="#" data-panel="achievements">Achievements</a>
-            <a href="#" data-panel="volunteering">Volunteering</a>
-            <a href="#" data-panel="scratchpad">Scratchpad</a>
-            <div class="sidebar-label">Site</div>
-            <a href="#" data-panel="footer">Footer</a>
-        </nav>
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   Portfolio editor
+   - Sign-in: GitHub OAuth via the sveltia-cms-auth Cloudflare Worker (Decap-compatible popup flow)
+   - Reads/writes data/portfolio-data.json through the GitHub contents API
+   - The "Build academic page" workflow regenerates index.html after each commit
+   ═══════════════════════════════════════════════════════════════ */
+const CONFIG = {
+  authBase: 'https://sveltia-cms-auth.durjoymajumdar02.workers.dev',
+  repo: 'AsokaKrsna/asokakrsna.github.io',
+  branch: 'main',
+  dataPath: 'data/portfolio-data.json',
+  cvPaths: ['CV.pdf', 'Resume.pdf'],
+};
+const TOKEN_KEY = 'cms-gh-token';
+const DRAFT_KEY = 'cms-draft-v2';
 
-        <div class="content" id="contentArea"></div>
-        <div class="preview-panel" id="previewPanel">
-            <div class="preview-header">
-                <span>Live Preview</span>
-                <div>
-                    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('livePreviewIframe').src = 'index.html?preview=1'" title="Reload Nerd Mode" style="padding: 0.2rem 0.5rem; margin-right: 0.2rem;">Nerd</button>
-                    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('livePreviewIframe').src = 'classic.html?preview=1'" title="Reload Classic Mode" style="padding: 0.2rem 0.5rem; margin-right: 0.5rem;">Classic</button>
-                    <button class="btn btn-ghost btn-sm" onclick="closeLivePreview()" style="padding: 0.2rem 0.5rem;">✕</button>
-                </div>
-            </div>
-            <iframe id="livePreviewIframe" src=""></iframe>
+/* ───────── Field schema ─────────
+   type: text | url | textarea | html | select | bool | strings | htmlStrings | csv | objects
+   For objects: item = [fields], title = fn(item) | key, template = {} */
+const T = (key, label, extra = {}) => ({ key, label, type: 'text', ...extra });
+const U = (key, label, extra = {}) => ({ key, label, type: 'url', ...extra });
+const A = (key, label, extra = {}) => ({ key, label, type: 'textarea', ...extra });
+const H = (key, label, extra = {}) => ({ key, label, type: 'html', ...extra });
+const B = (key, label, extra = {}) => ({ key, label, type: 'bool', ...extra });
+const S = (key, label, options, extra = {}) => ({ key, label, type: 'select', options, ...extra });
+const ROW = (...fields) => ({ type: 'row', fields });
+
+const PANELS = [
+  { group: 'Site' },
+  { id: 'dashboard', label: 'Dashboard', special: 'dashboard' },
+
+  { group: 'Academic page' },
+  { id: 'classic', label: 'Header & bio', where: 'Academic', path: 'classic', fields: [
+    T('role', 'Role line', { help: 'Shown under your name, e.g. "M.Tech student and Junior Researcher, Cybersecurity Lab, IIT Patna"' }),
+    T('seekingText', 'Seeking line', { help: 'Green status line. Leave empty to hide.' }),
+    { key: 'bio', label: 'Bio paragraphs', type: 'htmlStrings', help: 'Links allowed: <a href="...">text</a>, <em>, <strong>' },
+    A('practice', 'CTF / practice line', { help: 'One line under Service & leadership' }),
+    T('printHeader', 'Print header'),
+    { key: 'sidebarAffiliations', label: 'Affiliations (fallback role)', type: 'strings' },
+  ]},
+  { id: 'news', label: 'News', where: 'Academic', path: 'classic.news', type: 'objects',
+    title: (n) => stripTags(n.text), sub: (n) => n.date, template: { date: '', text: '' },
+    help: 'Newest first. The first 6 show; the rest fold into "Older news".',
+    item: [T('date', 'Date', { help: 'e.g. Nov 2026 or 2026' }), H('text', 'Text')] },
+  { id: 'currentWork', label: 'Current work', where: 'Academic', path: 'classic.currentWork', type: 'objects',
+    title: 'title', template: { title: '', text: '' },
+    help: 'Ongoing projects. Only put here what you are comfortable making public.',
+    item: [T('title', 'Title'), H('text', 'Description')] },
+  { id: 'honors', label: 'Honours', where: 'Academic', path: 'classic.honors', type: 'objects',
+    title: 'text', sub: (h) => h.year, template: { year: '', text: '' },
+    help: 'State facts and selection rates; avoid superlatives.',
+    item: [T('year', 'Year'), A('text', 'Honour')] },
+
+  { group: 'Shared content' },
+  { id: 'research', label: 'Publications', where: 'Both', path: 'research', type: 'objects',
+    title: 'title', sub: (p) => [p.year, p.status].filter(Boolean).join(' · '),
+    template: { title: '', authors: 'D. Majumdar', venue: '', publication: '', year: '', date: '', status: 'published', type: 'published', url: '', doi: '', pdf: '', code: '', tldr: '', description: '', yourRole: '', impactArea: '' },
+    help: 'Never add manuscripts that are confidential until they are public.',
+    item: [
+      T('title', 'Title'),
+      T('authors', 'Authors', { help: 'As on the paper, e.g. "S. Arjun, D. Majumdar". Your name is bolded automatically.' }),
+      ROW(S('status', 'Status', ['published', 'preprint', 'under review']), T('year', 'Year'), T('date', 'Date (Nerd Mode)')),
+      T('venue', 'Venue (full name)', { help: 'Academic page' }),
+      T('publication', 'Venue (short, Nerd Mode)', { help: 'e.g. IEEE ISCS 2024' }),
+      ROW(U('url', 'Paper URL'), T('doi', 'DOI')),
+      ROW(U('pdf', 'PDF URL'), U('code', 'Code URL')),
+      T('tldr', 'TL;DR (Nerd Mode)'), A('description', 'Description (Nerd Mode)'),
+      ROW(T('yourRole', 'Your role'), T('impactArea', 'Impact area')),
+      B('academic', 'Show on the academic page', { default: true }),
+    ] },
+  { id: 'projects', label: 'Projects', where: 'Both', path: 'projects', type: 'objects',
+    title: 'title', pill: (p) => p.academic === true ? (p.category === 'software' ? 'software' : 'project') : null,
+    template: { title: '', description: '', technologies: [], githubUrl: '', liveUrl: '', linkText: '', status: '', category: 'project', academic: false },
+    help: 'On the academic page, "software" items go under Research software and "project" items under Projects.',
+    item: [
+      T('title', 'Title'), A('description', 'Description'),
+      A('cv', 'CV description (optional)', { help: 'Shorter wording for the PDF CV. Leave empty to reuse the description.' }),
+      { key: 'technologies', label: 'Technologies', type: 'csv', help: 'Comma-separated' },
+      ROW(U('githubUrl', 'Code URL'), U('liveUrl', 'Live / docs URL')),
+      ROW(T('linkText', 'Live link label', { help: 'Default "Site"' }), T('status', 'Badge', { help: 'e.g. Code in limited access' })),
+      S('category', 'Academic-page section', ['software', 'project']),
+      B('academic', 'Show on the academic page'),
+    ] },
+  { id: 'experience', label: 'Experience', where: 'Both', path: 'experience', type: 'objects',
+    title: (e) => `${e.title || 'New position'} — ${e.company || ''}`, sub: (e) => e.period, pill: (e) => e.kind,
+    template: { period: '', title: '', company: '', location: '', kind: 'research', academic: true, responsibilities: [] },
+    help: 'Kind decides the academic-page section: research → Research experience, teaching → Teaching, service → Service & leadership.',
+    item: [
+      ROW(T('title', 'Title'), T('company', 'Organisation')),
+      ROW(T('period', 'Period', { help: 'e.g. Nov 2025 - Present' }), T('location', 'Location'), S('kind', 'Kind', ['research', 'teaching', 'service'])),
+      { key: 'responsibilities', label: 'Points (outcomes, not duties)', type: 'strings' },
+      { key: 'cv', label: 'CV points (optional)', type: 'strings', help: 'Replace the points above on the PDF CV only. Leave empty to reuse them.' },
+      B('academic', 'Show on the academic page', { default: true }),
+    ] },
+  { id: 'education', label: 'Education', where: 'Both', path: 'education', type: 'objects',
+    title: 'institution', sub: (e) => e.period, template: { institution: '', degree: '', period: '', location: '', grade: '', details: '' },
+    item: [T('institution', 'Institution'), T('degree', 'Degree'), ROW(T('period', 'Period'), T('location', 'Location')),
+      T('grade', 'Grade', { help: 'Must match your transcript and CV exactly' }), A('details', 'Details (academic page)')] },
+  { id: 'about', label: 'About (Nerd)', where: 'Nerd', path: 'about', fields: [{ key: 'paragraphs', label: 'Paragraphs', type: 'htmlStrings' }] },
+  { id: 'researchInterests', label: 'Research focus', where: 'Both', path: 'researchInterests', fields: [
+    { key: 'areas', label: 'Areas (chips on the academic page)', type: 'strings', help: 'Keep to about 4.' },
+    T('title', 'Section title (Nerd)'), A('statement', 'Statement (Nerd)'), A('futureGoals', 'Future goals (Nerd)'),
+  ]},
+  { id: 'skills', label: 'Skills', where: 'Both', path: 'skills', type: 'objects',
+    title: 'category', template: { category: '', icon: 'fas fa-code', items: '' },
+    item: [ROW(T('category', 'Category'), T('icon', 'Icon (Nerd)', { help: 'Font Awesome class' })), A('items', 'Items')] },
+  { id: 'volunteering', label: 'Volunteering', where: 'Both', path: 'volunteering', type: 'objects',
+    title: 'organization', sub: (v) => v.period, template: { organization: '', role: '', period: '', description: '', impact: '' },
+    help: 'Shown under Teaching & mentoring on the academic page.',
+    item: [T('organization', 'Organisation'), ROW(T('role', 'Role'), T('period', 'Period')), A('description', 'Description'), T('impact', 'Impact (Nerd)'),
+      B('academic', 'Show on the academic page', { default: true })] },
+  { id: 'contact', label: 'Contact', where: 'Both', path: 'contact', fields: [
+    A('description', 'Message'), { key: 'emails', label: 'Emails', type: 'strings' },
+    U('calendlyUrl', 'Calendly URL'), T('phone', 'Phone (Nerd Mode only; leave empty to hide)'),
+  ]},
+  { id: 'socialLinks', label: 'Social links', where: 'Both', path: 'socialLinks', type: 'objects',
+    title: 'platform', pill: (s) => s.academic === false ? 'nerd only' : null, template: { platform: '', icon: '', url: '', academic: true },
+    item: [ROW(T('platform', 'Platform'), T('icon', 'Icon (Nerd)')), U('url', 'URL'), B('academic', 'Show on the academic page', { default: true })] },
+  { id: 'personal', label: 'Personal', where: 'Both', path: 'personal', fields: [
+    ROW(T('name', 'Name'), T('alias', 'Alias')), T('title', 'Title (Nerd)'), T('tagline', 'Tagline (Nerd)'),
+    ROW(T('profileImage', 'Photo path'), T('resumeLink', 'CV link', { help: 'CV.pdf — upload a new PDF from the Dashboard' })),
+    T('favicon', 'Favicon path'),
+  ]},
+
+  { group: 'Nerd Mode only' },
+  { id: 'achievements', label: 'Achievements', where: 'Nerd', path: 'achievements', fields: [
+    { key: 'academic', label: 'Academic', type: 'strings' }, { key: 'competitions', label: 'Competitions', type: 'strings' },
+    { key: 'leadership', label: 'Leadership', type: 'strings' },
+  ]},
+  { id: 'cyberArena', label: 'Cyber arena', where: 'Nerd', path: 'cyberArena', fields: [
+    A('intro', 'Intro'),
+    { key: 'platforms', label: 'Platforms', type: 'objects', title: 'name', template: { name: '', icon: 'fas fa-flag', highlights: [], linkText: '', url: '' },
+      item: [ROW(T('name', 'Name'), T('icon', 'Icon')), { key: 'highlights', label: 'Highlights', type: 'strings' }, ROW(T('linkText', 'Link label'), U('url', 'URL'))] },
+  ]},
+  { id: 'blogs', label: 'Blogs', where: 'Nerd', path: 'blogs', type: 'objects', title: 'title', sub: (b) => b.date,
+    template: { date: '', title: '', url: '' }, item: [T('title', 'Title'), ROW(T('date', 'Date'), U('url', 'URL'))] },
+  { id: 'certifications', label: 'Certifications', where: 'Nerd', path: 'certifications', type: 'objects', title: 'name', sub: (c) => c.date,
+    template: { name: '', date: '' }, item: [ROW(T('name', 'Name'), T('date', 'Date'))] },
+  { id: 'nerd', label: 'Terminal & loader', where: 'Nerd', path: 'nerd', fields: [
+    { key: 'sidebarRotatingTexts', label: 'Rotating sidebar texts', type: 'strings' },
+    { key: 'terminal.funFacts', label: 'Terminal fun facts', type: 'strings' },
+    { key: 'terminal.aboutVariants', label: 'Terminal "about" variants', type: 'strings', help: 'Placeholders: {currentOrg} {seekingText} {primaryAffiliation} {researchAreas}' },
+    ROW(T('terminal.host', 'Terminal host'), T('loader.title', 'Loader title'), T('loader.subtitle', 'Loader subtitle')),
+  ]},
+  { id: 'scratchpad', label: 'Scratchpad', where: 'Nerd', path: 'scratchpad', fields: [A('intro', 'Intro'), ROW(T('linkText', 'Link label'), U('url', 'URL'))] },
+  { group: 'CV (PDF)' },
+  { id: 'cv', label: 'CV settings', where: 'CV', path: 'cv',
+    help: 'The PDF CV is generated from all shared sections plus these CV-only fields, and rebuilt automatically after every publish.',
+    fields: [
+      T('headline', 'Headline', { help: 'Line under your name' }),
+      ROW(T('email', 'Primary email'), T('emailAlt', 'Second email'), T('phone', 'Phone')),
+      A('interests', 'Research interests paragraph', { help: 'Keyword-rich but true: screening tools match these words.' }),
+      { key: 'links', label: 'Header links', type: 'objects', title: 'label', template: { label: '', url: '' }, item: [ROW(T('label', 'Shown text'), U('url', 'URL'))] },
+      { key: 'skills', label: 'Skills lines', type: 'objects', title: 'label', template: { label: '', items: '' }, item: [T('label', 'Label'), A('items', 'Items')] },
+      A('certifications', 'Certifications line'),
+      A('volunteering', 'Volunteer teaching line'),
+      ROW(T('practice.title', 'CTF entry title'), T('practice.period', 'CTF period')),
+      A('practice.text', 'CTF entry text'),
+    ] },
+  { group: 'Site' },
+  { id: 'footer', label: 'Footer', where: 'Both', path: 'footer', fields: [
+    T('classicText', 'Academic footer'), T('text', 'Nerd footer'), ROW(T('copyright', 'Copyright'), T('lastUpdated', 'Last updated')),
+  ]},
+];
+
+/* ───────── helpers ───────── */
+function esc(s) { return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+function stripTags(s) { return String(s ?? '').replace(/<[^>]*>/g, ''); }
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function getPath(obj, path) {
+  if (!path) return obj;
+  return path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
+}
+function setPath(obj, path, value) {
+  const keys = path.split('.');
+  let cur = obj;
+  keys.slice(0, -1).forEach((k, i) => {
+    if (cur[k] == null) cur[k] = /^\d+$/.test(keys[i + 1]) ? [] : {};
+    cur = cur[k];
+  });
+  cur[keys[keys.length - 1]] = value;
+}
+function join(...parts) { return parts.filter((p) => p !== '' && p != null).join('.'); }
+function b64encodeUtf8(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+function b64decodeUtf8(b64) {
+  const bin = atob(b64.replace(/\s/g, ''));
+  return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0)));
+}
+function isValidUrl(u) { return !u || /^(https?:\/\/|mailto:)/i.test(u) || /^[\w./#?=&-]+$/.test(u); }
+
+/* ───────── GitHub ───────── */
+const GH = {
+  token: null,
+  async api(path, opts = {}) {
+    const res = await fetch(`https://api.github.com${path}`, {
+      ...opts,
+      headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${this.token}`, 'X-GitHub-Api-Version': '2022-11-28', ...(opts.headers || {}) },
+    });
+    if (!res.ok) {
+      let msg = res.status + '';
+      try { msg = (await res.json()).message || msg; } catch (e) {}
+      const err = new Error(msg); err.status = res.status; throw err;
+    }
+    return res.status === 204 ? null : res.json();
+  },
+  getFile(path) { return this.api(`/repos/${CONFIG.repo}/contents/${path}?ref=${encodeURIComponent(CONFIG.branch)}`); },
+  async putFile(path, contentB64, message, sha) {
+    const body = { message, content: contentB64, branch: CONFIG.branch };
+    if (sha) body.sha = sha;
+    return this.api(`/repos/${CONFIG.repo}/contents/${path}`, { method: 'PUT', body: JSON.stringify(body) });
+  },
+  // Decap/Sveltia-compatible OAuth popup handshake with the auth worker.
+  login() {
+    return new Promise((resolve, reject) => {
+      const site = encodeURIComponent(location.hostname);
+      const url = `${CONFIG.authBase}/auth?provider=github&site_id=${site}&scope=repo`;
+      const w = 600, h = 720;
+      const popup = window.open(url, 'gh-auth', `width=${w},height=${h},left=${(screen.width - w) / 2},top=${(screen.height - h) / 2}`);
+      if (!popup) return reject(new Error('Popup blocked. Allow popups for this site and try again.'));
+      const authOrigin = new URL(CONFIG.authBase).origin;
+      const onMsg = (e) => {
+        if (e.origin !== authOrigin || typeof e.data !== 'string') return;
+        if (e.data === 'authorizing:github') { popup.postMessage(e.data, e.origin); return; }
+        const m = e.data.match(/^authorization:github:(success|error):(.*)$/s);
+        if (!m) return;
+        cleanup();
+        let payload = {};
+        try { payload = JSON.parse(m[2]); } catch (err) {}
+        if (m[1] === 'success' && payload.token) resolve(payload.token);
+        else reject(new Error(payload.message || payload.error || 'GitHub sign-in failed'));
+      };
+      const timer = setInterval(() => { if (popup.closed) { cleanup(); reject(new Error('Sign-in window closed')); } }, 600);
+      const cleanup = () => { window.removeEventListener('message', onMsg); clearInterval(timer); };
+      window.addEventListener('message', onMsg);
+    });
+  },
+};
+
+/* ───────── App ───────── */
+const App = {
+  data: {}, base: {}, sha: null, user: null, readOnly: false, current: 'dashboard', open: new Set(),
+
+  async start(readOnly) {
+    this.readOnly = readOnly;
+    document.getElementById('signin').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    await this.load();
+    this.renderSidebar();
+    this.show(location.hash.slice(1) || 'dashboard');
+  },
+
+  async load() {
+    try {
+      if (!this.readOnly) {
+        const file = await GH.getFile(CONFIG.dataPath);
+        this.sha = file.sha;
+        this.base = JSON.parse(b64decodeUtf8(file.content));
+      } else {
+        const res = await fetch(`${CONFIG.dataPath}?t=${Date.now()}`);
+        this.base = await res.json();
+      }
+    } catch (e) {
+      toast('Could not load data: ' + e.message, 'err');
+      this.base = {};
+    }
+    this.data = clone(this.base);
+    let draft = null;
+    try { draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); } catch (e) {}
+    this.draft = draft && JSON.stringify(draft.data) !== JSON.stringify(this.base) ? draft : null;
+    this.updateStatus();
+  },
+
+  /* sidebar + routing */
+  renderSidebar() {
+    const warnings = this.validate();
+    const byPanel = {};
+    warnings.forEach((w) => { byPanel[w.panel] = (byPanel[w.panel] || 0) + 1; });
+    document.getElementById('sidebar').innerHTML = PANELS.map((p) => {
+      if (p.group) return `<div class="group">${esc(p.group)}</div>`;
+      const arr = p.type === 'objects' ? getPath(this.data, p.path) : null;
+      const right = byPanel[p.id] ? `<span class="warn-badge">${byPanel[p.id]}!</span>`
+        : (p.id === 'dashboard' && warnings.length ? `<span class="warn-badge">${warnings.length}!</span>`
+        : (Array.isArray(arr) ? `<span class="count">${arr.length}</span>` : ''));
+      return `<a href="#${p.id}" data-id="${p.id}" class="${p.id === this.current ? 'active' : ''}">${esc(p.label)}${right}</a>`;
+    }).join('');
+  },
+
+  show(id) {
+    const panel = PANELS.find((p) => p.id === id) || PANELS.find((p) => p.id === 'dashboard');
+    this.current = panel.id;
+    document.querySelectorAll('#sidebar a').forEach((a) => a.classList.toggle('active', a.dataset.id === panel.id));
+    document.getElementById('sidebar').classList.remove('open');
+    const el = document.getElementById('content');
+    el.innerHTML = panel.special === 'dashboard' ? this.renderDashboard() : this.renderPanel(panel);
+    if (history.replaceState) history.replaceState(null, '', '#' + panel.id);
+  },
+
+  /* dashboard */
+  renderDashboard() {
+    const warnings = this.validate();
+    const changes = diffPaths(this.base, this.data);
+    const draftBanner = this.draft ? `<div class="banner warn"><span>You have an unsaved draft from ${new Date(this.draft.savedAt).toLocaleString()}.</span><span class="spacer"></span>
+      <button class="btn btn-sm" type="button" onclick="App.restoreDraft()">Restore draft</button><button class="btn btn-ghost btn-sm" type="button" onclick="App.discardDraft()">Discard</button></div>` : '';
+    const roBanner = this.readOnly ? `<div class="banner info"><span>Read-only mode: you can edit, preview and download the JSON, but not commit. Sign in with GitHub to publish.</span></div>` : '';
+    return `<div class="panel-head"><div><h2>Dashboard</h2><p>Edit a section on the left, check it in Preview, then Publish. The academic page rebuilds on GitHub about a minute after each commit.</p></div></div>
+      ${draftBanner}${roBanner}
+      <div class="cards">
+        <div class="card"><h3>Changes</h3><p>${changes.length ? `${changes.length} field${changes.length > 1 ? 's' : ''} changed since the last commit.` : 'No unpublished changes.'}</p>
+          <button class="btn btn-primary btn-sm" type="button" onclick="App.openPublish()" ${changes.length ? '' : 'disabled'}>Review &amp; publish</button></div>
+        <div class="card"><h3>CV (PDF)</h3><p>Generated from your data and rebuilt on every publish (edit wording under <em>CV settings</em>). Uploading a PDF overrides it until the next publish.</p>
+          <input type="file" id="cv-file" accept="application/pdf" hidden onchange="App.uploadCV(this.files[0])">
+          <button class="btn btn-sm" type="button" onclick="document.getElementById('cv-file').click()" ${this.readOnly ? 'disabled' : ''}>Upload PDF</button>
+          <a class="btn btn-ghost btn-sm" href="CV.pdf" target="_blank" rel="noopener">View current</a></div>
+        <div class="card"><h3>Site</h3><p>Repository <code>${esc(CONFIG.repo)}</code>, branch <code>${esc(CONFIG.branch)}</code>.</p>
+          <a class="btn btn-ghost btn-sm" href="./" target="_blank" rel="noopener">Academic ↗</a>
+          <a class="btn btn-ghost btn-sm" href="nerd.html" target="_blank" rel="noopener">Nerd ↗</a>
+          <a class="btn btn-ghost btn-sm" href="https://github.com/${esc(CONFIG.repo)}/actions" target="_blank" rel="noopener">Builds ↗</a></div>
+      </div>
+      <h3 style="font-size:.85rem;margin-bottom:.5rem">Checks</h3>
+      <ul class="warnings">${warnings.length ? warnings.map((w) => `<li onclick="App.show('${w.panel}')">${esc(w.msg)}</li>`).join('') : '<li class="ok">No problems found.</li>'}</ul>`;
+  },
+
+  validate() {
+    const d = this.data, out = [];
+    const add = (panel, msg) => out.push({ panel, msg });
+    (d.research || []).forEach((p, i) => {
+      const n = `Publication ${i + 1}${p.title ? ` ("${p.title.slice(0, 40)}…")` : ''}`;
+      if (!p.title) add('research', `${n}: missing title.`);
+      if (!p.year) add('research', `${n}: missing year.`);
+      if (!p.authors) add('research', `${n}: missing authors.`);
+      if (!p.venue && !p.publication) add('research', `${n}: missing venue.`);
+      if (/under review/i.test(p.status || '') && p.venue) add('research', `${n}: under-review papers should not name a venue.`);
+    });
+    const urlCheck = (panel, label, u) => { if (u && !isValidUrl(u)) add(panel, `${label}: "${u}" does not look like a URL.`); };
+    (d.projects || []).forEach((p) => { urlCheck('projects', p.title, p.githubUrl); urlCheck('projects', p.title, p.liveUrl); });
+    (d.socialLinks || []).forEach((s) => urlCheck('socialLinks', s.platform, s.url));
+    (d.research || []).forEach((p) => { urlCheck('research', p.title, p.url); urlCheck('research', p.title, p.pdf); });
+    // the same grade written two different ways is the most common inconsistency
+    const text = JSON.stringify(d);
+    const cgpas = new Set([...text.matchAll(/CGPA[^0-9]{0,12}(\d\.\d{1,2})/gi)].map((m) => m[1]));
+    if (cgpas.size > 1) add('education', `CGPA appears with different values: ${[...cgpas].join(', ')}.`);
+    const words = /(most prestigious|world'?s biggest|biggest|largest|nationalist)/i;
+    const hits = [...new Set((text.match(new RegExp(words, 'gi')) || []).map((w) => w.toLowerCase()))];
+    if (hits.length) add('dashboard', `Wording academics discount: ${hits.join(', ')}. State the fact and the selection rate instead.`);
+    if (d.classic && d.classic.news && d.classic.news.some((n) => !n.date)) add('news', 'A news item has no date.');
+    return out;
+  },
+
+  /* generic panel renderer */
+  renderPanel(panel) {
+    const where = panel.where ? `<span class="where">${esc(panel.where)}</span>` : '';
+    const head = `<div class="panel-head"><div><h2>${esc(panel.label)}${where}</h2>${panel.help ? `<p>${esc(panel.help)}</p>` : ''}</div></div>`;
+    if (panel.type === 'objects') return head + this.renderObjects(panel, panel.path);
+    return head + this.renderFields(panel.fields, panel.path);
+  },
+
+  renderFields(fields, base) {
+    return fields.map((f) => this.renderField(f, base)).join('');
+  },
+
+  renderField(f, base) {
+    if (f.type === 'row') return `<div class="row">${f.fields.map((x) => this.renderField(x, base)).join('')}</div>`;
+    const path = join(base, f.key);
+    const v = getPath(this.data, path);
+    const help = f.help ? `<small>${esc(f.help)}</small>` : '';
+    const id = 'f-' + path.replace(/\W/g, '-');
+    switch (f.type) {
+      case 'textarea': case 'html':
+        return `<div class="field"><label for="${id}">${esc(f.label)}</label><textarea id="${id}" rows="${f.type === 'html' ? 3 : 2}" data-path="${path}">${esc(v)}</textarea>${help}</div>`;
+      case 'select':
+        return `<div class="field"><label for="${id}">${esc(f.label)}</label><select id="${id}" data-path="${path}">${f.options.map((o) => `<option ${o === v ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>${help}</div>`;
+      case 'bool': {
+        const checked = v === undefined ? !!f.default : !!v;
+        return `<label class="check"><input type="checkbox" data-path="${path}" data-bool="1" ${checked ? 'checked' : ''}>${esc(f.label)}</label>`;
+      }
+      case 'csv':
+        return `<div class="field"><label for="${id}">${esc(f.label)}</label><input type="text" id="${id}" data-path="${path}" data-csv="1" value="${esc((v || []).join(', '))}">${help}</div>`;
+      case 'strings': case 'htmlStrings': {
+        const arr = Array.isArray(v) ? v : [];
+        const multi = f.type === 'htmlStrings';
+        const rows = arr.map((s, i) => `<div class="string">
+            ${multi ? `<textarea rows="3" data-path="${path}.${i}">${esc(s)}</textarea>` : `<input type="text" data-path="${path}.${i}" value="${esc(s)}">`}
+            ${i > 0 ? `<button class="btn btn-ghost btn-sm" type="button" title="Move up" onclick="App.move('${path}',${i},-1)">↑</button>` : ''}
+            <button class="btn btn-danger btn-sm" type="button" title="Remove" onclick="App.remove('${path}',${i})">✕</button></div>`).join('');
+        return `<div class="field"><span class="lbl">${esc(f.label)}</span><div class="strings">${rows}</div>${help}
+          <button class="btn btn-sm add-row" type="button" onclick="App.addString('${path}')">+ Add</button></div>`;
+      }
+      case 'objects':
+        return `<div class="field"><span class="lbl">${esc(f.label)}</span>${this.renderObjects(f, path)}</div>`;
+      default:
+        return `<div class="field"><label for="${id}">${esc(f.label)}</label><input type="${f.type === 'url' ? 'url' : 'text'}" id="${id}" data-path="${path}" ${f.type === 'url' ? 'data-url="1"' : ''} value="${esc(v)}">${help}</div>`;
+    }
+  },
+
+  renderObjects(spec, path) {
+    const arr = getPath(this.data, path) || [];
+    const titleOf = (it) => (typeof spec.title === 'function' ? spec.title(it) : it[spec.title]) || 'Untitled';
+    const items = arr.map((it, i) => {
+      const key = `${path}.${i}`;
+      const open = this.open.has(key);
+      const sub = spec.sub ? spec.sub(it) : '';
+      const pill = spec.pill ? spec.pill(it) : null;
+      const hidden = it && it.academic === false && spec.item.some((f) => f.key === 'academic');
+      return `<div class="item ${open ? 'open' : ''}" data-key="${key}">
+        <div class="item-head" onclick="App.toggle('${key}', this)">
+          <span class="chev">▶</span><span class="t">${esc(stripTags(titleOf(it)))}</span>
+          ${pill ? `<span class="pill">${esc(pill)}</span>` : ''}${hidden && !pill ? '<span class="pill off">academic</span>' : ''}
+          ${sub ? `<span class="sub">${esc(sub)}</span>` : ''}
+          ${i > 0 ? `<button class="btn btn-ghost btn-sm" type="button" title="Move up" onclick="event.stopPropagation();App.move('${path}',${i},-1)">↑</button>` : ''}
+          ${i < arr.length - 1 ? `<button class="btn btn-ghost btn-sm" type="button" title="Move down" onclick="event.stopPropagation();App.move('${path}',${i},1)">↓</button>` : ''}
+          <button class="btn btn-danger btn-sm" type="button" title="Delete" onclick="event.stopPropagation();App.remove('${path}',${i},true)">✕</button>
         </div>
-    </div>
-
-    <!-- GitHub Modal -->
-    <div class="modal-overlay" id="githubModal">
-        <div class="modal">
-            <h3>Push to GitHub</h3>
-            <div class="field">
-                <label>Personal Access Token</label>
-                <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx">
-                <small>Needs <code>repo</code> scope. Token is never stored on any server.</small>
-            </div>
-            <div class="field">
-                <label>Repository (owner/repo)</label>
-                <input type="text" id="gh-repo" placeholder="AsokaKrsna/asokakrsna.github.io">
-            </div>
-            <div class="field">
-                <label>Branch</label>
-                <input type="text" id="gh-branch" value="redesign/dual-mode">
-            </div>
-            <div class="field">
-                <label>Commit Message</label>
-                <input type="text" id="gh-message" value="Update portfolio data via admin panel">
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-ghost" onclick="closeGitHubModal()">Cancel</button>
-                <button class="btn btn-save" onclick="pushToGitHub()" id="gh-push-btn">Push Commit</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Preview Modal -->
-    <div class="modal-overlay" id="previewModal">
-        <div class="modal" style="width: 640px;">
-            <h3>JSON Preview</h3>
-            <textarea id="previewArea"
-                style="width:100%; height: 400px; background: var(--bg); border: 1px solid var(--border); color: var(--accent); font-family: var(--mono); font-size: 0.75rem; border-radius: var(--radius); padding: 0.8rem;"
-                readonly></textarea>
-            <div class="modal-actions">
-                <button class="btn btn-ghost" onclick="closePreview()">Close</button>
-                <button class="btn btn-primary" onclick="copyJSON()">Copy</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast -->
-    <div class="toast" id="toast"></div>
-
-    <script>
-        /* ═══════════════════════════════════════════════════════════
-           PORTFOLIO ADMIN PANEL
-           Full CRUD for portfolio-data.json
-           ═══════════════════════════════════════════════════════════ */
-
-        const PASS_HASH = 'efa88170397c87c264cb471f3cf86e6d';
-        const DATA_PATH = 'data/portfolio-data.json';
-
-        let data = {};
-        let dirty = false;
-
-        // ─── MD5 (RFC 1321 minimal implementation) ───
-        function md5(string) {
-            function md5cycle(x, k) {
-                var a = x[0], b = x[1], c = x[2], d = x[3];
-                a = ff(a, b, c, d, k[0], 7, -680876936); d = ff(d, a, b, c, k[1], 12, -389564586);
-                c = ff(c, d, a, b, k[2], 17, 606105819); b = ff(b, c, d, a, k[3], 22, -1044525330);
-                a = ff(a, b, c, d, k[4], 7, -176418897); d = ff(d, a, b, c, k[5], 12, 1200080426);
-                c = ff(c, d, a, b, k[6], 17, -1473231341); b = ff(b, c, d, a, k[7], 22, -45705983);
-                a = ff(a, b, c, d, k[8], 7, 1770035416); d = ff(d, a, b, c, k[9], 12, -1958414417);
-                c = ff(c, d, a, b, k[10], 17, -42063); b = ff(b, c, d, a, k[11], 22, -1990404162);
-                a = ff(a, b, c, d, k[12], 7, 1804603682); d = ff(d, a, b, c, k[13], 12, -40341101);
-                c = ff(c, d, a, b, k[14], 17, -1502002290); b = ff(b, c, d, a, k[15], 22, 1236535329);
-                a = gg(a, b, c, d, k[1], 5, -165796510); d = gg(d, a, b, c, k[6], 9, -1069501632);
-                c = gg(c, d, a, b, k[11], 14, 643717713); b = gg(b, c, d, a, k[0], 20, -373897302);
-                a = gg(a, b, c, d, k[5], 5, -701558691); d = gg(d, a, b, c, k[10], 9, 38016083);
-                c = gg(c, d, a, b, k[15], 14, -660478335); b = gg(b, c, d, a, k[4], 20, -405537848);
-                a = gg(a, b, c, d, k[9], 5, 568446438); d = gg(d, a, b, c, k[14], 9, -1019803690);
-                c = gg(c, d, a, b, k[3], 14, -187363961); b = gg(b, c, d, a, k[8], 20, 1163531501);
-                a = gg(a, b, c, d, k[13], 5, -1444681467); d = gg(d, a, b, c, k[2], 9, -51403784);
-                c = gg(c, d, a, b, k[7], 14, 1735328473); b = gg(b, c, d, a, k[12], 20, -1926607734);
-                a = hh(a, b, c, d, k[5], 4, -378558); d = hh(d, a, b, c, k[8], 11, -2022574463);
-                c = hh(c, d, a, b, k[11], 16, 1839030562); b = hh(b, c, d, a, k[14], 23, -35309556);
-                a = hh(a, b, c, d, k[1], 4, -1530992060); d = hh(d, a, b, c, k[4], 11, 1272893353);
-                c = hh(c, d, a, b, k[7], 16, -155497632); b = hh(b, c, d, a, k[10], 23, -1094730640);
-                a = hh(a, b, c, d, k[13], 4, 681279174); d = hh(d, a, b, c, k[0], 11, -358537222);
-                c = hh(c, d, a, b, k[3], 16, -722521979); b = hh(b, c, d, a, k[6], 23, 76029189);
-                a = hh(a, b, c, d, k[9], 4, -640364487); d = hh(d, a, b, c, k[12], 11, -421815835);
-                c = hh(c, d, a, b, k[15], 16, 530742520); b = hh(b, c, d, a, k[2], 23, -995338651);
-                a = ii(a, b, c, d, k[0], 6, -198630844); d = ii(d, a, b, c, k[7], 10, 1126891415);
-                c = ii(c, d, a, b, k[14], 15, -1416354905); b = ii(b, c, d, a, k[5], 21, -57434055);
-                a = ii(a, b, c, d, k[12], 6, 1700485571); d = ii(d, a, b, c, k[3], 10, -1894986606);
-                c = ii(c, d, a, b, k[10], 15, -1051523); b = ii(b, c, d, a, k[1], 21, -2054922799);
-                a = ii(a, b, c, d, k[8], 6, 1873313359); d = ii(d, a, b, c, k[15], 10, -30611744);
-                c = ii(c, d, a, b, k[6], 15, -1560198380); b = ii(b, c, d, a, k[13], 21, 1309151649);
-                a = ii(a, b, c, d, k[4], 6, -145523070); d = ii(d, a, b, c, k[11], 10, -1120210379);
-                c = ii(c, d, a, b, k[2], 15, 718787259); b = ii(b, c, d, a, k[9], 21, -343485551);
-                x[0] = add32(a, x[0]); x[1] = add32(b, x[1]); x[2] = add32(c, x[2]); x[3] = add32(d, x[3]);
-            }
-            function cmn(q, a, b, x, s, t) { a = add32(add32(a, q), add32(x, t)); return add32((a << s) | (a >>> (32 - s)), b); }
-            function ff(a, b, c, d, x, s, t) { return cmn((b & c) | ((~b) & d), a, b, x, s, t); }
-            function gg(a, b, c, d, x, s, t) { return cmn((b & d) | (c & (~d)), a, b, x, s, t); }
-            function hh(a, b, c, d, x, s, t) { return cmn(b ^ c ^ d, a, b, x, s, t); }
-            function ii(a, b, c, d, x, s, t) { return cmn(c ^ (b | (~d)), a, b, x, s, t); }
-            function md5blk(s) {
-                var md5blks = [], i;
-                for (i = 0; i < 64; i += 4)
-                    md5blks[i >> 2] = s.charCodeAt(i) + (s.charCodeAt(i + 1) << 8) + (s.charCodeAt(i + 2) << 16) + (s.charCodeAt(i + 3) << 24);
-                return md5blks;
-            }
-            function md5blk_array(a) {
-                var md5blks = [], i;
-                for (i = 0; i < 64; i += 4)
-                    md5blks[i >> 2] = a[i] + (a[i + 1] << 8) + (a[i + 2] << 16) + (a[i + 3] << 24);
-                return md5blks;
-            }
-            function add32(a, b) { return (a + b) & 0xFFFFFFFF; }
-            function rhex(n) {
-                var s = '', j;
-                for (j = 0; j < 4; j++)
-                    s += ('0' + ((n >> (j * 8 + 4)) & 0x0F).toString(16)).slice(-1) +
-                        ('0' + ((n >> (j * 8)) & 0x0F).toString(16)).slice(-1);
-                return s;
-            }
-            function hex(x) { for (var i = 0; i < x.length; i++) x[i] = rhex(x[i]); return x.join(''); }
-            function md5_core(s) {
-                var n = s.length, state = [1732584193, -271733879, -1732584194, 271733878], i;
-                for (i = 64; i <= n; i += 64) md5cycle(state, md5blk(s.substring(i - 64, i)));
-                s = s.substring(i - 64);
-                var tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                for (i = 0; i < s.length; i++) tail[i >> 2] |= s.charCodeAt(i) << ((i % 4) << 3);
-                tail[i >> 2] |= 0x80 << ((i % 4) << 3);
-                if (i > 55) { md5cycle(state, tail); tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; }
-                tail[14] = n * 8;
-                md5cycle(state, tail);
-                return state;
-            }
-            return hex(md5_core(string));
-        }
-
-        // ─── Gate ───
-        document.getElementById('gate-pass').addEventListener('keydown', e => {
-            if (e.key === 'Enter') {
-                if (md5(e.target.value) === PASS_HASH) {
-                    document.getElementById('gate').classList.add('hidden');
-                    document.getElementById('app').style.display = 'flex';
-                    document.getElementById('layout').style.display = 'flex';
-                    loadData();
-                } else {
-                    document.getElementById('gate-error').style.display = 'block';
-                    e.target.select();
-                }
-            }
-        });
-
-        // ─── Data Loading ───
-        async function loadData() {
-            try {
-                const resp = await fetch(DATA_PATH + '?t=' + Date.now());
-                data = await resp.json();
-                renderPanel('personal');
-                toast('Data loaded', 'success');
-            } catch (err) {
-                toast('Failed to load data: ' + err.message, 'error');
-            }
-        }
-
-        // ─── Sidebar Navigation ───
-        document.getElementById('sidebar').addEventListener('click', e => {
-            const a = e.target.closest('a[data-panel]');
-            if (!a) return;
-            e.preventDefault();
-            document.querySelectorAll('#sidebar a').forEach(x => x.classList.remove('active'));
-            a.classList.add('active');
-            renderPanel(a.dataset.panel);
-        });
-
-        // ─── Mark Dirty ───
-        function markDirty() {
-            dirty = true;
-            document.getElementById('statusDot').className = 'status-dot unsaved';
-            document.getElementById('statusMsg').textContent = 'Unsaved changes';
-            
-            // Auto-update live preview iframe if it's open
-            const panel = document.getElementById('previewPanel');
-            const iframe = document.getElementById('livePreviewIframe');
-            if (panel && panel.classList.contains('open') && iframe.contentWindow) {
-                // Throttle the postMessage to avoid freezing on fast typing
-                clearTimeout(window._previewThrottle);
-                window._previewThrottle = setTimeout(() => {
-                    try {
-                        const jsonData = JSON.parse(getJSON());
-                        iframe.contentWindow.postMessage({ type: 'livePreviewUpdate', data: jsonData }, '*');
-                    } catch(e) {}
-                }, 300);
-            }
-        }
-        function markClean() {
-            dirty = false;
-            document.getElementById('statusDot').className = 'status-dot saved';
-            document.getElementById('statusMsg').textContent = 'Saved';
-        }
-
-        // ─── Toast ───
-        function toast(msg, type = '') {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.className = 'toast show ' + type;
-            setTimeout(() => t.className = 'toast', 2500);
-        }
-
-        // ─── Render Panel ───
-        function renderPanel(name) {
-            const area = document.getElementById('contentArea');
-            const renderers = {
-                personal: renderPersonal,
-                about: renderAbout,
-                contact: renderContact,
-                socialLinks: renderSocialLinks,
-                education: renderEducation,
-                researchInterests: renderResearchInterests,
-                research: renderResearch,
-                certifications: renderCertifications,
-                experience: renderExperience,
-                skills: renderSkills,
-                projects: renderProjects,
-                cyberArena: renderCyberArena,
-                blogs: renderBlogs,
-                achievements: renderAchievements,
-                volunteering: renderVolunteering,
-                scratchpad: renderScratchpad,
-                footer: renderFooter,
-            };
-            area.innerHTML = '';
-            if (renderers[name]) {
-                const panel = document.createElement('div');
-                panel.className = 'panel active';
-                panel.innerHTML = renderers[name]();
-                area.appendChild(panel);
-                attachHandlers(panel, name);
-            }
-        }
-
-        // ═══ HELPER: field HTML generators ═══
-
-        function textField(label, value, key, opts = {}) {
-            const type = opts.type || 'text';
-            const small = opts.help ? `<small>${opts.help}</small>` : '';
-            const cls = opts.wide ? '' : '';
-            return `<div class="field ${cls}">
-        <label>${label}</label>
-        <input type="${type}" value="${esc(value || '')}" data-key="${key}" ${opts.readonly ? 'readonly' : ''}>
-        ${small}
-    </div>`;
-        }
-
-        function textareaField(label, value, key, opts = {}) {
-            const small = opts.help ? `<small>${opts.help}</small>` : '';
-            const rows = opts.rows || 3;
-            return `<div class="field">
-        <label>${label}</label>
-        <textarea rows="${rows}" data-key="${key}">${esc(value || '')}</textarea>
-        ${small}
-    </div>`;
-        }
-
-        function selectField(label, value, key, options) {
-            const opts = options.map(o => `<option value="${o}" ${o === value ? 'selected' : ''}>${o}</option>`).join('');
-            return `<div class="field">
-        <label>${label}</label>
-        <select data-key="${key}">${opts}</select>
-    </div>`;
-        }
-
-        function esc(s) {
-            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        }
-
-        function panelHeader(title, addBtn = '') {
-            return `<div class="panel-header"><h2>${title}</h2><div>${addBtn}</div></div>`;
-        }
-
-        // ═══ SECTION RENDERERS ═══
-
-        function renderPersonal() {
-            const p = data.personal || {};
-            return panelHeader('Personal Info') +
-                textField('Name', p.name, 'personal.name') +
-                textField('Alias / Handle', p.alias, 'personal.alias') +
-                textField('Title', p.title, 'personal.title') +
-                textField('Tagline', p.tagline, 'personal.tagline') +
-                textField('Profile Image Path', p.profileImage, 'personal.profileImage', { help: 'Relative path e.g. images/profile.png' }) +
-                textField('Favicon Path', p.favicon, 'personal.favicon') +
-                textField('Resume Link', p.resumeLink, 'personal.resumeLink');
-        }
-
-        function renderAbout() {
-            const paragraphs = (data.about && data.about.paragraphs) || [];
-            let html = panelHeader('About', `<button class="btn btn-primary btn-sm" onclick="addAboutParagraph()">+ Paragraph</button>`);
-            html += '<div class="array-list" id="aboutList">';
-            paragraphs.forEach((p, i) => {
-                html += `<div class="array-item" data-index="${i}">
-            <div class="array-item-header">
-                <span class="array-item-title">Paragraph ${i + 1}</span>
-                <div class="array-item-actions">
-                    <button class="btn btn-danger btn-sm" onclick="removeAboutParagraph(${i})">✕</button>
-                </div>
-            </div>
-            <div class="array-item-body">
-                <div class="field">
-                    <textarea rows="3" data-key="about.paragraphs.${i}">${esc(p)}</textarea>
-                    <small>HTML allowed (links, bold, etc.)</small>
-                </div>
-            </div>
-        </div>`;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderContact() {
-            const c = data.contact || {};
-            let html = panelHeader('Contact');
-            html += textareaField('Description', c.description, 'contact.description', { rows: 3 });
-            html += textField('Phone', c.phone, 'contact.phone');
-            html += textField('Calendly URL', c.calendlyUrl, 'contact.calendlyUrl');
-            // Emails as string list
-            html += '<div class="field"><label>Emails</label>';
-            html += '<div class="string-list" id="emailList">';
-            (c.emails || []).forEach((email, i) => {
-                html += `<div class="string-list-item">
-            <input type="email" value="${esc(email)}" data-key="contact.emails.${i}">
-            <button class="btn btn-danger btn-sm" onclick="removeEmail(${i})">✕</button>
-        </div>`;
-            });
-            html += '</div>';
-            html += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addEmail()">+ Email</button>`;
-            html += '</div>';
-            return html;
-        }
-
-        function renderSocialLinks() {
-            const links = data.socialLinks || [];
-            let html = panelHeader('Social Links', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('socialLinks', {platform:'',icon:'',url:''})">+ Link</button>`);
-            html += '<div class="array-list">';
-            links.forEach((l, i) => {
-                html += `<div class="array-item" data-index="${i}">
-            <div class="array-item-header" onclick="toggleCollapse(this)">
-                <span class="array-item-title">${l.platform || 'New Link'}</span>
-                <div class="array-item-actions">
-                    ${moveButtons(i, links.length, 'socialLinks')}
-                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('socialLinks', ${i})">✕</button>
-                </div>
-            </div>
-            <div class="array-item-body">
-                ${textField('Platform', l.platform, `socialLinks.${i}.platform`)}
-                ${textField('Icon Class', l.icon, `socialLinks.${i}.icon`, { help: 'FontAwesome class e.g. fab fa-github' })}
-                ${textField('URL', l.url, `socialLinks.${i}.url`)}
-            </div>
-        </div>`;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderEducation() {
-            const items = data.education || [];
-            let html = panelHeader('Education', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('education', {institution:'',location:'',grade:'',period:'',degree:''})">+ Entry</button>`);
-            html += '<div class="array-list">';
-            items.forEach((e, i) => {
-                html += `<div class="array-item" data-index="${i}">
-            <div class="array-item-header" onclick="toggleCollapse(this)">
-                <span class="array-item-title">${e.institution || 'New Entry'}</span>
-                <div class="array-item-actions">
-                    ${moveButtons(i, items.length, 'education')}
-                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('education', ${i})">✕</button>
-                </div>
-            </div>
-            <div class="array-item-body">
-                ${textField('Institution', e.institution, `education.${i}.institution`)}
-                ${textField('Degree', e.degree, `education.${i}.degree`)}
-                <div class="field-row">
-                    ${textField('Period', e.period, `education.${i}.period`)}
-                    ${textField('Location', e.location, `education.${i}.location`)}
-                </div>
-                ${textField('Grade', e.grade, `education.${i}.grade`)}
-            </div>
-        </div>`;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderResearchInterests() {
-            const r = data.researchInterests || {};
-            let html = panelHeader('Research Interests');
-            html += textField('Section Title', r.title, 'researchInterests.title');
-            html += textareaField('Research Statement', r.statement, 'researchInterests.statement', { rows: 4, help: 'Your research focus statement' });
-            // Areas as string list
-            html += '<div class="field"><label>Research Areas</label>';
-            html += '<div class="string-list" id="areasList">';
-            (r.areas || []).forEach((a, i) => {
-                html += `<div class="string-list-item">
-            <input type="text" value="${esc(a)}" data-key="researchInterests.areas.${i}">
-            <button class="btn btn-danger btn-sm" onclick="removeStringItem('researchInterests', 'areas', ${i})">✕</button>
-        </div>`;
-            });
-            html += '</div>';
-            html += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addStringItem('researchInterests', 'areas')">+ Area</button>`;
-            html += '</div>';
-            html += textareaField('Future Goals', r.futureGoals, 'researchInterests.futureGoals', { rows: 2 });
-            return html;
-        }
-
-        function renderResearch() {
-            const items = data.research || [];
-            let html = panelHeader('Publications', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('research', {date:'',publication:'',title:'',description:'',tldr:'',url:'',type:'published',yourRole:'',impactArea:''})">+ Publication</button>`);
-            html += '<div class="array-list">';
-            items.forEach((r, i) => {
-                html += `<div class="array-item" data-index="${i}">
-            <div class="array-item-header" onclick="toggleCollapse(this)">
-                <span class="array-item-title">${r.title || 'New Publication'}</span>
-                <div class="array-item-actions">
-                    ${moveButtons(i, items.length, 'research')}
-                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('research', ${i})">✕</button>
-                </div>
-            </div>
-            <div class="array-item-body">
-                ${textField('Title', r.title, `research.${i}.title`)}
-                <div class="field-row">
-                    ${textField('Date', r.date, `research.${i}.date`)}
-                    ${textField('Publication / Venue', r.publication, `research.${i}.publication`)}
-                </div>
-                ${textareaField('Description', r.description, `research.${i}.description`, { rows: 3 })}
-                ${textField('TLDR', r.tldr, `research.${i}.tldr`)}
-                ${textField('URL', r.url, `research.${i}.url`)}
-                <div class="field-row">
-                    ${selectField('Type', r.type, `research.${i}.type`, ['published', 'preprint', 'in-review', 'working'])}
-                    ${textField('Your Role', r.yourRole, `research.${i}.yourRole`)}
-                </div>
-                ${textField('Impact Area', r.impactArea, `research.${i}.impactArea`)}
-            </div>
-        </div>`;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderCertifications() {
-            const items = data.certifications || [];
-            let html = panelHeader('Certifications', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('certifications', {name:'',date:''})">+ Certification</button>`);
-            html += '<div class="array-list">';
-            items.forEach((c, i) => {
-                html += `<div class="array-item" data-index="${i}">
-            <div class="array-item-header" onclick="toggleCollapse(this)">
-                <span class="array-item-title">${c.name || 'New Cert'}</span>
-                <div class="array-item-actions">
-                    ${moveButtons(i, items.length, 'certifications')}
-                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('certifications', ${i})">✕</button>
-                </div>
-            </div>
-            <div class="array-item-body">
-                <div class="field-row">
-                    ${textField('Name', c.name, `certifications.${i}.name`)}
-                    ${textField('Date', c.date, `certifications.${i}.date`)}
-                </div>
-            </div>
-        </div>`;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderExperience() {
-            const items = data.experience || [];
-            let html = panelHeader('Experience', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('experience', {period:'',title:'',company:'',location:'',responsibilities:[]})">+ Position</button>`);
-            html += '<div class="array-list">';
-            items.forEach((e, i) => {
-                let respHtml = '<div class="field"><label>Responsibilities</label><div class="string-list" id="resp-' + i + '">';
-                (e.responsibilities || []).forEach((r, j) => {
-                    respHtml += `<div class="string-list-item">
-                <input type="text" value="${esc(r)}" data-key="experience.${i}.responsibilities.${j}">
-                <button class="btn btn-danger btn-sm" onclick="removeNestedString('experience', ${i}, 'responsibilities', ${j})">✕</button>
-            </div>`;
-                });
-                respHtml += '</div>';
-                respHtml += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addNestedString('experience', ${i}, 'responsibilities')">+ Responsibility</button></div>`;
-
-                html += `<div class="array-item" data-index="${i}">
-            <div class="array-item-header" onclick="toggleCollapse(this)">
-                <span class="array-item-title">${e.title || 'New Position'} — ${e.company || ''}</span>
-                <div class="array-item-actions">
-                    ${moveButtons(i, items.length, 'experience')}
-                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('experience', ${i})">✕</button>
-                </div>
-            </div>
-            <div class="array-item-body">
-                ${textField('Job Title', e.title, `experience.${i}.title`)}
-                ${textField('Company / Organization', e.company, `experience.${i}.company`)}
-                <div class="field-row">
-                    ${textField('Period', e.period, `experience.${i}.period`)}
-                    ${textField('Location', e.location, `experience.${i}.location`)}
-                </div>
-                ${respHtml}
-            </div>
-        </div>`;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderSkills() {
-            const items = data.skills || [];
-            let html = panelHeader('Skills / Arsenal', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('skills', {category:'',icon:'',items:''})">+ Category</button>`);
-            html += '<div class="array-list">';
-            items.forEach((s, i) => {
-                html += `<div class="array-item" data-index="${i}">
-            <div class="array-item-header" onclick="toggleCollapse(this)">
-                <span class="array-item-title">${s.category || 'New Category'}</span>
-                <div class="array-item-actions">
-                    ${moveButtons(i, items.length, 'skills')}
-                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('skills', ${i})">✕</button>
-                </div>
-            </div>
-            <div class="array-item-body">
-                ${textField('Category Name', s.category, `skills.${i}.category`)}
-                ${textField('Icon Class', s.icon, `skills.${i}.icon`, { help: 'FontAwesome class' })}
-                ${textareaField('Items', s.items, `skills.${i}.items`, { rows: 2, help: 'Comma-separated skills' })}
-            </div>
-        </div>`;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderProjects() {
-            const items = data.projects || [];
-            let html = panelHeader('Projects', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('projects', {title:'',description:'',technologies:[],githubUrl:'',liveUrl:''})">+ Project</button>`);
-            html += '<div class="array-list">';
-            items.forEach((p, i) => {
-                html += `<div class="array-item" data-index="${i}">
-            <div class="array-item-header" onclick="toggleCollapse(this)">
-                <span class="array-item-title">${p.title || 'New Project'}</span>
-                <div class="array-item-actions">
-                    ${moveButtons(i, items.length, 'projects')}
-                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('projects', ${i})">✕</button>
-                </div>
-            </div>
-            <div class="array-item-body">
-                ${textField('Title', p.title, `projects.${i}.title`)}
-                ${textareaField('Description', p.description, `projects.${i}.description`, { rows: 2 })}
-                ${textField('Technologies', (p.technologies || []).join(', '), `projects.${i}.technologies`, { help: 'Comma-separated' })}
-                <div class="field-row">
-                    ${textField('GitHub URL', p.githubUrl, `projects.${i}.githubUrl`)}
-                    ${textField('Live URL', p.liveUrl, `projects.${i}.liveUrl`)}
-                </div>
-            </div>
-        </div>`;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderCyberArena() {
-            const ca = data.cyberArena || {};
-            let html = panelHeader('Cyber Arena', `<button class="btn btn-primary btn-sm" onclick="addCyberPlatform()">+ Platform</button>`);
-            html += textareaField('Intro', ca.intro, 'cyberArena.intro', { rows: 2 });
-            html += '<div class="array-list" style="margin-top:1rem">';
-            (ca.platforms || []).forEach((p, i) => {
-                let highlightsHtml = '<div class="field"><label>Highlights</label><div class="string-list" id="ca-hl-' + i + '">';
-                (p.highlights || []).forEach((h, j) => {
-                    highlightsHtml += `<div class="string-list-item">
-                <input type="text" value="${esc(h)}" data-key="cyberArena.platforms.${i}.highlights.${j}">
-                <button class="btn btn-danger btn-sm" onclick="removeNestedString('cyberArena.platforms', ${i}, 'highlights', ${j})">✕</button>
-            </div>`;
-                });
-                highlightsHtml += '</div>';
-                highlightsHtml += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addNestedString('cyberArena.platforms', ${i}, 'highlights')">+ Highlight</button></div>`;
-
-                html += `<div class="array-item" data-index="${i}">
-            <div class="array-item-header" onclick="toggleCollapse(this)">
-                <span class="array-item-title">${p.name || 'New Platform'}</span>
-                <div class="array-item-actions">
-                    ${moveButtons(i, (ca.platforms || []).length, 'cyberArena.platforms')}
-                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeCyberPlatform(${i})">✕</button>
-                </div>
-            </div>
-            <div class="array-item-body">
-                ${textField('Platform Name', p.name, `cyberArena.platforms.${i}.name`)}
-                ${textField('Icon Class', p.icon, `cyberArena.platforms.${i}.icon`)}
-                ${highlightsHtml}
-                <div class="field-row">
-                    ${textField('Link Text', p.linkText, `cyberArena.platforms.${i}.linkText`)}
-                    ${textField('URL', p.url, `cyberArena.platforms.${i}.url`)}
-                </div>
-            </div>
-        </div>`;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderBlogs() {
-            const items = data.blogs || [];
-            let html = panelHeader('Blogs & Writeups', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('blogs', {date:'',title:'',url:''})">+ Blog</button>`);
-            html += '<div class="array-list">';
-            items.forEach((b, i) => {
-                html += `<div class="array-item" data-index="${i}">
-            <div class="array-item-header" onclick="toggleCollapse(this)">
-                <span class="array-item-title">${b.title || 'New Blog'}</span>
-                <div class="array-item-actions">
-                    ${moveButtons(i, items.length, 'blogs')}
-                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('blogs', ${i})">✕</button>
-                </div>
-            </div>
-            <div class="array-item-body">
-                ${textField('Title', b.title, `blogs.${i}.title`)}
-                <div class="field-row">
-                    ${textField('Date', b.date, `blogs.${i}.date`)}
-                    ${textField('URL', b.url, `blogs.${i}.url`)}
-                </div>
-            </div>
-        </div>`;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderAchievements() {
-            const a = data.achievements || {};
-            let html = panelHeader('Achievements');
-            // Academic
-            html += renderStringArraySection('Academic', 'achievements', 'academic', a.academic || []);
-            html += '<hr style="border: none; border-top: 1px solid var(--border); margin: 1.2rem 0;">';
-            // Competitions
-            html += renderStringArraySection('Competitions', 'achievements', 'competitions', a.competitions || []);
-            html += '<hr style="border: none; border-top: 1px solid var(--border); margin: 1.2rem 0;">';
-            // Leadership
-            html += renderStringArraySection('Leadership', 'achievements', 'leadership', a.leadership || []);
-            return html;
-        }
-
-        function renderStringArraySection(label, parent, key, items) {
-            let html = `<div class="field"><label>${label}</label>`;
-            html += `<div class="string-list" id="${parent}-${key}">`;
-            items.forEach((item, i) => {
-                html += `<div class="string-list-item">
-            <input type="text" value="${esc(item)}" data-key="${parent}.${key}.${i}">
-            <button class="btn btn-danger btn-sm" onclick="removeStringItem('${parent}', '${key}', ${i})">✕</button>
-        </div>`;
-            });
-            html += '</div>';
-            html += `<button class="btn btn-primary btn-sm" style="margin-top:0.4rem" onclick="addStringItem('${parent}', '${key}')">+ ${label}</button>`;
-            html += '</div>';
-            return html;
-        }
-
-        function renderVolunteering() {
-            const items = data.volunteering || [];
-            let html = panelHeader('Volunteering', `<button class="btn btn-primary btn-sm" onclick="addArrayItem('volunteering', {organization:'',role:'',period:'',description:'',impact:''})">+ Entry</button>`);
-            html += '<div class="array-list">';
-            items.forEach((v, i) => {
-                html += `<div class="array-item" data-index="${i}">
-            <div class="array-item-header" onclick="toggleCollapse(this)">
-                <span class="array-item-title">${v.organization || 'New Entry'}</span>
-                <div class="array-item-actions">
-                    ${moveButtons(i, items.length, 'volunteering')}
-                    <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); removeArrayItem('volunteering', ${i})">✕</button>
-                </div>
-            </div>
-            <div class="array-item-body">
-                ${textField('Organization', v.organization, `volunteering.${i}.organization`)}
-                <div class="field-row">
-                    ${textField('Role', v.role, `volunteering.${i}.role`)}
-                    ${textField('Period', v.period, `volunteering.${i}.period`)}
-                </div>
-                ${textareaField('Description', v.description, `volunteering.${i}.description`, { rows: 2 })}
-                ${textField('Impact', v.impact, `volunteering.${i}.impact`)}
-            </div>
-        </div>`;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderScratchpad() {
-            const sp = data.scratchpad || {};
-            let html = panelHeader('Scratchpad');
-            html += `<div class="field-row">
-        ${textField('Link URL (Blog Page)', sp.url, 'scratchpad.url')}
-    </div>`;
-            return html;
-        }
-
-        function renderFooter() {
-            const f = data.footer || {};
-            return panelHeader('Footer') +
-                textField('Footer Text', f.text, 'footer.text', { help: 'HTML allowed' }) +
-                textField('Copyright', f.copyright, 'footer.copyright');
-        }
-
-        // ═══ MOVE BUTTONS ═══
-        function moveButtons(i, len, section) {
-            let btns = '';
-            if (i > 0) btns += `<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); moveItem('${section}', ${i}, -1)" title="Move up">↑</button>`;
-            if (i < len - 1) btns += `<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); moveItem('${section}', ${i}, 1)" title="Move down">↓</button>`;
-            return btns;
-        }
-
-        // ═══ DATA MANIPULATION (CRUD) ═══
-
-        function setNestedValue(obj, path, value) {
-            const keys = path.split('.');
-            let cur = obj;
-            for (let i = 0; i < keys.length - 1; i++) {
-                const k = isNaN(keys[i]) ? keys[i] : parseInt(keys[i]);
-                if (cur[k] === undefined) cur[k] = isNaN(keys[i + 1]) ? {} : [];
-                cur = cur[k];
-            }
-            const lastKey = isNaN(keys[keys.length - 1]) ? keys[keys.length - 1] : parseInt(keys[keys.length - 1]);
-            cur[lastKey] = value;
-        }
-
-        function getNestedValue(obj, path) {
-            const keys = path.split('.');
-            let cur = obj;
-            for (const k of keys) {
-                const key = isNaN(k) ? k : parseInt(k);
-                if (cur === undefined) return undefined;
-                cur = cur[key];
-            }
-            return cur;
-        }
-
-        function getNestedArray(path) {
-            return getNestedValue(data, path);
-        }
-
-        // Attach input change handler
-        function attachHandlers(panel) {
-            panel.addEventListener('input', e => {
-                const el = e.target;
-                const key = el.dataset.key;
-                if (!key) return;
-                let val = el.value;
-                // Handle special comma-separated arrays
-                if (key.match(/\btechnologies$/) || key.match(/\btags$/)) {
-                    val = val.split(',').map(s => s.trim()).filter(Boolean);
-                }
-                setNestedValue(data, key, val);
-                markDirty();
-            });
-            panel.addEventListener('change', e => {
-                const el = e.target;
-                const key = el.dataset.key;
-                if (!key) return;
-                setNestedValue(data, key, el.value);
-                markDirty();
-            });
-        }
-
-        // Toggle collapse
-        function toggleCollapse(header) {
-            header.parentElement.classList.toggle('collapsed');
-        }
-
-        // ─── Generic array operations ───
-        function addArrayItem(section, template) {
-            if (!data[section]) data[section] = [];
-            data[section].push(JSON.parse(JSON.stringify(template)));
-            markDirty();
-            renderPanel(section);
-        }
-
-        function removeArrayItem(section, index) {
-            if (!data[section]) return;
-            data[section].splice(index, 1);
-            markDirty();
-            renderPanel(section);
-        }
-
-        function moveItem(sectionPath, index, direction) {
-            const arr = getNestedArray(sectionPath);
-            if (!arr) return;
-            const newIndex = index + direction;
-            if (newIndex < 0 || newIndex >= arr.length) return;
-            [arr[index], arr[newIndex]] = [arr[newIndex], arr[index]];
-            markDirty();
-            // Find the active panel
-            const activeLink = document.querySelector('#sidebar a.active');
-            if (activeLink) renderPanel(activeLink.dataset.panel);
-        }
-
-        // ─── About paragraphs ───
-        function addAboutParagraph() {
-            if (!data.about) data.about = { paragraphs: [] };
-            if (!data.about.paragraphs) data.about.paragraphs = [];
-            data.about.paragraphs.push('');
-            markDirty();
-            renderPanel('about');
-        }
-        function removeAboutParagraph(i) {
-            data.about.paragraphs.splice(i, 1);
-            markDirty();
-            renderPanel('about');
-        }
-
-        // ─── Emails ───
-        function addEmail() {
-            if (!data.contact) data.contact = {};
-            if (!data.contact.emails) data.contact.emails = [];
-            data.contact.emails.push('');
-            markDirty();
-            renderPanel('contact');
-        }
-        function removeEmail(i) {
-            data.contact.emails.splice(i, 1);
-            markDirty();
-            renderPanel('contact');
-        }
-
-        // ─── String items in nested objects ───
-        function addStringItem(parent, key) {
-            if (!data[parent]) data[parent] = {};
-            if (!data[parent][key]) data[parent][key] = [];
-            data[parent][key].push('');
-            markDirty();
-            // Find panel
-            const activeLink = document.querySelector('#sidebar a.active');
-            if (activeLink) renderPanel(activeLink.dataset.panel);
-        }
-        function removeStringItem(parent, key, index) {
-            data[parent][key].splice(index, 1);
-            markDirty();
-            const activeLink = document.querySelector('#sidebar a.active');
-            if (activeLink) renderPanel(activeLink.dataset.panel);
-        }
-
-        // ─── Nested strings (e.g., experience[i].responsibilities[j]) ───
-        function addNestedString(sectionPath, index, field) {
-            const arr = getNestedArray(sectionPath);
-            if (!arr || !arr[index]) return;
-            if (!arr[index][field]) arr[index][field] = [];
-            arr[index][field].push('');
-            markDirty();
-            const activeLink = document.querySelector('#sidebar a.active');
-            if (activeLink) renderPanel(activeLink.dataset.panel);
-        }
-        function removeNestedString(sectionPath, index, field, itemIndex) {
-            const arr = getNestedArray(sectionPath);
-            if (!arr || !arr[index] || !arr[index][field]) return;
-            arr[index][field].splice(itemIndex, 1);
-            markDirty();
-            const activeLink = document.querySelector('#sidebar a.active');
-            if (activeLink) renderPanel(activeLink.dataset.panel);
-        }
-
-        // ─── Cyber Arena platforms ───
-        function addCyberPlatform() {
-            if (!data.cyberArena) data.cyberArena = { intro: '', platforms: [] };
-            if (!data.cyberArena.platforms) data.cyberArena.platforms = [];
-            data.cyberArena.platforms.push({ name: '', icon: '', highlights: [], linkText: '', url: '' });
-            markDirty();
-            renderPanel('cyberArena');
-        }
-        function removeCyberPlatform(i) {
-            data.cyberArena.platforms.splice(i, 1);
-            markDirty();
-            renderPanel('cyberArena');
-        }
-
-        // ─── Scratchpad items ───
-        function addScratchpadItem() {
-            if (!data.scratchpad) data.scratchpad = { intro: '', items: [] };
-            if (!data.scratchpad.items) data.scratchpad.items = [];
-            data.scratchpad.items.push({ title: '', status: 'exploring', date: '', description: '', lesson: '', tags: [] });
-            markDirty();
-            renderPanel('scratchpad');
-        }
-        function removeScratchpadItem(i) {
-            data.scratchpad.items.splice(i, 1);
-            markDirty();
-            renderPanel('scratchpad');
-        }
-
-        // ═══ SAVE / EXPORT ═══
-
-        function getJSON() {
-            return JSON.stringify(data, null, 2);
-        }
-
-        function downloadJSON() {
-            const blob = new Blob([getJSON()], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'portfolio-data.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            toast('Downloaded portfolio-data.json', 'success');
-        }
-
-        let previewWindow = null;
-        function previewSite() {
-            const jsonString = getJSON();
-            sessionStorage.setItem('portfolio-preview-data', jsonString);
-            sessionStorage.setItem('portfolio-session-active', 'true');
-            
-            const panel = document.getElementById('previewPanel');
-            const iframe = document.getElementById('livePreviewIframe');
-            
-            if (!panel.classList.contains('open')) {
-                panel.classList.add('open');
-                iframe.src = 'index.html?preview=1';
-            } else {
-                if (iframe.contentWindow) {
-                    iframe.contentWindow.postMessage({ type: 'livePreviewUpdate', data: JSON.parse(jsonString) }, '*');
-                }
-            }
-        }
-
-        function closeLivePreview() {
-            document.getElementById('previewPanel').classList.remove('open');
-            document.getElementById('livePreviewIframe').src = '';
-        }
-
-        function previewJSON() {
-            document.getElementById('previewArea').value = getJSON();
-            document.getElementById('previewModal').classList.add('show');
-        }
-        function closePreview() {
-            document.getElementById('previewModal').classList.remove('show');
-        }
-        function copyJSON() {
-            navigator.clipboard.writeText(getJSON()).then(() => toast('Copied to clipboard', 'success'));
-        }
-
-        // ═══ GITHUB API ═══
-
-        function showGitHubModal() {
-            // Restore saved values
-            const saved = JSON.parse(localStorage.getItem('admin-gh') || '{}');
-            if (saved.repo) document.getElementById('gh-repo').value = saved.repo;
-            if (saved.branch) document.getElementById('gh-branch').value = saved.branch;
-            document.getElementById('githubModal').classList.add('show');
-        }
-        function closeGitHubModal() {
-            document.getElementById('githubModal').classList.remove('show');
-        }
-
-        async function pushToGitHub() {
-            const token = document.getElementById('gh-token').value.trim();
-            const repo = document.getElementById('gh-repo').value.trim();
-            const branch = document.getElementById('gh-branch').value.trim();
-            const message = document.getElementById('gh-message').value.trim();
-
-            if (!token || !repo || !branch || !message) {
-                toast('Fill all fields', 'error');
-                return;
-            }
-
-            // Save non-sensitive settings
-            localStorage.setItem('admin-gh', JSON.stringify({ repo, branch }));
-
-            const btn = document.getElementById('gh-push-btn');
-            btn.textContent = 'Pushing...';
-            btn.disabled = true;
-
-            try {
-                const filePath = DATA_PATH;
-                const apiBase = `https://api.github.com/repos/${repo}/contents/${filePath}`;
-                const headers = {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/vnd.github.v3+json'
-                };
-
-                // Get current file SHA
-                const getResp = await fetch(`${apiBase}?ref=${branch}`, { headers });
-                let sha = '';
-                if (getResp.ok) {
-                    const fileData = await getResp.json();
-                    sha = fileData.sha;
-                }
-
-                // Create/Update file
-                const content = btoa(unescape(encodeURIComponent(getJSON())));
-                const body = {
-                    message,
-                    content,
-                    branch,
-                };
-                if (sha) body.sha = sha;
-
-                const putResp = await fetch(apiBase, {
-                    method: 'PUT',
-                    headers,
-                    body: JSON.stringify(body)
-                });
-
-                if (putResp.ok) {
-                    toast('Pushed to GitHub successfully!', 'success');
-                    markClean();
-                    closeGitHubModal();
-                } else {
-                    const err = await putResp.json();
-                    toast('GitHub error: ' + (err.message || putResp.status), 'error');
-                }
-            } catch (err) {
-                toast('Push failed: ' + err.message, 'error');
-            } finally {
-                btn.textContent = 'Push Commit';
-                btn.disabled = false;
-            }
-        }
-
-        // ─── Warn before leaving with unsaved changes ───
-        window.addEventListener('beforeunload', e => {
-            if (dirty) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        });
-
-    </script>
+        <div class="item-body">${open ? this.renderFields(spec.item, key) : ''}</div>
+      </div>`;
+    }).join('');
+    const tpl = encodeURIComponent(JSON.stringify(spec.template || {}));
+    return `<div class="items">${items || '<p style="color:var(--muted);font-size:.8rem">Nothing here yet.</p>'}</div>
+      <button class="btn btn-sm add-row" type="button" onclick="App.addObject('${path}','${tpl}')">+ Add</button>`;
+  },
+
+  /* edits */
+  toggle(key, head) {
+    const item = head.parentElement;
+    if (this.open.has(key)) { this.open.delete(key); item.classList.remove('open'); return; }
+    this.open.add(key);
+    const panel = PANELS.find((p) => p.id === this.current);
+    const spec = findSpecFor(panel, key);
+    item.querySelector('.item-body').innerHTML = this.renderFields(spec.item, key);
+    item.classList.add('open');
+  },
+  rerender() { const y = window.scrollY; this.show(this.current); window.scrollTo(0, y); this.renderSidebar(); },
+  addObject(path, tpl) {
+    const arr = getPath(this.data, path) || [];
+    if (!getPath(this.data, path)) setPath(this.data, path, arr);
+    arr.push(JSON.parse(decodeURIComponent(tpl)));
+    this.open.add(`${path}.${arr.length - 1}`);
+    this.changed(); this.rerender();
+  },
+  addString(path) {
+    const arr = getPath(this.data, path) || [];
+    if (!getPath(this.data, path)) setPath(this.data, path, arr);
+    arr.push('');
+    this.changed(); this.rerender();
+  },
+  remove(path, i, confirmIt) {
+    const arr = getPath(this.data, path);
+    if (!arr) return;
+    if (confirmIt && !confirm('Delete this item?')) return;
+    arr.splice(i, 1);
+    this.open = new Set([...this.open].filter((k) => !k.startsWith(path + '.')));
+    this.changed(); this.rerender();
+  },
+  move(path, i, dir) {
+    const arr = getPath(this.data, path);
+    const j = i + dir;
+    if (!arr || j < 0 || j >= arr.length) return;
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+    this.open = new Set([...this.open].filter((k) => !k.startsWith(path + '.')));
+    this.changed(); this.rerender();
+  },
+  onInput(e) {
+    const el = e.target;
+    const path = el.dataset && el.dataset.path;
+    if (!path) return;
+    let val = el.value;
+    if (el.dataset.bool) val = el.checked;
+    else if (el.dataset.csv) val = val.split(',').map((s) => s.trim()).filter(Boolean);
+    setPath(this.data, path, val);
+    if (el.dataset.url) el.closest('.field').classList.toggle('invalid', !isValidUrl(val));
+    // keep the paired legacy field in sync so both pages read the same fact
+    const m = path.match(/^research\.(\d+)\.status$/);
+    if (m) setPath(this.data, `research.${m[1]}.type`, val === 'under review' ? 'in-review' : val);
+    this.changed(true);
+  },
+  changed(light) {
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ data: this.data, baseSha: this.sha, savedAt: Date.now() })); } catch (e) {}
+      this.pushPreview();
+      if (light) this.renderSidebar();
+    }, 350);
+    this.updateStatus();
+  },
+  updateStatus() {
+    const n = diffPaths(this.base, this.data).length;
+    document.getElementById('dot').classList.toggle('dirty', n > 0);
+    document.getElementById('status-msg').textContent = n ? `${n} unpublished change${n > 1 ? 's' : ''}` : 'Up to date';
+  },
+  restoreDraft() {
+    if (!this.draft) return;
+    if (this.draft.baseSha && this.sha && this.draft.baseSha !== this.sha) {
+      if (!confirm('The site data changed on GitHub since this draft was saved. Restoring will overwrite those newer changes when you publish. Restore anyway?')) return;
+    }
+    this.data = clone(this.draft.data); this.draft = null;
+    this.changed(); this.rerender(); toast('Draft restored', 'ok');
+  },
+  discardDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} this.draft = null; this.rerender(); },
+
+  /* preview */
+  togglePreview() {
+    const layout = document.getElementById('layout');
+    const on = !layout.classList.contains('with-preview');
+    layout.classList.toggle('with-preview', on);
+    document.getElementById('preview-btn').classList.toggle('btn-primary', on);
+    if (on) this.reloadPreview();
+  },
+  reloadPreview() {
+    try { sessionStorage.setItem('portfolio-preview-data', JSON.stringify(this.data)); } catch (e) {}
+    const page = document.querySelector('#preview-seg .on').dataset.page;
+    document.getElementById('preview-frame').src = `${page}?preview=1&t=${Date.now()}`;
+  },
+  pushPreview() {
+    if (!document.getElementById('layout').classList.contains('with-preview')) return;
+    try { sessionStorage.setItem('portfolio-preview-data', JSON.stringify(this.data)); } catch (e) {}
+    const f = document.getElementById('preview-frame');
+    if (f.contentWindow) f.contentWindow.postMessage({ type: 'livePreviewUpdate', data: clone(this.data) }, location.origin);
+  },
+
+  /* publish */
+  openPublish() {
+    const changes = diffPaths(this.base, this.data);
+    const warnings = this.validate();
+    const fmt = (v) => v === undefined ? '∅' : (typeof v === 'string' ? v : JSON.stringify(v));
+    const cut = (s) => (s.length > 160 ? s.slice(0, 160) + '…' : s);
+    document.getElementById('publish-body').innerHTML = (changes.length
+      ? `<p style="color:var(--dim);font-size:.82rem;margin-bottom:.5rem">${changes.length} change${changes.length > 1 ? 's' : ''}:</p><div class="diff">${changes.slice(0, 80).map((c) =>
+          `<div><span class="k">${esc(c.path)}</span>\n<span class="del">− ${esc(cut(fmt(c.from)))}</span>\n<span class="add">+ ${esc(cut(fmt(c.to)))}</span></div>`).join('')}${changes.length > 80 ? `<div>…and ${changes.length - 80} more</div>` : ''}</div>`
+      : '<p style="color:var(--dim)">Nothing to publish.</p>')
+      + (warnings.length ? `<div class="banner warn" style="margin-top:.8rem">${warnings.length} check${warnings.length > 1 ? 's' : ''} still flagged on the Dashboard. You can publish anyway.</div>` : '')
+      + (this.readOnly ? '<div class="banner info" style="margin-top:.8rem">Read-only mode: download the JSON instead, or sign in to commit.</div>' : '');
+    document.getElementById('commit-msg').value = changes.length
+      ? `Update ${[...new Set(changes.map((c) => c.path.split('.')[0]))].slice(0, 4).join(', ')} via editor` : '';
+    document.getElementById('commit-btn').disabled = !changes.length || this.readOnly;
+    document.getElementById('publish-modal').classList.add('show');
+  },
+  async commit() {
+    const btn = document.getElementById('commit-btn');
+    const msg = document.getElementById('commit-msg').value.trim() || 'Update portfolio data via editor';
+    btn.disabled = true; btn.textContent = 'Committing…';
+    try {
+      const json = JSON.stringify(this.data, null, 2) + '\n';
+      const res = await GH.putFile(CONFIG.dataPath, b64encodeUtf8(json), msg, this.sha);
+      this.sha = res.content.sha;
+      this.base = clone(this.data);
+      try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+      this.closeModal('publish-modal');
+      this.updateStatus(); this.rerender();
+      toast('Committed. The live site updates in about 1–2 minutes.', 'ok');
+    } catch (e) {
+      if (e.status === 409 || e.status === 422) toast('The file changed on GitHub since you loaded it. Download your JSON as a backup, then reload.', 'err');
+      else toast('Commit failed: ' + e.message, 'err');
+    } finally { btn.disabled = false; btn.textContent = 'Commit to GitHub'; }
+  },
+  async uploadCV(file) {
+    if (!file) return;
+    if (file.type !== 'application/pdf') return toast('Please choose a PDF.', 'err');
+    if (file.size > 5 * 1024 * 1024) return toast('PDF is larger than 5 MB.', 'err');
+    if (!confirm(`Replace ${CONFIG.cvPaths.join(' and ')} with "${file.name}"?`)) return;
+    const b64 = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(file); });
+    try {
+      for (const p of CONFIG.cvPaths) {
+        let sha;
+        try { sha = (await GH.getFile(p)).sha; } catch (e) { if (e.status !== 404) throw e; }
+        await GH.putFile(p, b64, `Update ${p} via editor`, sha);
+      }
+      toast('CV uploaded. Live in about a minute.', 'ok');
+    } catch (e) { toast('Upload failed: ' + e.message, 'err'); }
+  },
+
+  /* misc */
+  showJSON() { document.getElementById('json-area').value = JSON.stringify(this.data, null, 2); document.getElementById('json-modal').classList.add('show'); },
+  copyJSON() { navigator.clipboard.writeText(JSON.stringify(this.data, null, 2)).then(() => toast('Copied', 'ok')); },
+  download() {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(this.data, null, 2) + '\n'], { type: 'application/json' }));
+    a.download = 'portfolio-data.json'; a.click(); URL.revokeObjectURL(a.href);
+  },
+  closeModal(id) { document.getElementById(id).classList.remove('show'); },
+};
+
+function findSpecFor(panel, key) {
+  // key like "research.3" or "cyberArena.platforms.1": find the objects spec whose path matches
+  const parentPath = key.replace(/\.\d+$/, '');
+  if (panel.type === 'objects' && panel.path === parentPath) return panel;
+  const search = (fields, base) => {
+    for (const f of fields || []) {
+      if (f.type === 'row') { const r = search(f.fields, base); if (r) return r; continue; }
+      const p = join(base, f.key);
+      if (f.type === 'objects') {
+        if (p === parentPath) return f;
+        const inner = parentPath.startsWith(p + '.') ? search(f.item, parentPath.slice(0, parentPath.lastIndexOf('.'))) : null;
+        if (inner) return inner;
+      }
+    }
+    return null;
+  };
+  return search(panel.fields, panel.path);
+}
+
+function diffPaths(a, b, path = '', out = []) {
+  if (JSON.stringify(a) === JSON.stringify(b)) return out;
+  const isObj = (x) => x && typeof x === 'object';
+  if (isObj(a) && isObj(b) && Array.isArray(a) === Array.isArray(b)) {
+    const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+    keys.forEach((k) => diffPaths(a[k], b[k], path ? `${path}.${k}` : k, out));
+  } else out.push({ path: path || '(root)', from: a, to: b });
+  return out;
+}
+
+function toast(msg, kind = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast show ${kind}`;
+  clearTimeout(t._h); t._h = setTimeout(() => (t.className = 'toast'), kind === 'err' ? 6000 : 3000);
+}
+
+/* ───────── wiring ───────── */
+document.getElementById('content').addEventListener('input', (e) => App.onInput(e));
+document.getElementById('content').addEventListener('change', (e) => { if (e.target.dataset && (e.target.dataset.bool || e.target.tagName === 'SELECT')) App.onInput(e); });
+document.getElementById('sidebar').addEventListener('click', (e) => {
+  const a = e.target.closest('a[data-id]'); if (!a) return;
+  e.preventDefault(); App.show(a.dataset.id); window.scrollTo(0, 0);
+});
+document.getElementById('menu-btn').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
+document.getElementById('preview-seg').addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  document.querySelectorAll('#preview-seg button').forEach((x) => x.classList.toggle('on', x === b));
+  App.reloadPreview();
+});
+document.querySelectorAll('.modal-bg').forEach((m) => m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('show'); }));
+window.addEventListener('beforeunload', (e) => { if (diffPaths(App.base, App.data).length) { e.preventDefault(); e.returnValue = ''; } });
+
+async function signIn(token) {
+  GH.token = token;
+  const user = await GH.api('/user');
+  const repo = await GH.api(`/repos/${CONFIG.repo}`);
+  if (!repo.permissions || !repo.permissions.push) throw new Error(`@${user.login} cannot push to ${CONFIG.repo}.`);
+  try { sessionStorage.setItem(TOKEN_KEY, token); } catch (e) {}
+  App.user = user;
+  document.getElementById('who').innerHTML = `<img src="${esc(user.avatar_url)}" alt=""><span>${esc(user.login)}</span>
+    <button class="btn btn-ghost btn-sm" type="button" onclick="signOut()">Sign out</button>`;
+  await App.start(false);
+}
+function signOut() {
+  try { sessionStorage.removeItem(TOKEN_KEY); } catch (e) {}
+  location.hash = ''; location.reload();
+}
+document.getElementById('gh-login').addEventListener('click', async () => {
+  const err = document.getElementById('signin-err'); err.textContent = '';
+  try { await signIn(await GH.login()); } catch (e) { err.textContent = e.message; GH.token = null; }
+});
+document.getElementById('offline-btn').addEventListener('click', () => App.start(true));
+
+(async () => {
+  let saved = null;
+  try { saved = sessionStorage.getItem(TOKEN_KEY); } catch (e) {}
+  if (saved) {
+    try { await signIn(saved); } catch (e) { try { sessionStorage.removeItem(TOKEN_KEY); } catch (x) {} }
+  }
+})();
+</script>
 </body>
-
 </html>

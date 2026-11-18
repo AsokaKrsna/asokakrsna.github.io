@@ -1,0 +1,59 @@
+# Rebuilds everything generated from data/portfolio-data.json whenever it (or a generator) changes,
+# e.g. after the CMS commits an edit:
+#   index.html (academic page) and nerd.html asset stamps  ← scripts/build.mjs
+#   cv/cv.tex → CV.pdf and Resume.pdf                       ← scripts/build-cv.mjs + LaTeX
+# GitHub Pages then serves the new commit.
+name: Build site and CV
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/portfolio-data.json'
+      - 'templates/**'
+      - 'scripts/**'
+      - 'js/**'
+      - 'css/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-site
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate JSON
+        run: node -e "JSON.parse(require('fs').readFileSync('data/portfolio-data.json','utf8'))"
+      - name: Render pages
+        run: node scripts/build.mjs
+      - name: Generate CV source
+        run: node scripts/build-cv.mjs
+      - name: Compile CV
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: cv.tex
+          working_directory: cv
+      - name: Publish CV
+        run: |
+          cp cv/cv.pdf CV.pdf
+          cp cv/cv.pdf Resume.pdf
+      - name: Commit if changed
+        run: |
+          git add index.html nerd.html cv/cv.tex CV.pdf Resume.pdf
+          if git diff --cached --quiet; then
+            echo "Everything already up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Rebuild site and CV from portfolio data"
+          git push
