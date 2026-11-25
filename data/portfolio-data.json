@@ -773,7 +773,7 @@
         "url": "https://orcid.org/0009-0002-3086-9893"
       }
     ],
-    "interests": "How systems fail when their trust assumptions meet an adversary who does not share them: blockchain and cross-chain bridge security; smart contract and DeFi security; agentic AI and large language models (LLMs) for security analysis and attack detection; adversarial uses of LLMs; network security and protocol-level attacks.",
+    "interests": "My research asks how systems fail when their trust assumptions meet an adversary who does not share them. I am currently building agentic AI systems that detect and explain attacks on cross-chain bridges. I am also exploring: how attackers use LLMs, and how far LLM judgments about code and smart contracts can be trusted.",
     "skills": [
       {
         "label": "Programming",
