@@ -773,7 +773,7 @@
         "url": "https://orcid.org/0009-0002-3086-9893"
       }
     ],
-    "interests": "My research asks how systems fail when their trust assumptions meet an adversary who does not share them. I am currently building agentic AI systems that detect and explain attacks on cross-chain bridges. I am also exploring: how attackers use LLMs, and how far LLM judgments about code and smart contracts can be trusted.",
+    "interests": "My research asks how systems fail when their trust assumptions meet an adversary who does not share them. I am currently building LLM agents that detect and explain attacks on cross-chain bridges, evaluated against real exploits replayed on forked chains. I also study how reliable LLMs are as security analysts (when their judgments about code and smart contracts can be trusted) and how attackers use them.",
     "skills": [
       {
         "label": "Programming",
